@@ -18,10 +18,10 @@
 
 _Describe the big picture of your changes here_
 
-#### 📌 Self Check before Merge
+#### 📌 Technical Assignment
 
-Please check all items below before review.
+_Please attach the clauses from the TA._
 
-- [x] Database migration is added or not needed
-- [x] Documentation is updated/provided or not needed
-- [ ] Changes are tested locally
+_Example_
+- [x] Create PR template (10 points)
+- [ ] Update gitignore file (5 points)
