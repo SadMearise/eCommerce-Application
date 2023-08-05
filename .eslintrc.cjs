@@ -24,6 +24,13 @@ module.exports = {
     ecmaVersion: "latest",
     sourceType: "module",
   },
+  settings: {
+    "import/resolver": {
+      "node": {
+        "extensions": [".ts", ".tsx"]
+      }
+    }
+  },
   plugins: ["react-refresh", "@typescript-eslint", "react", "prettier", "react-hooks"],
   rules: {
     "react-refresh/only-export-components": ["warn", { allowConstantExport: true }],
@@ -46,6 +53,7 @@ module.exports = {
     "react/jsx-filename-extension": [2, { extensions: [".js", ".jsx", ".ts", ".tsx"] }],
     "import/no-extraneous-dependencies": ["error", { devDependencies: true }],
     quotes: ["error", "double"],
+    "import/extensions": "off",
     "@typescript-eslint/explicit-member-accessibility": [
       "error",
       {
