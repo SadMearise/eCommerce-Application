@@ -1,4 +1,4 @@
-## Kratkoe - Online Clothing Store
+# Kratkoe - Online Clothing Store
 ![Project Status](https://img.shields.io/badge/status-active-brightgreen.svg)
 
 ## Table of Contents
@@ -15,13 +15,14 @@
 ## Technologies:
 * Frontend:
   - HTML5 🌐
-  - CSS3 🎨
+  - Sass(SCSS) 🎨
   - TypeScript 🚀
-  - React.ts ⚛️
-  - Redux 🔄
+  - React ⚛️
+  - Redux Toolkit 🔄
   - Axios 🌐
+  - Material UI 🏛️
 * Backend:
-  - commerce-tools 🚀
+  - Commerce-tools 🚀
 * Infrastructure and Deployment:
   - Git 🗂️
   - GitHub 🐙
@@ -29,8 +30,9 @@
   - Jest 🃏
 * Other Tools:
   - Vite 📦
-  - ESLint ✨ and Prettier 🎨
-
+  - ESLint ✨
+  - Prettier 🎨
+  - Husky 🐶
 ## Scripts:
 <details>
   <summary><b>Scripts</b></summary>
