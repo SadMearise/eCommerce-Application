@@ -13,6 +13,7 @@ module.exports = {
     'plugin:react/recommended',
     'prettier',
     'plugin:prettier/recommended',
+    'airbnb',
   ],
   ignorePatterns: ['dist', '.eslintrc.cjs', '.prettierrc'],
   parser: '@typescript-eslint/parser',
@@ -42,5 +43,7 @@ module.exports = {
     '@typescript-eslint/no-var-requires': 'off',
     'react/jsx-uses-react': 'off',
     'react/react-in-jsx-scope': 'off',
+    'react/jsx-filename-extension': [2, { extensions: ['.js', '.jsx', '.ts', '.tsx'] }],
+    'import/no-extraneous-dependencies': ['error', { devDependencies: true }],
   },
 };
