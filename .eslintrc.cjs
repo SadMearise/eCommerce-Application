@@ -45,5 +45,18 @@ module.exports = {
     'react/react-in-jsx-scope': 'off',
     'react/jsx-filename-extension': [2, { extensions: ['.js', '.jsx', '.ts', '.tsx'] }],
     'import/no-extraneous-dependencies': ['error', { devDependencies: true }],
+    "@typescript-eslint/explicit-member-accessibility": [
+      "error",
+      {
+        accessibility: "explicit",
+        overrides: {
+          accessors: "explicit",
+          constructors: "off",
+          methods: "explicit",
+          properties: "explicit",
+          parameterProperties: "explicit",
+        },
+      },
+    ],
   },
 };

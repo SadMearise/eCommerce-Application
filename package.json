@@ -4,10 +4,10 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --open",
     "build": "tsc && vite build",
     "lint": "eslint . --ext .ts,.tsx",
-    "format": "prettier --ignore-path .gitignore --ignore-path .eslintignore --ignore-path .prettierignore --write .",
+    "format": "npx prettier --write .",
     "prepare": "husky install",
     "test": "jest"
   },
