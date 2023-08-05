@@ -23,5 +23,6 @@ _Describe the big picture of your changes here_
 _Please attach the clauses from the TA._
 
 _Example_
+
 - [x] Create PR template (10 points)
 - [ ] Update gitignore file (5 points)

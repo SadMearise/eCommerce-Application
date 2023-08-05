@@ -24,15 +24,9 @@ module.exports = {
     ecmaVersion: "latest",
     sourceType: "module",
   },
-  settings: {
-    "import/resolver": {
-      "node": {
-        "extensions": [".ts", ".tsx"]
-      }
-    }
-  },
   plugins: ["react-refresh", "@typescript-eslint", "react", "prettier", "react-hooks"],
   rules: {
+    "import/extensions": "off",
     "react-refresh/only-export-components": ["warn", { allowConstantExport: true }],
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",
@@ -53,7 +47,6 @@ module.exports = {
     "react/jsx-filename-extension": [2, { extensions: [".js", ".jsx", ".ts", ".tsx"] }],
     "import/no-extraneous-dependencies": ["error", { devDependencies: true }],
     quotes: ["error", "double"],
-    "import/extensions": "off",
     "@typescript-eslint/explicit-member-accessibility": [
       "error",
       {
@@ -67,5 +60,12 @@ module.exports = {
         },
       },
     ],
+  },
+  settings: {
+    "import/resolver": {
+      node: {
+        extensions: [".js", ".jsx", ".ts", ".tsx"],
+      },
+    },
   },
 };
