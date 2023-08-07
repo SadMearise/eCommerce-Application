@@ -19,7 +19,7 @@
   - TypeScript 🚀
   - React ⚛️
   - Redux Toolkit 🔄
-  - Axios 🌐
+  - TypeScript SDK 🌐
   - Material UI 🏛️
 * Backend:
   - Commerce-tools 🚀
