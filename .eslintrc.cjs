@@ -60,6 +60,28 @@ module.exports = {
         },
       },
     ],
+    "no-param-reassign": [
+      "error",
+      {
+        props: true,
+        ignorePropertyModificationsFor: ["state"],
+      },
+    ],
+    "object-curly-newline": [
+      "error",
+      {
+        ExportDeclaration: { multiline: true },
+      },
+    ],
+    "operator-linebreak": [
+      "error",
+      "after",
+      {
+        overrides: {
+          ":": "before",
+        },
+      },
+    ],
   },
   settings: {
     "import/resolver": {
