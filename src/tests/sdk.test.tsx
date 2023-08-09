@@ -1,4 +1,4 @@
-import getApiRoot from "../services/BuildClient";
+import getApiRoot from "../utils/BuildClient";
 
 test("Commercetools SDK test", async () => {
   const apiRoot = getApiRoot();
