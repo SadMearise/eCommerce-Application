@@ -1,3 +1,5 @@
+import { CTP_PROJECT_KEY, CTP_CLIENT_SECRET, CTP_CLIENT_ID, CTP_AUTH_URL, CTP_API_URL, CTP_SCOPES } from "../../env";
+
 type TClientData = {
   projectKey: string;
   clientSecret: string;
@@ -8,12 +10,12 @@ type TClientData = {
 };
 
 const CLIENT_DATA: TClientData = {
-  projectKey: import.meta.env.VITE_CTP_PROJECT_KEY || "",
-  clientSecret: import.meta.env.VITE_CTP_CLIENT_SECRET || "",
-  clientId: import.meta.env.VITE_CTP_CLIENT_ID || "",
-  authURL: import.meta.env.VITE_CTP_AUTH_URL || "",
-  apiURL: import.meta.env.VITE_CTP_API_URL || "",
-  scopes: import.meta.env.VITE_CTP_SCOPES?.split(" ") || [""],
+  projectKey: CTP_PROJECT_KEY || "",
+  clientSecret: CTP_CLIENT_SECRET || "",
+  clientId: CTP_CLIENT_ID || "",
+  authURL: CTP_AUTH_URL || "",
+  apiURL: CTP_API_URL || "",
+  scopes: CTP_SCOPES || [""],
 };
 
 export default CLIENT_DATA;
