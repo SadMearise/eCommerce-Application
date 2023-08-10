@@ -1,22 +1,14 @@
 import { createApiBuilderFromCtpClient } from "@commercetools/platform-sdk";
 import { ClientBuilder, type AuthMiddlewareOptions, type HttpMiddlewareOptions } from "@commercetools/sdk-client-v2";
+import CLIENT_DATA from "./constants";
 
-const projectKey = "kratkoe";
-const clientID = "dRNDZ4QTkb1DlBx2-nXKWPQ6";
-const clientSecret = "kqDUba4Kic80DroP55ZJGf31fPZSo5aM";
-const region = "europe-west1.gcp";
-const scopes = [
-  `view_categories:${projectKey}`,
-  `view_published_products:${projectKey}`,
-  `manage_my_profile:${projectKey}`,
-  `manage_customers:${projectKey}`,
-];
+const { projectKey, clientSecret, clientId, authURL, apiURL, scopes } = CLIENT_DATA;
 
 const authMiddlewareOptions: AuthMiddlewareOptions = {
-  host: `https://auth.${region}.commercetools.com`,
+  host: authURL,
   projectKey,
   credentials: {
-    clientId: clientID,
+    clientId,
     clientSecret,
   },
   scopes,
@@ -24,7 +16,7 @@ const authMiddlewareOptions: AuthMiddlewareOptions = {
 };
 
 const httpMiddlewareOptions: HttpMiddlewareOptions = {
-  host: `https://api.${region}.commercetools.com`,
+  host: apiURL,
   fetch,
 };
 
