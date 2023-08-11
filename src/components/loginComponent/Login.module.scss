@@ -1,0 +1,64 @@
+[class$="MuiFormHelperText-root"] {
+  color: red !important;
+}
+
+.form {
+  max-width: 500px;
+  margin: 0 auto;
+
+  & div {
+    margin: 5px 0;
+  }
+}
+
+.vizard {
+  position: absolute;
+  right: 15px;
+  top: 23%;
+
+  & input {
+    padding: 0;
+    height: initial;
+    width: initial;
+    margin-bottom: 0;
+    display: none;
+    cursor: pointer;
+  }
+
+  & label {
+    position: relative;
+    cursor: pointer;
+  }
+
+  & label:before {
+    content: "";
+    -webkit-appearance: none;
+    background-color: transparent;
+    display: inline-block;
+    position: relative;
+    vertical-align: middle;
+    cursor: pointer;
+  }
+
+  & input:checked + label:after {
+    content: "";
+    display: block;
+    position: absolute;
+  }
+}
+
+.password {
+  position: relative;
+  display: flex;
+}
+
+.err {
+  & input {
+    border: 2px solid red;
+    border-radius: 5px;
+
+    &:focus {
+      border: 0;
+    }
+  }
+}
