@@ -1,9 +1,7 @@
+import { ClientResponse, Customer } from "@commercetools/platform-sdk";
+
 export interface IState {
   user: {
-    user: {
-      email: string;
-      password: string;
-      loggedIn: boolean;
-    };
+    customer: ClientResponse<Customer>;
   };
 }

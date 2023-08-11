@@ -7,7 +7,7 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import styles from "./Login.module.scss";
 import { LoginBtn, TLoginOnSubmitValues } from "./types";
 import { login } from "../../store/features/userSlice";
-import { attemptLogin } from "../../services/BuildClient";
+import loginToApi from "../../services/LoginToApi";
 
 function validateEmail(value: string) {
   let error;
@@ -44,27 +44,11 @@ function LoginComponent() {
   };
 
   const onSubmit = async (values: TLoginOnSubmitValues, props: FormikHelpers<TLoginOnSubmitValues>) => {
-    setTimeout(() => {
-      props.setSubmitting(true);
-      props.resetForm();
-    }, 2000);
+    const customerResponse = await loginToApi(values.email, values.password);
+    props.setSubmitting(true);
+    props.resetForm();
 
-    const aboutMe = await attemptLogin("t20t@tut.by", "123");
-    console.log("aboutMe", aboutMe);
-
-    // const aboutMe = await getApiRoot().me().get().execute();
-    // console.log("aboutMe", aboutMe);
-
-    // const categories = await getApiRoot().categories().get().execute();
-    // console.log("categories", categories);
-
-    dispatch(
-      login({
-        email: values.email,
-        password: values.password,
-        loggedIn: true,
-      })
-    );
+    dispatch(login(customerResponse));
   };
 
   function toggleVizard() {
