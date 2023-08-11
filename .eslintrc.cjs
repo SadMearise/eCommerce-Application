@@ -86,7 +86,7 @@ module.exports = {
     "@typescript-eslint/no-shadow": "warn",
     "no-unused-vars": "off",
     "@typescript-eslint/no-unused-vars": ["error"],
-    "max-len": ["error", { "code": 120 }]
+    "max-len": ["error", { code: 120 }],
   },
   settings: {
     "import/resolver": {
