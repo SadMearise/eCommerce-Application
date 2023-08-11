@@ -7,6 +7,7 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import styles from "./Login.module.scss";
 import { LoginBtn, TLoginOnSubmitValues } from "./types";
 import { login } from "../../store/features/userSlice";
+import { attemptLogin } from "../../services/BuildClient";
 
 function validateEmail(value: string) {
   let error;
@@ -42,11 +43,20 @@ function LoginComponent() {
     password: "",
   };
 
-  const onSubmit = (values: TLoginOnSubmitValues, props: FormikHelpers<TLoginOnSubmitValues>) => {
+  const onSubmit = async (values: TLoginOnSubmitValues, props: FormikHelpers<TLoginOnSubmitValues>) => {
     setTimeout(() => {
       props.setSubmitting(true);
       props.resetForm();
     }, 2000);
+
+    const aboutMe = await attemptLogin("t20t@tut.by", "123");
+    console.log("aboutMe", aboutMe);
+
+    // const aboutMe = await getApiRoot().me().get().execute();
+    // console.log("aboutMe", aboutMe);
+
+    // const categories = await getApiRoot().categories().get().execute();
+    // console.log("categories", categories);
 
     dispatch(
       login({
