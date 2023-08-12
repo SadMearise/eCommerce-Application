@@ -2,6 +2,61 @@
   color: red !important;
 }
 
-[class$="MuiFormControl-root"] {
-  margin: 10px 0 !important;
+.message {
+  max-width: 500px;
+  margin: 0 auto 20px;
+  color: red;
+}
+
+.form {
+  max-width: 500px;
+  margin: 0 auto;
+}
+.form div {
+  margin: 5px 0;
+}
+
+.vizard {
+  position: absolute;
+  right: 15px;
+  top: 23%;
+}
+.vizard input {
+  padding: 0;
+  height: initial;
+  width: initial;
+  margin-bottom: 0;
+  display: none;
+  cursor: pointer;
+}
+.vizard label {
+  position: relative;
+  cursor: pointer;
+}
+.vizard label:before {
+  content: "";
+  -webkit-appearance: none;
+  background-color: transparent;
+  display: inline-block;
+  position: relative;
+  vertical-align: middle;
+  cursor: pointer;
+}
+.vizard input:checked + label:after {
+  content: "";
+  display: block;
+  position: absolute;
+}
+
+.password {
+  position: relative;
+  display: flex;
+}
+
+.err input {
+  border: 2px solid red;
+  border-radius: 5px;
+}
+.err input:focus {
+  border: 0;
 }

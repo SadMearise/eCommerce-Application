@@ -2,7 +2,7 @@ import { createApiBuilderFromCtpClient } from "@commercetools/platform-sdk";
 import { ClientBuilder, HttpMiddlewareOptions, type PasswordAuthMiddlewareOptions } from "@commercetools/sdk-client-v2";
 import CLIENT_DATA from "./constants";
 import tokenCache from "./TokenCash";
-import TLoginResponse from "./types";
+import { TLoginResponse } from "./types";
 
 const { projectKey, clientSecret, clientId, authURL, apiURL, scopes } = CLIENT_DATA;
 

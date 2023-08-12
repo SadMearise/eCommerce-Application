@@ -5,7 +5,9 @@ import { logout, selectUser } from "../../store/features/userSlice";
 
 function Logout() {
   const dispatch = useDispatch();
+  console.log("selectUser logout", selectUser);
   const user = useSelector(selectUser);
+  console.log(user);
 
   const handleLogout = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault();
@@ -15,8 +17,7 @@ function Logout() {
   return (
     <>
       <div>
-        Welcome
-        <span>{user.email}</span>
+        <span>{user?.body.email}</span>
       </div>
       <Button
         variant="contained"

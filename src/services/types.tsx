@@ -1,9 +1,12 @@
 import { Customer } from "@commercetools/platform-sdk";
+import { type TokenCache } from "@commercetools/sdk-client-v2";
 
-type TLoginResponse = {
+export type TLoginResponse = {
   customer?: Customer;
   isLoggined: boolean;
   error?: string;
 };
 
-export default TLoginResponse;
+export interface IAppTokenCache extends TokenCache {
+  hasValidToken(): boolean;
+}

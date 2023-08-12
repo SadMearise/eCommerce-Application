@@ -1,10 +1,6 @@
-import { type TokenCache } from "@commercetools/sdk-client-v2";
+import { IAppTokenCache } from "./types";
 
-interface AppTokenCache extends TokenCache {
-  hasValidToken(): boolean;
-}
-
-const tokenCache: AppTokenCache = {
+const tokenCache: IAppTokenCache = {
   get() {
     const tokenStoreStr = localStorage.getItem("local_token");
     if (tokenStoreStr) {
