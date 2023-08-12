@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import VisibilityIcon from "@mui/icons-material/Visibility";
+import { useNavigate } from "react-router-dom";
 import styles from "./Login.module.scss";
 import { LoginBtn, TLoginOnSubmitValues } from "./types";
 import { login } from "../../store/features/userSlice";
@@ -36,6 +37,8 @@ function validatePassword(value: string) {
 function LoginComponent() {
   const dispatch = useDispatch();
 
+  const navigate = useNavigate();
+
   const [fieldType, setFieldType] = useState("password");
   const [showError, setShowError] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
@@ -53,6 +56,7 @@ function LoginComponent() {
       dispatch(login(loginResponse.customer));
       props.setSubmitting(true);
       props.resetForm();
+      navigate("/");
     } else {
       setShowError(true);
       if (loginResponse.error) {

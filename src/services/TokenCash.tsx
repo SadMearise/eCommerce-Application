@@ -1,21 +1,26 @@
 import { type TokenCache } from "@commercetools/sdk-client-v2";
 
-const tokenCache: TokenCache = {
+interface AppTokenCache extends TokenCache {
+  hasValidToken(): boolean;
+}
+
+const tokenCache: AppTokenCache = {
   get() {
-    // console.log("myTokenCache GETTER!!", tokenCacheOptions);
     const tokenStoreStr = localStorage.getItem("local_token");
     if (tokenStoreStr) {
       return JSON.parse(tokenStoreStr);
     }
-
     return null;
   },
   set(cache) {
-    // console.log("myTokenCache SETTER!!", tokenCacheOptions);
-    if (!localStorage.getItem("local_token")) {
-      localStorage.setItem("local_token", JSON.stringify(cache));
-    }
-    // console.log(cache.token);
+    localStorage.setItem("local_token", JSON.stringify(cache));
+  },
+  hasValidToken() {
+    const cache = this.get();
+    if (!cache?.expirationTime) return false;
+    if (!cache?.token) return false;
+    if (cache.expirationTime < +new Date()) return false;
+    return true;
   },
 };
 
