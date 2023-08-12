@@ -27,6 +27,10 @@ module.exports = {
   plugins: ["react-refresh", "@typescript-eslint", "react", "prettier", "react-hooks"],
   rules: {
     "import/extensions": "off",
+    "import/no-extraneous-dependencies": [
+      "error",
+      { devDependencies: false, optionalDependencies: false, peerDependencies: false },
+    ],
     "react-refresh/only-export-components": ["warn", { allowConstantExport: true }],
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",
