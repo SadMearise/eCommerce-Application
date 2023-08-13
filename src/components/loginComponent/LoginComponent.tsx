@@ -9,34 +9,10 @@ import styles from "./Login.module.scss";
 import { LoginBtn, TLoginOnSubmitValues } from "./types";
 import { login } from "../../store/features/userSlice";
 import loginToApi from "../../services/LoginToApi";
-
-function validateEmail(value: string) {
-  let error;
-  const re =
-    /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i;
-  if (!value) {
-    error = "Required";
-  } else if (!re.test(value)) {
-    error = "Improperly formatted email address";
-  }
-  return error;
-}
-
-function validatePassword(value: string) {
-  let error;
-  const re = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^\w\s]).{8,}/;
-
-  if (!value) {
-    error = "Required";
-  } else if (!re.test(value)) {
-    error = "Weak password";
-  }
-  return error;
-}
+import { validateEmail, validatePassword } from "../../utils/loginValidate";
 
 function LoginComponent() {
   const dispatch = useDispatch();
-
   const navigate = useNavigate();
 
   const [fieldType, setFieldType] = useState("password");
@@ -53,7 +29,6 @@ function LoginComponent() {
     setShowError(false);
 
     if (loginResponse.isLoggined) {
-      console.log(loginResponse);
       dispatch(login({ customer: loginResponse.customer }));
       if (loginResponse.customer) {
         localStorage.setItem("customer", JSON.stringify(loginResponse.customer));
@@ -87,7 +62,12 @@ function LoginComponent() {
         onSubmit={onSubmit}
       >
         {({ errors, touched, isSubmitting }) => (
-          <Form className={styles.form}>
+          <Form
+            className={styles.form}
+            onChange={() => {
+              setShowError(false);
+            }}
+          >
             <Field
               as={TextField}
               className={(errors.email && touched.email) || showError ? `${styles.err}` : ""}

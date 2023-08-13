@@ -5,9 +5,9 @@ import { logout, selectUser } from "../../store/features/userSlice";
 
 function Logout() {
   const dispatch = useDispatch();
-  console.log("selectUser logout", selectUser);
+  // console.log("selectUser logout", selectUser);
   const user = useSelector(selectUser);
-  console.log(user);
+  // console.log(user);
 
   const handleLogout = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault();
