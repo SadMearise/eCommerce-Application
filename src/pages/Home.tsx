@@ -1,11 +1,14 @@
 import { useNavigate } from "react-router-dom";
-import Logout from "../components/logout/Logout";
+import { useDispatch } from "react-redux";
+import tokenCache from "../services/TokenCash";
+import { logout } from "../store/features/userSlice";
 
 export default function Home() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   return (
     <>
-      <Logout />
       <button
         type="button"
         onClick={() => {
@@ -13,6 +16,15 @@ export default function Home() {
         }}
       >
         Login
+      </button>
+      <button
+        type="button"
+        onClick={() => {
+          tokenCache.set({ token: "", expirationTime: 0 });
+          dispatch(logout());
+        }}
+      >
+        Logout
       </button>
       <h1>Home</h1>
     </>

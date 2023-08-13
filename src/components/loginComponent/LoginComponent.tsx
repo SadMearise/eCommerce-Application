@@ -30,9 +30,6 @@ function LoginComponent() {
 
     if (loginResponse.isLoggined) {
       dispatch(login({ customer: loginResponse.customer }));
-      if (loginResponse.customer) {
-        localStorage.setItem("customer", JSON.stringify(loginResponse.customer));
-      }
       props.setSubmitting(true);
       props.resetForm();
       navigate("/");
