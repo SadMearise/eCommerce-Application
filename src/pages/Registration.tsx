@@ -7,13 +7,15 @@ import { useFormik } from "formik";
 import { useState } from "react";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import regValidationSchema from "../utils/registerValidationSchema";
 import countriesSet from "../countries";
 import "dayjs/locale/en-gb";
+import { createCustomer } from "../services/customerService";
 
 export default function Registration() {
   const minDateOfBirth = dayjs().subtract(13, "year").startOf("day");
+  const navigate = useNavigate();
 
   const [showPassword, setShowPassword] = useState(false);
   const [isCountrySelected, setIsCountrySelected] = useState(false);
@@ -39,7 +41,12 @@ export default function Registration() {
     },
     validationSchema: regValidationSchema,
     onSubmit: (values) => {
-      console.log(values);
+      createCustomer(values)
+        .then(({ body }) => {
+          console.log(body);
+          navigate("/");
+        })
+        .catch(console.error);
     },
   });
   return (
@@ -73,7 +80,7 @@ export default function Registration() {
             Boolean(formik.errors.password) &&
             "Minimum 8 characters, at least 1 uppercase letter, 1 lowercase letter, and 1 number"
           }
-          type={showPassword ? "text" : "password"} // Показывает или скрывает пароль
+          type={showPassword ? "text" : "password"}
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
@@ -100,7 +107,6 @@ export default function Registration() {
             Boolean(formik.errors.firstName) &&
             "Must contain at least one character and no special characters or numbers"
           }
-          // className={formik.touched.firstName && formik.errors.firstName ? "Mui-error" : ""}
           fullWidth
           margin="dense"
         />
@@ -144,7 +150,7 @@ export default function Registration() {
             }}
           />
         </LocalizationProvider>
-        <h2>Addres:</h2>
+        <h2>Address:</h2>
         <TextField
           id="outlined-country-select"
           variant="outlined"
@@ -247,13 +253,12 @@ export default function Registration() {
           type="submit"
           disabled={!formik.dirty || !formik.isValid}
         >
-          Register
+          Register and go to Home
         </Button>
       </form>
       <Button
         component={Link}
         to="/login"
-        variant="outlined"
         type="submit"
       >
         Already have an account? Login here
