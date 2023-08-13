@@ -19,6 +19,7 @@ export default function Registration() {
 
   const [showPassword, setShowPassword] = useState(false);
   const [isCountrySelected, setIsCountrySelected] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const togglePasswordVisibility = () => {
     setShowPassword((prevShowPassword) => !prevShowPassword);
@@ -30,7 +31,7 @@ export default function Registration() {
       password: "",
       firstName: "",
       lastName: "",
-      dateOfBirth: "",
+      dateOfBirth: minDateOfBirth.format("YYYY-MM-DD"),
       address: {
         country: "",
         city: "",
@@ -42,11 +43,12 @@ export default function Registration() {
     validationSchema: regValidationSchema,
     onSubmit: (values) => {
       createCustomer(values)
-        .then(({ body }) => {
-          console.log(body);
+        .then(() => {
           navigate("/");
         })
-        .catch(console.error);
+        .catch((error) => {
+          setErrorMessage(error.message);
+        });
     },
   });
   return (
@@ -255,6 +257,7 @@ export default function Registration() {
         >
           Register and go to Home
         </Button>
+        {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
       </form>
       <Button
         component={Link}
