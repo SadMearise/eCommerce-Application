@@ -16,44 +16,38 @@ function LoginComponent() {
   const navigate = useNavigate();
 
   const [fieldType, setFieldType] = useState("password");
-  const [showError, setShowError] = useState(false);
-  const [errorMsg, setErrorMsg] = useState("");
+  const [error, setError] = useState({ show: false, message: "" });
 
   const initialValues = {
     email: "",
     password: "",
   };
 
-  const onSubmit = async (values: TLoginOnSubmitValues, props: FormikHelpers<TLoginOnSubmitValues>) => {
-    const loginResponse = await loginToApi(values.email, values.password);
-    setShowError(false);
-
-    if (loginResponse.isLoggined) {
-      dispatch(login({ customer: loginResponse.customer }));
-      props.setSubmitting(true);
-      props.resetForm();
-      navigate("/");
-    } else {
-      setShowError(true);
-      if (loginResponse.error) {
-        setErrorMsg(loginResponse.error);
-      } else {
-        setErrorMsg("Something went wrong");
+  const onSubmit = async (
+    values: TLoginOnSubmitValues,
+    { setSubmitting, resetForm }: FormikHelpers<TLoginOnSubmitValues>
+  ) => {
+    try {
+      const loginResponse = await loginToApi(values.email, values.password);
+      setError({ show: !loginResponse.isLoggined, message: loginResponse.error || "An error occurred" });
+      if (loginResponse.isLoggined) {
+        dispatch(login({ customer: loginResponse.customer }));
+        setSubmitting(true);
+        resetForm();
+        navigate("/");
       }
+    } catch (e) {
+      setError({ show: true, message: "An error occurred" });
     }
   };
 
   function toggleVizard() {
-    if (fieldType === "password") {
-      setFieldType("text");
-    } else {
-      setFieldType("password");
-    }
+    setFieldType(fieldType === "password" ? "text" : "password");
   }
 
   return (
     <>
-      {showError && <p className={styles.message}>{errorMsg}</p>}
+      {error.show && <p className={styles.message}>{error.message}</p>}
       <Formik
         initialValues={initialValues}
         onSubmit={onSubmit}
@@ -62,12 +56,12 @@ function LoginComponent() {
           <Form
             className={styles.form}
             onChange={() => {
-              setShowError(false);
+              setError({ show: false, message: "" });
             }}
           >
             <Field
               as={TextField}
-              className={(errors.email && touched.email) || showError ? `${styles.err}` : ""}
+              className={(errors.email && touched.email) || error.show ? `${styles.err}` : ""}
               type="email"
               variant="outlined"
               name="email"
@@ -82,7 +76,7 @@ function LoginComponent() {
             <div className={styles.password}>
               <Field
                 as={TextField}
-                className={(errors.password && touched.password) || showError ? `${styles.err}` : ""}
+                className={(errors.password && touched.password) || error.show ? `${styles.err}` : ""}
                 type={fieldType}
                 variant="outlined"
                 name="password"
