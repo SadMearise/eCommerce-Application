@@ -1,4 +1,3 @@
-/* eslint-disable react/jsx-wrap-multilines */
 /* eslint-disable operator-linebreak */
 import {
   Button,
@@ -37,7 +36,7 @@ export default function RegistrationForm() {
   const [isDefaultShipping, setIsDefaultShipping] = useState(false);
   const [isDefaultBilling, setIsDefaultBilling] = useState(false);
 
-  const togglePasswordVisibility = () => {
+  const togglePasswordVisibility = (): void => {
     setShowPassword((prevShowPassword) => !prevShowPassword);
   };
 
@@ -82,6 +81,7 @@ export default function RegistrationForm() {
     if (isDefaultBilling) {
       updateAddressField(formik, "billing");
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isDefaultShipping, isDefaultBilling, formik.values.address]);
   return (
     <>

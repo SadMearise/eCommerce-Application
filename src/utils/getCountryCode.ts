@@ -1,6 +1,4 @@
-interface CountryCodeMapping {
-  [countryName: string]: string;
-}
+import { CountryCodeMapping } from "../models/types";
 
 const countryNameWithCode: CountryCodeMapping = {
   Russia: "RU",

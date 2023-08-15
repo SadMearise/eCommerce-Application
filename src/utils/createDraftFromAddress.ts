@@ -1,7 +1,7 @@
 import { CustomerAddress } from "../models/types";
 import getCountryCode from "./getCountryCode";
 
-export default function createDraftFromAddress(address: CustomerAddress) {
+export default function createDraftFromAddress(address: CustomerAddress): CustomerAddress {
   return {
     country: getCountryCode(address.country || ""),
     city: address.city || "",
