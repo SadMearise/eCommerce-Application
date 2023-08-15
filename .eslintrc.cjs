@@ -26,6 +26,13 @@ module.exports = {
   },
   plugins: ["react-refresh", "@typescript-eslint", "react", "prettier", "react-hooks"],
   rules: {
+    "react/jsx-wrap-multilines": "off",
+    "operator-linebreak": "off",
+    indent: "off",
+    "no-shadow": "off",
+    "@typescript-eslint/no-shadow": ["error"],
+    "implicit-arrow-linebreak": "off",
+    "max-len": ["error", { code: 120, ignoreComments: true, ignoreStrings: true }],
     "import/extensions": "off",
     "import/no-extraneous-dependencies": [
       "error",
