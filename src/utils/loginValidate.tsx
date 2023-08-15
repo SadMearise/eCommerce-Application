@@ -1,23 +1,22 @@
 export function validateEmail(value: string) {
-  let error;
-  const re =
-    /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i;
   if (!value) {
-    error = "Required";
-  } else if (!re.test(value)) {
-    error = "Improperly formatted email address";
+    return "Required";
   }
-  return error;
+  const emailRegex =
+    /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i;
+  if (!emailRegex.test(value)) {
+    return "Improperly formatted email address";
+  }
+  return undefined;
 }
 
 export function validatePassword(value: string) {
-  let error;
-  const re = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^\w\s]).{8,}/;
-
   if (!value) {
-    error = "Required";
-  } else if (!re.test(value)) {
-    error = "Weak password";
+    return "Required";
   }
-  return error;
+  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^\w\s]).{8,}/;
+  if (!passwordRegex.test(value)) {
+    return "Weak password";
+  }
+  return undefined;
 }
