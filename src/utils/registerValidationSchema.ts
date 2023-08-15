@@ -1,3 +1,4 @@
+/* eslint-disable operator-linebreak */
 import * as yup from "yup";
 import { PostalCodeValidation } from "../models/types";
 import countriesSet from "../countries";
@@ -11,7 +12,7 @@ const postalCodeValidation: PostalCodeValidation = {
 };
 
 const addressValidationSchema = yup.object().shape({
-  country: yup.string().required("Country is required"),
+  country: yup.string().required(),
   city: yup
     .string()
     .test("city-validation", (value) => {
@@ -63,6 +64,8 @@ const regValidationSchema = yup.object().shape({
     .matches(/^[a-zA-Z]+$/) // Last name must contain at least one letter and no special characters or numbers
     .required(),
   address: addressValidationSchema,
+  shippingAddress: addressValidationSchema,
+  billingAddress: addressValidationSchema,
 });
 
 export default regValidationSchema;
