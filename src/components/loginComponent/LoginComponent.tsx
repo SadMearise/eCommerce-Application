@@ -10,6 +10,7 @@ import { LoginBtn, TLoginOnSubmitValues } from "./types";
 import { login } from "../../store/features/userSlice";
 import loginToApi from "../../services/LoginToApi";
 import { validateEmail, validatePassword } from "../../utils/loginValidate";
+import RouterPaths from "../../router/routes";
 
 function LoginComponent() {
   const dispatch = useDispatch();
@@ -34,7 +35,7 @@ function LoginComponent() {
         dispatch(login({ customer: loginResponse.customer }));
         setSubmitting(true);
         resetForm();
-        navigate("/");
+        navigate(RouterPaths.Home);
       }
     } catch (e) {
       setError({ show: true, message: "An error occurred" });
@@ -113,7 +114,7 @@ function LoginComponent() {
             </Button>
 
             <Link
-              to="/registration"
+              to={RouterPaths.Registration}
               className={styles.link}
             >
               Registration

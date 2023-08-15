@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import tokenCache from "../services/TokenCash";
 import { logout } from "../store/features/userSlice";
+import RouterPaths from "../router/routes";
 
 export default function Home() {
   const navigate = useNavigate();
@@ -12,7 +13,7 @@ export default function Home() {
       <button
         type="button"
         onClick={() => {
-          navigate("/login");
+          navigate(RouterPaths.Login);
         }}
       >
         Login
