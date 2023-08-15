@@ -41,6 +41,14 @@ export default function RegistrationForm() {
     setShowPassword((prevShowPassword) => !prevShowPassword);
   };
 
+  const defaultAddress = {
+    country: "",
+    city: "",
+    streetName: "",
+    streetNumber: "",
+    postalCode: "",
+  };
+
   const formik = useFormik<ICustomer>({
     initialValues: {
       email: "",
@@ -48,29 +56,11 @@ export default function RegistrationForm() {
       firstName: "",
       lastName: "",
       dateOfBirth: minDateOfBirth.format("YYYY-MM-DD"),
-      address: {
-        country: "",
-        city: "",
-        streetName: "",
-        streetNumber: "",
-        postalCode: "",
-      },
+      address: { ...defaultAddress },
       defaultShippingAddress: false,
       defaultBillingAddress: false,
-      shippingAddress: {
-        country: "",
-        city: "",
-        streetName: "",
-        streetNumber: "",
-        postalCode: "",
-      },
-      billingAddress: {
-        country: "",
-        city: "",
-        streetName: "",
-        streetNumber: "",
-        postalCode: "",
-      },
+      shippingAddress: { ...defaultAddress },
+      billingAddress: { ...defaultAddress },
     },
     validationSchema: regValidationSchema,
     onSubmit: (values) => {
