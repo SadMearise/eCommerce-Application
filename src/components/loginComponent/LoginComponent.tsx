@@ -26,7 +26,7 @@ function LoginComponent() {
   const onSubmit = async (
     values: TLoginOnSubmitValues,
     { setSubmitting, resetForm }: FormikHelpers<TLoginOnSubmitValues>
-  ) => {
+  ): Promise<void> => {
     try {
       const loginResponse = await loginToApi(values.email, values.password);
       setError({ show: !loginResponse.isLoggined, message: loginResponse.error || "An error occurred" });
@@ -41,7 +41,7 @@ function LoginComponent() {
     }
   };
 
-  function toggleVizard() {
+  function toggleVizard(): void {
     setFieldType(fieldType === "password" ? "text" : "password");
   }
 

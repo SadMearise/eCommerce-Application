@@ -1,4 +1,4 @@
-export function validateEmail(value: string) {
+export function validateEmail(value: string): string | undefined {
   if (!value) {
     return "Required";
   }
@@ -10,7 +10,7 @@ export function validateEmail(value: string) {
   return undefined;
 }
 
-export function validatePassword(value: string) {
+export function validatePassword(value: string): string | undefined {
   if (!value) {
     return "Required";
   }
