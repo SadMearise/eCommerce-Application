@@ -87,7 +87,7 @@ module.exports = {
     "no-unused-vars": "off",
     "max-len": ["error", { code: 120 }],
     "react/jsx-props-no-spreading": "off",
-    "@typescript-eslint/no-unused-vars": ["error"]
+    "@typescript-eslint/no-unused-vars": ["error"],
   },
   settings: {
     "import/resolver": {
