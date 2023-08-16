@@ -52,7 +52,7 @@ const regValidationSchema = yup.object().shape({
   email: yup.string().email().required(),
   password: yup
     .string()
-    .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^\w\s]).{8,}/) // Password must contain at least one uppercase letter, one lowercase letter, and one number
+    .matches(/^(?! )(?!.* $)(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^\w\s]).{8,}$/) // Password must contain at least one uppercase letter, one lowercase letter, and one number
     .required(),
   firstName: yup
     .string()
