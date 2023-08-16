@@ -65,7 +65,7 @@ function LoginComponent() {
               className={
                 (errors.email && touched.email) || error.show ? `${styles.err} ${styles.field}` : `${styles.field}`
               }
-              type="email"
+              type="text"
               variant="outlined"
               name="email"
               label="Email"
