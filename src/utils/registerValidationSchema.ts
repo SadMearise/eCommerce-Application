@@ -6,7 +6,7 @@ import countriesSet from "../countries";
 const postalCodeValidation: PostalCodeValidation = {
   Russia: yup.string().matches(/^\d{6}$/),
   Georgia: yup.string().matches(/^\d{4}$/),
-  Belarus: yup.string().matches(/^\d{4}$/),
+  Belarus: yup.string().matches(/^\d{6}$/),
   USA: yup.string().matches(/^\d{5}(-\d{4})?$/),
   Canada: yup.string().matches(/^[A-Za-z]\d[A-Za-z] \d[A-Za-z]\d$/),
 };
