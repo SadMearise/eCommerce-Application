@@ -8,42 +8,43 @@ import Basket from "../pages/Basket";
 import Catalog from "../pages/Catalog";
 import Product from "../pages/Product";
 import Profile from "../pages/Profile";
+import RouterPaths from "./routes";
 
 const router = createBrowserRouter([
   {
-    path: "*",
+    path: RouterPaths.Page404,
     element: <Page404 />,
   },
   {
-    path: "/",
+    path: RouterPaths.Home,
     element: <Home />,
   },
   {
-    path: "/about",
+    path: RouterPaths.About,
     element: <About />,
   },
   {
-    path: "/basket",
+    path: RouterPaths.Basket,
     element: <Basket />,
   },
   {
-    path: "/catalog",
+    path: RouterPaths.Catalog,
     element: <Catalog />,
   },
   {
-    path: "/product",
+    path: RouterPaths.Product,
     element: <Product />,
   },
   {
-    path: "/profile",
+    path: RouterPaths.Profile,
     element: <Profile />,
   },
   {
-    path: "/registration",
+    path: RouterPaths.Registration,
     element: <Registration />,
   },
   {
-    path: "/login",
+    path: RouterPaths.Login,
     element: <Login />,
   },
 ]);
