@@ -25,6 +25,7 @@ import styles from "./RegistrationForm.module.scss";
 import createCustomer from "../../services/customerService";
 import { ICustomer } from "../../models/types";
 import updateAddressField from "../../utils/updateAddressFields";
+import RouterPaths from "../../router/routes";
 
 export default function RegistrationForm() {
   const minDateOfBirth = dayjs().subtract(13, "year").startOf("day");
@@ -65,7 +66,7 @@ export default function RegistrationForm() {
     onSubmit: (values) => {
       createCustomer(values)
         .then(() => {
-          navigate("/");
+          navigate(RouterPaths.Home);
         })
         .catch((error: Error) => {
           setErrorMessage({ show: true, message: error.message });
@@ -554,7 +555,7 @@ export default function RegistrationForm() {
 
       <Button
         component={Link}
-        to="/login"
+        to={RouterPaths.Login}
         type="submit"
       >
         Already have an account? Login here
