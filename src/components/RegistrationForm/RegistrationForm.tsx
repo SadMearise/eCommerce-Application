@@ -115,7 +115,7 @@ export default function RegistrationForm() {
           helperText={
             formik.touched.password &&
             Boolean(formik.errors.password) &&
-            "Minimum 8 characters, at least 1 uppercase letter, 1 lowercase letter, and 1 number"
+            "Minimum 8 characters, at least 1 uppercase letter, 1 lowercase letter, 1 number and at least one special character (e.g., !@#$%^&*)"
           }
           type={showPassword ? "text" : "password"}
           InputProps={{
