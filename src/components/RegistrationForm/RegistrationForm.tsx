@@ -32,7 +32,7 @@ export default function RegistrationForm() {
 
   const [showPassword, setShowPassword] = useState(false);
   const [isCountrySelected, setIsCountrySelected] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState({ show: false, message: "" });
   const [isDefaultShipping, setIsDefaultShipping] = useState(false);
   const [isDefaultBilling, setIsDefaultBilling] = useState(false);
 
@@ -68,7 +68,7 @@ export default function RegistrationForm() {
           navigate("/");
         })
         .catch((error: Error) => {
-          setErrorMessage(error.message);
+          setErrorMessage({ show: true, message: error.message });
         });
     },
   });
@@ -94,8 +94,11 @@ export default function RegistrationForm() {
           value={formik.values.email}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
-          error={formik.touched.email && Boolean(formik.errors.email)}
-          helperText={formik.touched.email && Boolean(formik.errors.email) && "email address (e.g., example@email.com)"}
+          error={(formik.touched.email && Boolean(formik.errors.email)) || errorMessage.show}
+          helperText={
+            (formik.touched.email && Boolean(formik.errors.email) && "email address (e.g., example@email.com)") ||
+            (errorMessage.show && errorMessage.message)
+          }
           fullWidth
           margin="dense"
         />
@@ -545,7 +548,7 @@ export default function RegistrationForm() {
           >
             Register and go to Home
           </Button>
-          {errorMessage && <p className={styles["error-message"]}>{errorMessage}</p>}
+          {errorMessage.show && <p className={styles["error-message"]}>{errorMessage.message}</p>}
         </div>
       </form>
 
