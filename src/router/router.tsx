@@ -49,7 +49,7 @@ const router = createBrowserRouter([
     element: <Login />,
     loader: async () => {
       if (tokenCache.hasValidToken()) {
-        return redirect("/");
+        return redirect(RouterPaths.Home);
       }
       return null;
     },

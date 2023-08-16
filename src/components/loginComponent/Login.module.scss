@@ -12,7 +12,7 @@
   max-width: 500px;
   margin: 0 auto;
 
-  & div {
+  & .field {
     margin: 5px 0;
   }
 }
@@ -22,7 +22,7 @@
   right: 15px;
   top: 23%;
 
-  & input {
+  & .toggler {
     padding: 0;
     height: initial;
     width: initial;
@@ -31,12 +31,12 @@
     cursor: pointer;
   }
 
-  & label {
+  & .label {
     position: relative;
     cursor: pointer;
   }
 
-  & label:before {
+  & .label:before {
     content: "";
     -webkit-appearance: none;
     background-color: transparent;
@@ -46,7 +46,7 @@
     cursor: pointer;
   }
 
-  & input:checked + label:after {
+  & .toggler:checked + .label:after {
     content: "";
     display: block;
     position: absolute;

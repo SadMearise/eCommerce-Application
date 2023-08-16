@@ -62,7 +62,9 @@ function LoginComponent() {
           >
             <Field
               as={TextField}
-              className={(errors.email && touched.email) || error.show ? `${styles.err}` : ""}
+              className={
+                (errors.email && touched.email) || error.show ? `${styles.err} ${styles.field}` : `${styles.field}`
+              }
               type="email"
               variant="outlined"
               name="email"
@@ -77,7 +79,11 @@ function LoginComponent() {
             <div className={styles.password}>
               <Field
                 as={TextField}
-                className={(errors.password && touched.password) || error.show ? `${styles.err}` : ""}
+                className={
+                  (errors.password && touched.password) || error.show
+                    ? `${styles.err} ${styles.field}`
+                    : `${styles.field}`
+                }
                 type={fieldType}
                 variant="outlined"
                 name="password"
@@ -90,11 +96,15 @@ function LoginComponent() {
               />
 
               <div className={styles.vizard}>
-                <label htmlFor="toggler">
+                <label
+                  htmlFor="toggler"
+                  className={styles.label}
+                >
                   <input
                     type="checkbox"
                     onClick={toggleVizard}
                     id="toggler"
+                    className={styles.toggler}
                   />
                   {fieldType === "password" ? (
                     <VisibilityOffIcon style={{ color: "#1565c0" }} />
