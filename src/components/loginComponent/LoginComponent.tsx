@@ -1,5 +1,5 @@
 import { Formik, Form, Field, ErrorMessage, FormikHelpers } from "formik";
-import { TextField, Button } from "@mui/material";
+import { TextField, Button, InputAdornment, IconButton } from "@mui/material";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
@@ -16,8 +16,11 @@ function LoginComponent() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const [fieldType, setFieldType] = useState("password");
   const [error, setError] = useState({ show: false, message: "" });
+  const [showPassword, setShowPassword] = useState(false);
+  const togglePasswordVisibility = (): void => {
+    setShowPassword((prevShowPassword) => !prevShowPassword);
+  };
 
   const initialValues = {
     email: "",
@@ -41,10 +44,6 @@ function LoginComponent() {
       setError({ show: true, message: "An error occurred" });
     }
   };
-
-  function toggleVizard(): void {
-    setFieldType(fieldType === "password" ? "text" : "password");
-  }
 
   return (
     <>
@@ -76,44 +75,32 @@ function LoginComponent() {
               helperText={<ErrorMessage name="email" />}
             />
 
-            <div className={styles.password}>
-              <Field
-                as={TextField}
-                className={
-                  (errors.password && touched.password) || error.show
-                    ? `${styles.err} ${styles.field}`
-                    : `${styles.field}`
-                }
-                type={fieldType}
-                variant="outlined"
-                name="password"
-                label="Password"
-                placeholder="Password"
-                validate={validatePassword}
-                fullWidth
-                required
-                helperText={<ErrorMessage name="password" />}
-              />
-
-              <div className={styles.vizard}>
-                <label
-                  htmlFor="toggler"
-                  className={styles.label}
-                >
-                  <input
-                    type="checkbox"
-                    onClick={toggleVizard}
-                    id="toggler"
-                    className={styles.toggler}
-                  />
-                  {fieldType === "password" ? (
-                    <VisibilityOffIcon style={{ color: "#1565c0" }} />
-                  ) : (
-                    <VisibilityIcon style={{ color: "#1565c0" }} />
-                  )}
-                </label>
-              </div>
-            </div>
+            <Field
+              as={TextField}
+              className={
+                (errors.password && touched.password) || error.show
+                  ? `${styles.err} ${styles.field}`
+                  : `${styles.field}`
+              }
+              type={showPassword ? "text" : "password"}
+              variant="outlined"
+              name="password"
+              label="Password"
+              placeholder="Password"
+              validate={validatePassword}
+              fullWidth
+              required
+              helperText={<ErrorMessage name="password" />}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton onClick={togglePasswordVisibility}>
+                      {showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
+            />
 
             <Button
               variant="contained"
