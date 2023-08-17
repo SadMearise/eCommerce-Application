@@ -93,7 +93,10 @@ export default function RegistrationForm() {
           name="email"
           label="Email"
           value={formik.values.email}
-          onChange={formik.handleChange}
+          onChange={(e) => {
+            formik.handleChange(e);
+            setErrorMessage({ show: false, message: "" });
+          }}
           onBlur={formik.handleBlur}
           error={(formik.touched.email && Boolean(formik.errors.email)) || errorMessage.show}
           helperText={
