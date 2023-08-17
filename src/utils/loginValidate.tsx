@@ -21,5 +21,8 @@ export function validatePassword(value: string): string | undefined {
       "contain uppercase letter (A-Z), lowercase letter (a-z), digit (0-9), special character (e.g., !@#$%^&*)."
     );
   }
+  if (value.trim() !== value) {
+    return "Mustn't contain leading or trailing whitespace";
+  }
   return undefined;
 }
