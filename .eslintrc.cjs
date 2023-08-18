@@ -26,11 +26,14 @@ module.exports = {
   },
   plugins: ["react-refresh", "@typescript-eslint", "react", "prettier", "react-hooks"],
   rules: {
-    "max-len": ["error", {
-      "code": 120,
-      "ignoreComments": true,
-      "ignoreStrings": true
-    }],
+    "max-len": [
+      "error",
+      {
+        code: 120,
+        ignoreComments: true,
+        ignoreStrings: true,
+      },
+    ],
     "react/jsx-wrap-multilines": "off",
     "implicit-arrow-linebreak": "off",
     "import/extensions": "off",

@@ -102,7 +102,9 @@ export default function RegistrationForm() {
           onBlur={formik.handleBlur}
           error={(formik.touched.email && Boolean(formik.errors.email)) || errorMessage.show}
           helperText={
-            (formik.touched.email && Boolean(formik.errors.email) && "email address (e.g., example@email.com)") ||
+            (formik.touched.email &&
+              Boolean(formik.errors.email) &&
+              "email address (e.g., example@email.com), may contain only english letters") ||
             (errorMessage.show && errorMessage.message)
           }
           fullWidth
@@ -120,7 +122,7 @@ export default function RegistrationForm() {
           helperText={
             formik.touched.password &&
             Boolean(formik.errors.password) &&
-            "Minimum 8 characters, at least 1 uppercase letter, 1 lowercase letter, 1 number and at least one special character (e.g., !@#$%^&*)"
+            "Minimum 8 characters, at least 1 uppercase letter, 1 lowercase letter, 1 number and at least one special character (e.g., !@#$%^&*), may contain only english letters"
           }
           type={showPassword ? "text" : "password"}
           InputProps={{
@@ -147,7 +149,7 @@ export default function RegistrationForm() {
           helperText={
             formik.touched.firstName &&
             Boolean(formik.errors.firstName) &&
-            "Must contain at least one character and no special characters or numbers"
+            "Must contain at least one character and no special characters or numbers, may contain only english letters"
           }
           fullWidth
           margin="dense"
@@ -164,7 +166,7 @@ export default function RegistrationForm() {
           helperText={
             formik.touched.lastName &&
             Boolean(formik.errors.lastName) &&
-            "Must contain at least one character and no special characters or numbers"
+            "Must contain at least one character and no special characters or numbers, may contain only english letters"
           }
           fullWidth
           margin="dense"
@@ -259,7 +261,7 @@ export default function RegistrationForm() {
           helperText={
             formik.touched.address?.city &&
             Boolean(formik.errors.address?.city) &&
-            "Must contain at least one character and no special characters or numbers"
+            "Must contain at least one character and no special characters or numbers, may contain only english letters"
           }
           disabled={!isCountrySelected}
           fullWidth
@@ -277,7 +279,7 @@ export default function RegistrationForm() {
           helperText={
             formik.touched.address?.streetName &&
             Boolean(formik.errors.address?.streetName) &&
-            "Must contain at least one character"
+            "Must contain at least one character and no special characters or numbers, may contain only english letters"
           }
           disabled={!isCountrySelected}
           fullWidth
@@ -295,7 +297,7 @@ export default function RegistrationForm() {
           helperText={
             formik.touched.address?.streetNumber &&
             Boolean(formik.errors.address?.streetNumber) &&
-            "Must contain at least one digit"
+            "Must contain at least one digit and should only be digits"
           }
           disabled={!isCountrySelected}
           fullWidth
@@ -362,7 +364,7 @@ export default function RegistrationForm() {
           helperText={
             formik.touched.shippingAddress?.city &&
             Boolean(formik.errors.shippingAddress?.city) &&
-            "Must contain at least one character and no special characters or numbers"
+            "Must contain at least one character and no special characters or numbers, may contain only english letters"
           }
           disabled={!isCountrySelected || formik.values.defaultShippingAddress}
           fullWidth
@@ -384,7 +386,7 @@ export default function RegistrationForm() {
           helperText={
             formik.touched.shippingAddress?.streetName &&
             Boolean(formik.errors.shippingAddress?.streetName) &&
-            "Must contain at least one character"
+            "Must contain at least one character and no special characters or numbers, may contain only english letters"
           }
           disabled={!isCountrySelected || formik.values.defaultShippingAddress}
           fullWidth
@@ -406,7 +408,7 @@ export default function RegistrationForm() {
           helperText={
             formik.touched.shippingAddress?.streetNumber &&
             Boolean(formik.errors.shippingAddress?.streetNumber) &&
-            "Must contain at least one digit"
+            "Must contain at least one digit and should only be digits"
           }
           disabled={!isCountrySelected || formik.values.defaultShippingAddress}
           fullWidth
@@ -474,7 +476,7 @@ export default function RegistrationForm() {
           helperText={
             formik.touched.billingAddress?.city &&
             Boolean(formik.errors.billingAddress?.city) &&
-            "Must contain at least one character and no special characters or numbers"
+            "Must contain at least one character and no special characters or numbers, may contain only english letters"
           }
           disabled={!isCountrySelected || formik.values.defaultBillingAddress}
           fullWidth
@@ -496,7 +498,7 @@ export default function RegistrationForm() {
           helperText={
             formik.touched.billingAddress?.streetName &&
             Boolean(formik.errors.billingAddress?.streetName) &&
-            "Must contain at least one character"
+            "Must contain at least one character and no special characters or numbers, may contain only english letters"
           }
           disabled={!isCountrySelected || formik.values.defaultBillingAddress}
           fullWidth
@@ -518,7 +520,7 @@ export default function RegistrationForm() {
           helperText={
             formik.touched.billingAddress?.streetNumber &&
             Boolean(formik.errors.billingAddress?.streetNumber) &&
-            "Must contain at least one digit"
+            "Must contain at least one digit and should only be digits"
           }
           disabled={!isCountrySelected || formik.values.defaultBillingAddress}
           fullWidth

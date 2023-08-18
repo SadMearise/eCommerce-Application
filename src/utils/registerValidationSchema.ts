@@ -20,7 +20,7 @@ const addressValidationSchema = yup.object().shape({
         return false;
       }
 
-      const containsLetter = /[a-zA-Zа]/.test(value);
+      const containsLetter = /^[a-zA-Z]+$/.test(value);
       const noSpecialCharsOrNumbers = /^[a-zA-Zа\s]*$/.test(value);
 
       return containsLetter && noSpecialCharsOrNumbers;
@@ -28,7 +28,7 @@ const addressValidationSchema = yup.object().shape({
     .required(),
   streetName: yup
     .string()
-    .matches(/[a-zA-Zа]/)
+    .matches(/^[a-zA-Z]+$/)
     .required(),
   streetNumber: yup.string().matches(/^\d+/).required(),
   postalCode: yup
