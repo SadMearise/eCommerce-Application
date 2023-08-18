@@ -1,8 +1,7 @@
 /* eslint-disable import/no-extraneous-dependencies */
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { Button } from "@mui/material";
-import { Link } from "react-router-dom";
 import tokenCache from "../services/TokenCash";
 import { logout } from "../store/features/userSlice";
 import RouterPaths from "../router/routes";
@@ -31,6 +30,12 @@ export default function Home() {
         Logout
       </button>
       <h1>Home</h1>
+      <Button
+        component={Link}
+        to={RouterPaths.Registration}
+      >
+        to Registration
+      </Button>
     </>
   );
 }

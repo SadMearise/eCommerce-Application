@@ -26,6 +26,7 @@ import createCustomer from "../../services/customerService";
 import { ICustomer } from "../../models/types";
 import updateAddressField from "../../utils/updateAddressFields";
 import RouterPaths from "../../router/routes";
+import loginToApi from "../../services/LoginToApi";
 
 export default function RegistrationForm() {
   const minDateOfBirth = dayjs().subtract(13, "year").startOf("day");
@@ -66,6 +67,7 @@ export default function RegistrationForm() {
     onSubmit: (values) => {
       createCustomer(values)
         .then(() => {
+          loginToApi(values.email, values.password);
           navigate(RouterPaths.Home);
         })
         .catch((error: Error) => {
