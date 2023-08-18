@@ -1,3 +1,10 @@
+import Header from "../components/header/Header";
+
 export default function Catalog() {
-  return <h1>Catalog</h1>;
+  return (
+    <>
+      <Header />
+      <h1>Catalog</h1>
+    </>
+  );
 }
