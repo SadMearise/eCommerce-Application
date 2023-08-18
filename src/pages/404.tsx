@@ -1,5 +1,6 @@
 import Button from "@mui/material/Button";
 import { Link } from "react-router-dom";
+import RouterPaths from "../router/routes";
 
 export default function Page404() {
   return (
@@ -9,7 +10,7 @@ export default function Page404() {
       <Button
         variant="contained"
         component={Link}
-        to="/"
+        to={RouterPaths.Home}
       >
         Go home
       </Button>
