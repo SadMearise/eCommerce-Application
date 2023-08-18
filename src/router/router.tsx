@@ -1,4 +1,4 @@
-import { createBrowserRouter } from "react-router-dom";
+import { createBrowserRouter, redirect } from "react-router-dom";
 import Page404 from "../pages/404";
 import Login from "../pages/Login";
 import Registration from "../pages/Registration";
@@ -8,6 +8,7 @@ import Basket from "../pages/Basket";
 import Catalog from "../pages/Catalog";
 import Product from "../pages/Product";
 import Profile from "../pages/Profile";
+import tokenCache from "../services/TokenCash";
 import RouterPaths from "./routes";
 
 const router = createBrowserRouter([
@@ -46,6 +47,12 @@ const router = createBrowserRouter([
   {
     path: RouterPaths.Login,
     element: <Login />,
+    loader: async () => {
+      if (tokenCache.hasValidToken()) {
+        return redirect(RouterPaths.Home);
+      }
+      return null;
+    },
   },
 ]);
 

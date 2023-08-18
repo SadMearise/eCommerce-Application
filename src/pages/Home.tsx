@@ -1,16 +1,36 @@
+/* eslint-disable import/no-extraneous-dependencies */
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import { Button } from "@mui/material";
 import { Link } from "react-router-dom";
+import tokenCache from "../services/TokenCash";
+import { logout } from "../store/features/userSlice";
+import RouterPaths from "../router/routes";
 
 export default function Home() {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   return (
     <>
-      <h1>Home</h1>
-      <Button
-        component={Link}
-        to="/registration"
+      <button
+        type="button"
+        onClick={() => {
+          navigate(RouterPaths.Login);
+        }}
       >
-        to Registration
-      </Button>
+        Login
+      </button>
+      <button
+        type="button"
+        onClick={() => {
+          tokenCache.set({ token: "", expirationTime: 0 });
+          dispatch(logout());
+        }}
+      >
+        Logout
+      </button>
+      <h1>Home</h1>
     </>
   );
 }
