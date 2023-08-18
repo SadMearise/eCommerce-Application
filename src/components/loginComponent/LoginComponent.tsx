@@ -73,6 +73,7 @@ function LoginComponent() {
               fullWidth
               required
               helperText={<ErrorMessage name="email" />}
+              error={(errors.email && touched.email) || error.show}
             />
 
             <Field
@@ -100,6 +101,7 @@ function LoginComponent() {
                   </InputAdornment>
                 ),
               }}
+              error={(errors.password && touched.password) || error.show}
             />
 
             <Button
