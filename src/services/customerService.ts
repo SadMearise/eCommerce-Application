@@ -1,4 +1,3 @@
-/* eslint-disable operator-linebreak */
 import { ClientResponse, CustomerDraft, CustomerSignInResult } from "@commercetools/platform-sdk";
 import getApiRoot from "./BuildClient";
 import { ICustomer } from "../models/types";
