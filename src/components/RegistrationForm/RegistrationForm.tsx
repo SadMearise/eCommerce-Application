@@ -20,6 +20,7 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import { Link, useNavigate } from "react-router-dom";
 import "dayjs/locale/en-gb";
+import { useDispatch } from "react-redux";
 import regValidationSchema from "../../utils/registerValidationSchema";
 import countriesSet from "../../countries";
 import styles from "./RegistrationForm.module.scss";
@@ -28,10 +29,12 @@ import { AddressType, ICustomer } from "../../models/types";
 import updateAddressField from "../../utils/updateAddressFields";
 import RouterPaths from "../../router/routes";
 import loginToApi from "../../services/LoginToApi";
+import { setRegistrationSuccess } from "../../store/features/registrationSlice";
 
 export default function RegistrationForm() {
   const minDateOfBirth = dayjs().subtract(13, "year").startOf("day");
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const [showPassword, setShowPassword] = useState(false);
   const [isCountrySelected, setIsCountrySelected] = useState(false);
@@ -70,6 +73,7 @@ export default function RegistrationForm() {
         .then(() => {
           loginToApi(values.email, values.password);
           navigate(RouterPaths.Home);
+          dispatch(setRegistrationSuccess(true));
         })
         .catch((error: Error) => {
           setErrorMessage({ show: true, message: error.message });

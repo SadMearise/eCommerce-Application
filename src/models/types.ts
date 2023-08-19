@@ -43,3 +43,11 @@ export enum AddressType {
 }
 
 export type AdditionalAddressType = AddressType.Shipping | AddressType.Billing;
+
+export interface RegistrationState {
+  isSuccess: boolean;
+}
+
+export interface RootState {
+  registration: RegistrationState;
+}
