@@ -1,7 +1,7 @@
 import { FormikProps } from "formik";
-import { ICustomer } from "../models/types";
+import { AdditionalAddressType, ICustomer } from "../models/types";
 
-const updateAddressField = (formik: FormikProps<ICustomer>, type: "shipping" | "billing"): void => {
+const updateAddressField = (formik: FormikProps<ICustomer>, type: AdditionalAddressType): void => {
   if (type === "shipping") {
     formik.setFieldValue("shippingAddress", {
       ...formik.values.address,

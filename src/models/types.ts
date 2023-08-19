@@ -28,3 +28,10 @@ export interface ICustomer {
 export interface CountryCodeMapping {
   [countryName: string]: string;
 }
+
+export enum AddressType {
+  Shipping = "shipping",
+  Billing = "billing",
+}
+
+export type AdditionalAddressType = AddressType.Shipping | AddressType.Billing;

@@ -24,7 +24,7 @@ import regValidationSchema from "../../utils/registerValidationSchema";
 import countriesSet from "../../countries";
 import styles from "./RegistrationForm.module.scss";
 import createCustomer from "../../services/customerService";
-import { ICustomer } from "../../models/types";
+import { AddressType, ICustomer } from "../../models/types";
 import updateAddressField from "../../utils/updateAddressFields";
 import RouterPaths from "../../router/routes";
 import loginToApi from "../../services/LoginToApi";
@@ -79,11 +79,11 @@ export default function RegistrationForm() {
 
   useEffect(() => {
     if (isDefaultShipping) {
-      updateAddressField(formik, "shipping");
+      updateAddressField(formik, AddressType.Shipping);
     }
 
     if (isDefaultBilling) {
-      updateAddressField(formik, "billing");
+      updateAddressField(formik, AddressType.Billing);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isDefaultShipping, isDefaultBilling, formik.values.address]);
