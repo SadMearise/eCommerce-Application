@@ -29,6 +29,14 @@ export interface CountryCodeMapping {
   [countryName: string]: string;
 }
 
+export enum CountryCode {
+  Russia = "RU",
+  Belarus = "BY",
+  Georgia = "GE",
+  UnitedStates = "US",
+  Canada = "CA",
+}
+
 export enum AddressType {
   Shipping = "shipping",
   Billing = "billing",
