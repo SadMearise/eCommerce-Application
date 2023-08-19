@@ -17,10 +17,7 @@ export default function AlertView() {
   return (
     <div>
       {open && (
-        <Alert
-          variant="outlined"
-          onClose={() => setOpen(false)}
-        >
+        <Alert variant="outlined">
           <AlertTitle>Success</AlertTitle>
           Registration successful! You&apos;re now logged in!
         </Alert>
