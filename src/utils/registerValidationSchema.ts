@@ -28,7 +28,7 @@ export const addressValidationSchema = yup.object().shape({
     .required(),
   streetName: yup
     .string()
-    .matches(/^[a-zA-Z]+$/)
+    .matches(/^[a-zA-Z0-9]+$/)
     .required(),
   streetNumber: yup.string().matches(/^\d+/).required(),
   postalCode: yup
@@ -52,7 +52,7 @@ const regValidationSchema = yup.object().shape({
   email: yup.string().email().required(),
   password: yup
     .string()
-    .matches(/^(?! )(?!.* $)(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^\w\s]).{8,}$/) // Password must contain at least one uppercase letter, one lowercase letter, and one number
+    .matches(/^(?!.*^\s)(?!.*\s$)(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*()])[a-zA-Z0-9!@#$%^&*() \t]*$/) // Password must contain at least one uppercase letter, one lowercase letter, and one number
     .required(),
   firstName: yup
     .string()

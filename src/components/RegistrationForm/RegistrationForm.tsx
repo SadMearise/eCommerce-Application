@@ -105,7 +105,7 @@ export default function RegistrationForm() {
           helperText={
             (formik.touched.email &&
               Boolean(formik.errors.email) &&
-              "email address (e.g., example@email.com), may contain only english letters") ||
+              "email address is not valid (e.g., example@email.com), may contain only english letters") ||
             (errorMessage.show && errorMessage.message)
           }
           fullWidth
