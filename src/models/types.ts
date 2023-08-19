@@ -11,6 +11,7 @@ export interface CustomerAddress {
   streetNumber: string;
   postalCode: string;
 }
+
 export interface ICustomer {
   email: string;
   password: string;
