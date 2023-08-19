@@ -26,7 +26,7 @@ module.exports = {
   },
   plugins: ["react-refresh", "@typescript-eslint", "react", "prettier", "react-hooks"],
   rules: {
-    "indent": "off",
+    indent: "off",
     "max-len": [
       "error",
       {
