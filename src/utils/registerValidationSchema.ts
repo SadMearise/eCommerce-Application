@@ -3,7 +3,7 @@ import * as yup from "yup";
 import { PostalCodeValidation } from "../models/types";
 import countriesSet from "../countries";
 
-const postalCodeValidation: PostalCodeValidation = {
+export const postalCodeValidation: PostalCodeValidation = {
   Russia: yup.string().matches(/^\d{6}$/),
   Georgia: yup.string().matches(/^\d{4}$/),
   Belarus: yup.string().matches(/^\d{6}$/),
@@ -11,7 +11,7 @@ const postalCodeValidation: PostalCodeValidation = {
   Canada: yup.string().matches(/^[A-Za-z]\d[A-Za-z] \d[A-Za-z]\d$/),
 };
 
-const addressValidationSchema = yup.object().shape({
+export const addressValidationSchema = yup.object().shape({
   country: yup.string().required(),
   city: yup
     .string()
