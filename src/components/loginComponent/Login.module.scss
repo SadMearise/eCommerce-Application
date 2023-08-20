@@ -19,10 +19,6 @@
 }
 
 .err {
-  & > div {
-    border: 2px solid red !important;
-  }
-
   &:focus {
     border: 0;
   }

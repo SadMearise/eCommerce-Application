@@ -29,7 +29,7 @@ import { AddressType, ICustomer } from "../../models/types";
 import updateAddressField from "../../utils/updateAddressFields";
 import RouterPaths from "../../router/routes";
 import loginToApi from "../../services/LoginToApi";
-import { setRegistrationSuccess } from "../../store/features/registrationSlice";
+import { setRegistrationSuccess } from "../../store/features/registration/registrationSlice";
 
 export default function RegistrationForm() {
   const minDateOfBirth = dayjs().subtract(13, "year").startOf("day");

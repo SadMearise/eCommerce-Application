@@ -1,19 +1,19 @@
 import { Formik, Form, Field, ErrorMessage, FormikHelpers } from "formik";
 import { TextField, Button, InputAdornment, IconButton } from "@mui/material";
 import { useState } from "react";
-import { useDispatch } from "react-redux";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { useNavigate, Link } from "react-router-dom";
 import styles from "./Login.module.scss";
 import { LoginBtn, TLoginOnSubmitValues } from "./types";
-import { login } from "../../store/features/userSlice";
+import { login } from "../../store/features/user/userSlice";
 import loginToApi from "../../services/LoginToApi";
 import { validateEmail, validatePassword } from "../../utils/loginValidate";
 import RouterPaths from "../../router/routes";
+import { useAppDispatch } from "../../store/hooks";
 
 function LoginComponent() {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   const [error, setError] = useState({ show: false, message: "" });
@@ -73,6 +73,7 @@ function LoginComponent() {
               fullWidth
               required
               helperText={<ErrorMessage name="email" />}
+              error={(errors.email && touched.email) || error.show}
             />
 
             <Field
@@ -100,6 +101,7 @@ function LoginComponent() {
                   </InputAdornment>
                 ),
               }}
+              error={(errors.password && touched.password) || error.show}
             />
 
             <Button

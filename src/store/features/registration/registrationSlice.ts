@@ -1,5 +1,8 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { RegistrationState } from "../../models/types";
+
+interface RegistrationState {
+  isSuccess: boolean;
+}
 
 const initialState: RegistrationState = {
   isSuccess: false,
@@ -16,4 +19,4 @@ const registrationSlice = createSlice({
 });
 
 export const { setRegistrationSuccess } = registrationSlice.actions;
-export default registrationSlice.reducer;
+export default registrationSlice;
