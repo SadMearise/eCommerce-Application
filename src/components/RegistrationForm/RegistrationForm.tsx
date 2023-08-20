@@ -1,5 +1,3 @@
-/* eslint-disable import/no-extraneous-dependencies */
-/* eslint-disable operator-linebreak */
 import {
   Button,
   Checkbox,

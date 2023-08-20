@@ -11,6 +11,7 @@ export default function Home() {
       <Header />
       <h1>Home</h1>
       {isSuccessSelector && <AlertView />}
+      <AlertView />
     </>
   );
 }

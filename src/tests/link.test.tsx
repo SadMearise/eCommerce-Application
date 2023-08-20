@@ -1,5 +1,5 @@
 import { render } from "@testing-library/react";
-import "@testing-library/jest-dom/extend-expect"; // для расширения сопоставлений DOM
+import "@testing-library/jest-dom/extend-expect";
 
 import { Link, MemoryRouter } from "react-router-dom";
 import { Button } from "@mui/material";
