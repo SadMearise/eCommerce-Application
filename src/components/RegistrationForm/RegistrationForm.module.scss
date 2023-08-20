@@ -1,8 +1,19 @@
+.fields-wrapper {
+  max-width: 1024px;
+  margin: 0 auto;
+}
+
 .basic-info-title {
   margin: 0;
   padding: 5px 0;
   font-size: 2rem;
   text-align: center;
+}
+
+.basic-info {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
 }
 
 .data-wrapper {

@@ -1,19 +1,10 @@
-import {
-  Button,
-  Checkbox,
-  FormControlLabel,
-  FormGroup,
-  IconButton,
-  InputAdornment,
-  MenuItem,
-  TextField,
-} from "@mui/material";
+import { Button, Checkbox, FormControlLabel, IconButton, InputAdornment, MenuItem, TextField } from "@mui/material";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker as MuiDatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs from "dayjs";
 import { useFormik } from "formik";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import { Link, useNavigate } from "react-router-dom";
@@ -22,12 +13,11 @@ import { useDispatch } from "react-redux";
 import regValidationSchema from "../../utils/registerValidationSchema";
 import countriesSet from "../../countries";
 import styles from "./RegistrationForm.module.scss";
-import createCustomer from "../../services/customerService";
-import { AddressType, ICustomer } from "../../models/types";
-import updateAddressField from "../../utils/updateAddressFields";
+import { ICustomer } from "../../models/types";
 import RouterPaths from "../../router/routes";
 import loginToApi from "../../services/LoginToApi";
 import { setRegistrationSuccess } from "../../store/features/registration/registrationSlice";
+import createCustomer from "../../services/customerService";
 
 export default function RegistrationForm() {
   const minDateOfBirth = dayjs().subtract(13, "year").startOf("day");
@@ -35,13 +25,9 @@ export default function RegistrationForm() {
   const dispatch = useDispatch();
 
   const [showPassword, setShowPassword] = useState(false);
-  const [isCountrySelected, setIsCountrySelected] = useState(false);
   const [isShippingCountrySelected, setIsShippingCountrySelected] = useState(false);
   const [isBillingCountrySelected, setBillingIsCountrySelected] = useState(false);
   const [errorMessage, setErrorMessage] = useState({ show: false, message: "" });
-  const [isDefaultShipping, setIsDefaultShipping] = useState(false);
-  const [isDefaultBilling, setIsDefaultBilling] = useState(false);
-
   const togglePasswordVisibility = (): void => {
     setShowPassword((prevShowPassword) => !prevShowPassword);
   };
@@ -61,9 +47,8 @@ export default function RegistrationForm() {
       firstName: "",
       lastName: "",
       dateOfBirth: minDateOfBirth.format("YYYY-MM-DD"),
-      address: { ...defaultAddress },
-      defaultShippingAddress: false,
-      defaultBillingAddress: false,
+      defaultShippingAddress: true,
+      defaultBillingAddress: true,
       shippingAddress: { ...defaultAddress },
       billingAddress: { ...defaultAddress },
     },
@@ -81,257 +66,112 @@ export default function RegistrationForm() {
     },
   });
 
-  useEffect(() => {
-    if (isDefaultShipping) {
-      updateAddressField(formik, AddressType.Shipping);
-    }
-
-    if (isDefaultBilling) {
-      updateAddressField(formik, AddressType.Billing);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isDefaultShipping, isDefaultBilling, formik.values.address]);
   return (
-    <>
-      <form onSubmit={formik.handleSubmit}>
+    <form onSubmit={formik.handleSubmit}>
+      <div className={styles["fields-wrapper"]}>
         <h2 className={styles["basic-info-title"]}>Basic information: </h2>
-        <div className={styles["data-wrapper"]}>
-          <div className={styles["data-info"]}>
-            <TextField
-              id="outlined-email-input"
-              variant="outlined"
-              name="email"
-              label="Email"
-              value={formik.values.email}
-              onChange={(e) => {
-                formik.handleChange(e);
-                setErrorMessage({ show: false, message: "" });
+        <div className={styles["basic-info"]}>
+          <TextField
+            id="outlined-email-input"
+            variant="outlined"
+            name="email"
+            label="Email"
+            value={formik.values.email}
+            onChange={(e) => {
+              formik.handleChange(e);
+              setErrorMessage({ show: false, message: "" });
+            }}
+            onBlur={formik.handleBlur}
+            error={(formik.touched.email && Boolean(formik.errors.email)) || errorMessage.show}
+            helperText={
+              (formik.touched.email &&
+                Boolean(formik.errors.email) &&
+                "email address is not valid (e.g., example@email.com), may contain only english letters") ||
+              (errorMessage.show && errorMessage.message)
+            }
+            fullWidth
+          />
+          <TextField
+            id="outlined-password-input"
+            variant="outlined"
+            name="password"
+            label="Password"
+            value={formik.values.password}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            error={formik.touched.password && Boolean(formik.errors.password)}
+            helperText={
+              formik.touched.password &&
+              Boolean(formik.errors.password) &&
+              "Minimum 8 characters, at least 1 uppercase letter, 1 lowercase letter, 1 number and at least one special character (e.g., !@#$%^&*), may contain only english letters"
+            }
+            type={showPassword ? "text" : "password"}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton onClick={togglePasswordVisibility}>
+                    {showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
+            fullWidth
+          />
+          <TextField
+            id="outlined-first-name-input"
+            variant="outlined"
+            name="firstName"
+            label="First name"
+            value={formik.values.firstName}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            error={formik.touched.firstName && Boolean(formik.errors.firstName)}
+            helperText={
+              formik.touched.firstName &&
+              Boolean(formik.errors.firstName) &&
+              "Must contain at least one character and no special characters or numbers, may contain only english letters"
+            }
+            fullWidth
+          />
+          <TextField
+            id="outlined-last-name-input"
+            variant="outlined"
+            name="lastName"
+            label="Last name"
+            value={formik.values.lastName}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            error={formik.touched.lastName && Boolean(formik.errors.lastName)}
+            helperText={
+              formik.touched.lastName &&
+              Boolean(formik.errors.lastName) &&
+              "Must contain at least one character and no special characters or numbers, may contain only english letters"
+            }
+            fullWidth
+          />
+          <LocalizationProvider
+            dateAdapter={AdapterDayjs}
+            adapterLocale="en-gb"
+          >
+            <MuiDatePicker
+              label="Date of birth"
+              value={minDateOfBirth || formik.values.dateOfBirth}
+              onChange={(date) => {
+                formik.setFieldValue("dateOfBirth", dayjs(date).format("YYYY-MM-DD"));
               }}
-              onBlur={formik.handleBlur}
-              error={(formik.touched.email && Boolean(formik.errors.email)) || errorMessage.show}
-              helperText={
-                (formik.touched.email &&
-                  Boolean(formik.errors.email) &&
-                  "email address is not valid (e.g., example@email.com), may contain only english letters") ||
-                (errorMessage.show && errorMessage.message)
-              }
-              fullWidth
-              // margin="dense"
-            />
-            <TextField
-              id="outlined-password-input"
-              variant="outlined"
-              name="password"
-              label="Password"
-              value={formik.values.password}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={formik.touched.password && Boolean(formik.errors.password)}
-              helperText={
-                formik.touched.password &&
-                Boolean(formik.errors.password) &&
-                "Minimum 8 characters, at least 1 uppercase letter, 1 lowercase letter, 1 number and at least one special character (e.g., !@#$%^&*), may contain only english letters"
-              }
-              type={showPassword ? "text" : "password"}
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton onClick={togglePasswordVisibility}>
-                      {showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
-                    </IconButton>
-                  </InputAdornment>
-                ),
+              slotProps={{
+                textField: {
+                  helperText: "You must be at least 13 years old.",
+                },
               }}
-              fullWidth
-              // margin="dense"
-            />
-            <TextField
-              id="outlined-first-name-input"
-              variant="outlined"
-              name="firstName"
-              label="First name"
-              value={formik.values.firstName}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={formik.touched.firstName && Boolean(formik.errors.firstName)}
-              helperText={
-                formik.touched.firstName &&
-                Boolean(formik.errors.firstName) &&
-                "Must contain at least one character and no special characters or numbers, may contain only english letters"
-              }
-              fullWidth
-              // margin="dense"
-            />
-            <TextField
-              id="outlined-last-name-input"
-              variant="outlined"
-              name="lastName"
-              label="Last name"
-              value={formik.values.lastName}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={formik.touched.lastName && Boolean(formik.errors.lastName)}
-              helperText={
-                formik.touched.lastName &&
-                Boolean(formik.errors.lastName) &&
-                "Must contain at least one character and no special characters or numbers, may contain only english letters"
-              }
-              fullWidth
-              // margin="dense"
-            />
-            <LocalizationProvider
-              dateAdapter={AdapterDayjs}
-              adapterLocale="en-gb"
-            >
-              <MuiDatePicker
-                label="Date of birth"
-                value={minDateOfBirth || formik.values.dateOfBirth}
-                onChange={(date) => {
-                  formik.setFieldValue("dateOfBirth", dayjs(date).format("YYYY-MM-DD"));
-                }}
-                slotProps={{
-                  textField: {
-                    helperText: "You must be at least 13 years old.",
-                  },
-                }}
-                shouldDisableDate={(date) => {
-                  const MIN_AGE = 13;
-                  const birthDate = dayjs(date);
-                  const age = dayjs().diff(birthDate, "years");
-                  return age < MIN_AGE;
-                }}
-              />
-            </LocalizationProvider>
-          </div>
-          <div className={styles["data-info"]}>
-            {/* <h2>Address: </h2> */}
-
-            <TextField
-              id="outlined-country-select"
-              variant="outlined"
-              select
-              name="address.country"
-              label="Select country"
-              value={formik.values.address.country}
-              onChange={(e) => {
-                formik.handleChange(e);
-                setIsCountrySelected(true);
+              shouldDisableDate={(date) => {
+                const MIN_AGE = 13;
+                const birthDate = dayjs(date);
+                const age = dayjs().diff(birthDate, "years");
+                return age < MIN_AGE;
               }}
-              onBlur={formik.handleBlur}
-              error={formik.touched.address?.country && Boolean(formik.errors.address?.country)}
-              fullWidth
-              // margin="dense"
-            >
-              {Array.from(countriesSet).map((country) => (
-                <MenuItem
-                  key={country}
-                  value={country}
-                >
-                  {country}
-                </MenuItem>
-              ))}
-            </TextField>
-            <TextField
-              id="outlined-city-input"
-              variant="outlined"
-              name="address.city"
-              label="City"
-              value={formik.values.address.city}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={formik.touched.address?.city && Boolean(formik.errors.address?.city)}
-              helperText={
-                formik.touched.address?.city &&
-                Boolean(formik.errors.address?.city) &&
-                "Must contain at least one character and no special characters or numbers, may contain only english letters"
-              }
-              disabled={!isCountrySelected}
-              fullWidth
-              // margin="dense"
             />
-            <TextField
-              id="outlined-street-input"
-              variant="outlined"
-              name="address.streetName"
-              label="Street"
-              value={formik.values.address.streetName}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={formik.touched.address?.streetName && Boolean(formik.errors.address?.streetName)}
-              helperText={
-                formik.touched.address?.streetName &&
-                Boolean(formik.errors.address?.streetName) &&
-                "Must contain at least one character and no special characters or numbers, may contain only english letters"
-              }
-              disabled={!isCountrySelected}
-              fullWidth
-              // margin="dense"
-            />
-            <TextField
-              id="outlined-street-number-input"
-              variant="outlined"
-              name="address.streetNumber"
-              label="Street number"
-              value={formik.values.address.streetNumber}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={formik.touched.address?.streetNumber && Boolean(formik.errors.address?.streetNumber)}
-              helperText={
-                formik.touched.address?.streetNumber &&
-                Boolean(formik.errors.address?.streetNumber) &&
-                "Must contain at least one digit and should only be digits"
-              }
-              disabled={!isCountrySelected}
-              fullWidth
-              // margin="dense"
-            />
-            <TextField
-              id="outlined-postal-code-input"
-              variant="outlined"
-              name="address.postalCode"
-              label="Postal code"
-              value={formik.values.address?.postalCode}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={formik.touched.address?.postalCode && Boolean(formik.errors.address?.postalCode)}
-              helperText={
-                formik.touched.address?.postalCode &&
-                Boolean(formik.errors.address?.postalCode) &&
-                "Must follow the format for the country (e.g., 220022 for the Russia or A0A 0A0 for Canada"
-              }
-              disabled={!isCountrySelected}
-              fullWidth
-              // margin="dense"
-            />
-            <FormGroup row>
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={formik.values.defaultShippingAddress}
-                    onChange={(e) => {
-                      formik.handleChange(e);
-                      setIsDefaultShipping(e.target.checked);
-                    }}
-                    name="defaultShippingAddress"
-                  />
-                }
-                label="Set as default shipping address"
-              />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={formik.values.defaultBillingAddress}
-                    onChange={(e) => {
-                      formik.handleChange(e);
-                      setIsDefaultBilling(e.target.checked);
-                    }}
-                    name="defaultBillingAddress"
-                  />
-                }
-                label="Set as default billing address"
-              />
-            </FormGroup>
-          </div>
+          </LocalizationProvider>
         </div>
         <div className={styles["data-wrapper"]}>
           <div className={styles["data-info"]}>
@@ -342,23 +182,14 @@ export default function RegistrationForm() {
               select
               name="shippingAddress.country"
               label="Select country"
-              value={
-                formik.values.defaultShippingAddress
-                  ? formik.values.address.country
-                  : formik.values.shippingAddress.country
-              }
+              value={formik.values.shippingAddress.country}
               onChange={(e) => {
                 formik.handleChange(e);
                 setIsShippingCountrySelected(true);
-                if (formik.values.defaultShippingAddress) {
-                  formik.setFieldValue("shippingAddress.country", formik.values.address.country);
-                }
               }}
               onBlur={formik.handleBlur}
               error={formik.touched.shippingAddress?.country && Boolean(formik.errors.shippingAddress?.country)}
-              disabled={formik.values.defaultShippingAddress}
               fullWidth
-              // margin="dense"
             >
               {Array.from(countriesSet).map((country) => (
                 <MenuItem
@@ -374,9 +205,7 @@ export default function RegistrationForm() {
               variant="outlined"
               name="shippingAddress.city"
               label="City"
-              value={
-                formik.values.defaultShippingAddress ? formik.values.address.city : formik.values.shippingAddress.city
-              }
+              value={formik.values.shippingAddress.city}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               error={formik.touched.shippingAddress?.city && Boolean(formik.errors.shippingAddress?.city)}
@@ -385,20 +214,15 @@ export default function RegistrationForm() {
                 Boolean(formik.errors.shippingAddress?.city) &&
                 "Must contain at least one character and no special characters or numbers, may contain only english letters"
               }
-              disabled={!isShippingCountrySelected || formik.values.defaultShippingAddress}
+              disabled={!isShippingCountrySelected}
               fullWidth
-              // margin="dense"
             />
             <TextField
               id="outlined-shipping-street-input"
               variant="outlined"
               name="shippingAddress.streetName"
               label="Street"
-              value={
-                formik.values.defaultShippingAddress
-                  ? formik.values.address.streetName
-                  : formik.values.shippingAddress.streetName
-              }
+              value={formik.values.shippingAddress.streetName}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               error={formik.touched.shippingAddress?.streetName && Boolean(formik.errors.shippingAddress?.streetName)}
@@ -407,20 +231,15 @@ export default function RegistrationForm() {
                 Boolean(formik.errors.shippingAddress?.streetName) &&
                 "Must contain at least one character and no special characters or numbers, may contain only english letters"
               }
-              disabled={!isShippingCountrySelected || formik.values.defaultShippingAddress}
+              disabled={!isShippingCountrySelected}
               fullWidth
-              // margin="dense"
             />
             <TextField
               id="outlined-shipping-street-number-input"
               variant="outlined"
               name="shippingAddress.streetNumber"
               label="Street number"
-              value={
-                formik.values.defaultShippingAddress
-                  ? formik.values.address.streetNumber
-                  : formik.values.shippingAddress.streetNumber
-              }
+              value={formik.values.shippingAddress.streetNumber}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               error={
@@ -431,20 +250,15 @@ export default function RegistrationForm() {
                 Boolean(formik.errors.shippingAddress?.streetNumber) &&
                 "Must contain at least one digit and should only be digits"
               }
-              disabled={!isShippingCountrySelected || formik.values.defaultShippingAddress}
+              disabled={!isShippingCountrySelected}
               fullWidth
-              // margin="dense"
             />
             <TextField
               id="outlined-shipping-postal-code-input"
               variant="outlined"
               name="shippingAddress.postalCode"
               label="Postal code"
-              value={
-                formik.values.defaultShippingAddress
-                  ? formik.values.address.postalCode
-                  : formik.values.shippingAddress?.postalCode
-              }
+              value={formik.values.shippingAddress?.postalCode}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               error={formik.touched.shippingAddress?.postalCode && Boolean(formik.errors.shippingAddress?.postalCode)}
@@ -453,9 +267,18 @@ export default function RegistrationForm() {
                 Boolean(formik.errors.shippingAddress?.postalCode) &&
                 "Must follow the format for the country (e.g., 220022 for the Russia or A0A 0A0 for Canada"
               }
-              disabled={!isShippingCountrySelected || formik.values.defaultShippingAddress}
+              disabled={!isShippingCountrySelected}
               fullWidth
-              // margin="dense"
+            />
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={formik.values.defaultShippingAddress}
+                  onChange={formik.handleChange}
+                  name="defaultShippingAddress"
+                />
+              }
+              label="Set as default shipping address"
             />
           </div>
           <div className={styles["data-info"]}>
@@ -466,20 +289,14 @@ export default function RegistrationForm() {
               select
               name="billingAddress.country"
               label="Select country"
-              value={
-                formik.values.defaultBillingAddress
-                  ? formik.values.address.country
-                  : formik.values.billingAddress.country
-              }
+              value={formik.values.billingAddress.country}
               onChange={(e) => {
                 formik.handleChange(e);
                 setBillingIsCountrySelected(true);
               }}
               onBlur={formik.handleBlur}
               error={formik.touched.billingAddress?.country && Boolean(formik.errors.billingAddress?.country)}
-              disabled={formik.values.defaultBillingAddress}
               fullWidth
-              // margin="dense"
             >
               {Array.from(countriesSet).map((country) => (
                 <MenuItem
@@ -495,9 +312,7 @@ export default function RegistrationForm() {
               variant="outlined"
               name="billingAddress.city"
               label="City"
-              value={
-                formik.values.defaultBillingAddress ? formik.values.address.city : formik.values.billingAddress.city
-              }
+              value={formik.values.billingAddress.city}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               error={formik.touched.billingAddress?.city && Boolean(formik.errors.billingAddress?.city)}
@@ -506,20 +321,15 @@ export default function RegistrationForm() {
                 Boolean(formik.errors.billingAddress?.city) &&
                 "Must contain at least one character and no special characters or numbers, may contain only english letters"
               }
-              disabled={!isBillingCountrySelected || formik.values.defaultBillingAddress}
+              disabled={!isBillingCountrySelected}
               fullWidth
-              // margin="dense"
             />
             <TextField
               id="outlined-billing-street-input"
               variant="outlined"
               name="billingAddress.streetName"
               label="Street"
-              value={
-                formik.values.defaultBillingAddress
-                  ? formik.values.address.streetName
-                  : formik.values.billingAddress.streetName
-              }
+              value={formik.values.billingAddress.streetName}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               error={formik.touched.billingAddress?.streetName && Boolean(formik.errors.billingAddress?.streetName)}
@@ -528,20 +338,15 @@ export default function RegistrationForm() {
                 Boolean(formik.errors.billingAddress?.streetName) &&
                 "Must contain at least one character and no special characters or numbers, may contain only english letters"
               }
-              disabled={!isBillingCountrySelected || formik.values.defaultBillingAddress}
+              disabled={!isBillingCountrySelected}
               fullWidth
-              // margin="dense"
             />
             <TextField
               id="outlined-billing-street-number-input"
               variant="outlined"
               name="billingAddress.streetNumber"
               label="Street number"
-              value={
-                formik.values.defaultBillingAddress
-                  ? formik.values.address.streetNumber
-                  : formik.values.billingAddress.streetNumber
-              }
+              value={formik.values.billingAddress.streetNumber}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               error={formik.touched.billingAddress?.streetNumber && Boolean(formik.errors.billingAddress?.streetNumber)}
@@ -550,20 +355,15 @@ export default function RegistrationForm() {
                 Boolean(formik.errors.billingAddress?.streetNumber) &&
                 "Must contain at least one digit and should only be digits"
               }
-              disabled={!isBillingCountrySelected || formik.values.defaultBillingAddress}
+              disabled={!isBillingCountrySelected}
               fullWidth
-              // margin="dense"
             />
             <TextField
               id="outlined-billing-postal-code-input"
               variant="outlined"
               name="billingAddress.postalCode"
               label="Postal code"
-              value={
-                formik.values.defaultBillingAddress
-                  ? formik.values.address.postalCode
-                  : formik.values.billingAddress?.postalCode
-              }
+              value={formik.values.billingAddress?.postalCode}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               error={formik.touched.billingAddress?.postalCode && Boolean(formik.errors.billingAddress?.postalCode)}
@@ -572,9 +372,18 @@ export default function RegistrationForm() {
                 Boolean(formik.errors.billingAddress?.postalCode) &&
                 "Must follow the format for the country (e.g., 220022 for the Russia or A0A 0A0 for Canada"
               }
-              disabled={!isBillingCountrySelected || formik.values.defaultBillingAddress}
+              disabled={!isBillingCountrySelected}
               fullWidth
-              // margin="dense"
+            />
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={formik.values.defaultBillingAddress}
+                  onChange={formik.handleChange}
+                  name="defaultBillingAddress"
+                />
+              }
+              label="Set as default billing address"
             />
           </div>
         </div>
@@ -588,15 +397,14 @@ export default function RegistrationForm() {
           </Button>
           {errorMessage.show && <p className={styles["error-message"]}>{errorMessage.message}</p>}
         </div>
-      </form>
-
-      <Button
-        component={Link}
-        to={RouterPaths.Login}
-        type="submit"
-      >
-        Already have an account? Login here
-      </Button>
-    </>
+        <Button
+          component={Link}
+          to={RouterPaths.Login}
+          type="submit"
+        >
+          Already have an account? Login here
+        </Button>
+      </div>
+    </form>
   );
 }

@@ -1,7 +1,6 @@
 import { ClientResponse, CustomerDraft, CustomerSignInResult } from "@commercetools/platform-sdk";
 import getApiRoot from "./BuildClient";
 import { ICustomer } from "../models/types";
-import areAddressesEqual from "../utils/areAddressessEqual";
 import createDraftFromAddress from "../utils/createDraftFromAddress";
 
 const apiRoot = getApiRoot();
@@ -13,36 +12,22 @@ const createCustomer = async (customerData: ICustomer): Promise<ClientResponse<C
     firstName,
     lastName,
     dateOfBirth,
-    address,
     defaultShippingAddress,
     defaultBillingAddress,
     shippingAddress,
     billingAddress,
   } = customerData;
 
-  const addressDraft = createDraftFromAddress(address);
   const shippingAddressDraft = createDraftFromAddress(shippingAddress);
   const billingAddressDraft = createDraftFromAddress(billingAddress);
 
-  const defaultShippingAddressIndex = defaultShippingAddress ? 0 : undefined;
-  const defaultBillingAddressIndex = defaultBillingAddress ? 0 : undefined;
+  const DEFAULT_SHIPPING_INDEX = 0;
+  const DEFAULT_BILLING_INDEX = 1;
 
-  const addressesDrafts = [addressDraft];
-  if (!defaultShippingAddressIndex && shippingAddress && !areAddressesEqual(addressDraft, shippingAddressDraft)) {
-    addressesDrafts.push(shippingAddressDraft);
-  }
+  const defaultShippingAddressIndex = defaultShippingAddress ? DEFAULT_SHIPPING_INDEX : undefined;
+  const defaultBillingAddressIndex = defaultBillingAddress ? DEFAULT_BILLING_INDEX : undefined;
 
-  if (!defaultBillingAddressIndex && billingAddress && !areAddressesEqual(addressDraft, billingAddressDraft)) {
-    addressesDrafts.push(billingAddressDraft);
-  }
-
-  const shippingAddressDraftIndex = addressesDrafts.includes(shippingAddressDraft)
-    ? [addressesDrafts.indexOf(shippingAddressDraft)]
-    : undefined;
-
-  const billingAddressDraftIndex = addressesDrafts.includes(billingAddressDraft)
-    ? [addressesDrafts.indexOf(billingAddressDraft)]
-    : undefined;
+  const addressesDrafts = [shippingAddressDraft, billingAddressDraft];
 
   const customerDraft: CustomerDraft = {
     email,
@@ -53,8 +38,6 @@ const createCustomer = async (customerData: ICustomer): Promise<ClientResponse<C
     addresses: addressesDrafts,
     defaultShippingAddress: defaultShippingAddressIndex,
     defaultBillingAddress: defaultBillingAddressIndex,
-    shippingAddresses: shippingAddressDraftIndex,
-    billingAddresses: billingAddressDraftIndex,
   };
 
   return apiRoot.customers().post({ body: customerDraft }).execute();

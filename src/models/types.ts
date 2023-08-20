@@ -18,7 +18,6 @@ export interface ICustomer {
   firstName: string;
   lastName: string;
   dateOfBirth: string;
-  address: CustomerAddress;
   defaultShippingAddress: boolean;
   defaultBillingAddress: boolean;
   shippingAddress: CustomerAddress;

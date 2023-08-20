@@ -52,7 +52,9 @@ const regValidationSchema = yup.object().shape({
   email: yup.string().email().required(),
   password: yup
     .string()
-    .matches(/^(?!.*^\s)(?!.*\s$)(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*()])[a-zA-Z0-9!@#$%^&*()~-_+= \t]*$/) // Password must contain at least one uppercase letter, one lowercase letter, and one number
+    .matches(
+      /^(?!.*^\s)(?!.*\s$)(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*()_~\-+= \t])[a-zA-Z0-9!@#$%^&*()_~\-+= \t]*$/
+    ) // Password must contain at least one uppercase letter, one lowercase letter, and one number
     .required(),
   firstName: yup
     .string()
@@ -62,7 +64,6 @@ const regValidationSchema = yup.object().shape({
     .string()
     .matches(/^[a-zA-Z]+$/) // Last name must contain at least one letter and no special characters or numbers
     .required(),
-  address: addressValidationSchema,
   shippingAddress: addressValidationSchema,
   billingAddress: addressValidationSchema,
 });
