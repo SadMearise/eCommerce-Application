@@ -1,3 +1,13 @@
+.body {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  @media (min-width: 900px) {
+    width: 100%;
+  }
+}
+
 .menu {
   &-item {
     padding: 0px !important;
@@ -7,5 +17,23 @@
     padding: 6px 16px;
     width: 100%;
     text-align: start !important;
+  }
+}
+
+.logo {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.icons {
+  display: flex;
+  gap: 10px;
+}
+
+.icon {
+  path {
+    fill: white;
   }
 }
