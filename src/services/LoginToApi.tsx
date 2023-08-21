@@ -35,6 +35,7 @@ async function loginToApi(username: string, password: string): Promise<TLoginRes
     .build();
 
   try {
+    tokenCache.disposeToken();
     const root = createApiBuilderFromCtpClient(ctpClient).withProjectKey({ projectKey });
     const userInfo = await root.me().get().execute();
     return { isLoggined: true, customer: userInfo.body };

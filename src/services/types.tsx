@@ -9,4 +9,5 @@ export type TLoginResponse = {
 
 export interface IAppTokenCache extends TokenCache {
   hasValidToken(): boolean;
+  disposeToken(): void;
 }
