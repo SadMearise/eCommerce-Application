@@ -12,6 +12,9 @@ const tokenCache: IAppTokenCache = {
     const cache = this.get();
     return cache?.expirationTime !== undefined && cache?.token !== undefined && cache.expirationTime >= +new Date();
   },
+  disposeToken() {
+    localStorage.removeItem("local_token");
+  },
 };
 
 export default tokenCache;
