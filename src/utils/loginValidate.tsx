@@ -15,7 +15,9 @@ export function validatePassword(value: string): string | undefined {
     return "Required";
   }
 
-  const passwordRegex = /^(?! )(?!.* $)(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^\w\s]).{8,}$/;
+  const passwordRegex =
+    // eslint-disable-next-line max-len
+    /^(?!.*^\s)(?!.*\s$)(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*()_~+= \t~!@#$%^&*()_+=?:;№"{}[\]/.,<>`-])[a-zA-Z0-9!@#$%^&*()_~+= \t~!@#$%^&*()_+=?:;№"{}[\]/.,<>`-]*$/;
   if (!passwordRegex.test(value)) {
     return (
       "Weak password: mustn't contain leading or trailing whitespace, must be at least 8 characters, " +
