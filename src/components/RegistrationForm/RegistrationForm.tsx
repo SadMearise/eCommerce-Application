@@ -18,6 +18,7 @@ import RouterPaths from "../../router/routes";
 import loginToApi from "../../services/LoginToApi";
 import { setRegistrationSuccess } from "../../store/features/registration/registrationSlice";
 import createCustomer from "../../services/customerService";
+import { login } from "../../store/features/user/userSlice";
 
 export default function RegistrationForm() {
   const minDateOfBirth = dayjs().subtract(13, "year").startOf("day");
@@ -59,6 +60,7 @@ export default function RegistrationForm() {
           loginToApi(values.email, values.password);
           navigate(RouterPaths.Home);
           dispatch(setRegistrationSuccess(true));
+          dispatch(login({ customer: values }));
         })
         .catch((error: Error) => {
           setErrorMessage({ show: true, message: error.message });
