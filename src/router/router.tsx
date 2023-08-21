@@ -1,5 +1,5 @@
 import { createBrowserRouter, redirect } from "react-router-dom";
-import Page404 from "../pages/404";
+import Page404 from "../pages/404/404";
 import Login from "../pages/Login";
 import Registration from "../pages/Registration";
 import Home from "../pages/Home";
