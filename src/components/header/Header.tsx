@@ -7,21 +7,20 @@ import Typography from "@mui/material/Typography";
 import Menu from "@mui/material/Menu";
 import MenuIcon from "@mui/icons-material/Menu";
 import Container from "@mui/material/Container";
-import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import { Link } from "react-router-dom";
+import PermIdentityOutlinedIcon from "@mui/icons-material/PermIdentityOutlined";
+import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import styles from "./Header.module.scss";
-import { useAppDispatch, useAppSelector } from "../../store/hooks";
-import selectUserInfo from "../../store/features/user/userSelector";
+import { useAppDispatch } from "../../store/hooks";
 import RouterPaths from "../../router/routes";
 import tokenCache from "../../services/TokenCash";
 import { logout } from "../../store/features/user/userSlice";
 
 export default function Header() {
   const dispatch = useAppDispatch();
-  const userInfo = useAppSelector(selectUserInfo);
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
 
@@ -49,24 +48,6 @@ export default function Header() {
     <AppBar position="static">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <Typography
-            variant="h6"
-            noWrap
-            component={Link}
-            to={RouterPaths.Home}
-            sx={{
-              mr: 2,
-              display: { xs: "none", md: "flex" },
-              fontFamily: "monospace",
-              fontWeight: 700,
-              letterSpacing: ".3rem",
-              color: "inherit",
-              textDecoration: "none",
-            }}
-          >
-            Kratkoe
-          </Typography>
-
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
             <IconButton
               size="large"
@@ -134,129 +115,151 @@ export default function Header() {
           >
             Kratkoe
           </Typography>
-          <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-            <Button
-              onClick={handleCloseNavMenu}
-              sx={{ my: 2, color: "white", display: "block" }}
-              component={Link}
-              to={RouterPaths.About}
-            >
-              About
-            </Button>
-            <Button
-              onClick={handleCloseNavMenu}
-              sx={{ my: 2, color: "white", display: "block" }}
-              component={Link}
-              to={RouterPaths.Catalog}
-            >
-              Catalog
-            </Button>
-          </Box>
 
-          <Box sx={{ flexGrow: 0, display: "flex", alignItems: "center" }}>
-            <Tooltip title="Open settings">
+          <Box className={styles.body}>
+            <Box sx={{ display: { xs: "none", md: "flex" } }}>
+              <Button
+                onClick={handleCloseNavMenu}
+                sx={{ my: 2, color: "white", display: "block" }}
+                component={Link}
+                to={RouterPaths.Home}
+              >
+                Home
+              </Button>
+              <Button
+                onClick={handleCloseNavMenu}
+                sx={{ my: 2, color: "white", display: "block" }}
+                component={Link}
+                to={RouterPaths.About}
+              >
+                About
+              </Button>
+              <Button
+                onClick={handleCloseNavMenu}
+                sx={{ my: 2, color: "white", display: "block" }}
+                component={Link}
+                to={RouterPaths.Catalog}
+              >
+                Catalog
+              </Button>
+            </Box>
+            <Typography
+              className={styles.logo}
+              variant="h6"
+              noWrap
+              component={Link}
+              to={RouterPaths.Home}
+              sx={{
+                display: { xs: "none", md: "flex" },
+                fontFamily: "monospace",
+                fontWeight: 700,
+                letterSpacing: ".3rem",
+                color: "inherit",
+                textDecoration: "none",
+              }}
+            >
+              Kratkoe
+            </Typography>
+            <Box
+              className={styles.icons}
+              sx={{ flexGrow: 0, display: "flex", alignItems: "center" }}
+            >
               <IconButton
-                onClick={handleOpenUserMenu}
+                component={Link}
+                to={RouterPaths.Basket}
                 sx={{ p: 0 }}
               >
-                <Avatar
-                  alt={userInfo ? `${userInfo.firstName}` : "Unknown"}
-                  src={userInfo ? "/static/images/avatar/2.jpg" : ""}
-                />
+                <ShoppingCartOutlinedIcon className={styles.icon} />
               </IconButton>
-            </Tooltip>
-            <Menu
-              sx={{ mt: "45px" }}
-              id="menu-appbar"
-              anchorEl={anchorElUser}
-              anchorOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              open={Boolean(anchorElUser)}
-              onClose={handleCloseUserMenu}
-            >
-              {userInfo && (
-                <MenuItem
-                  className={styles["menu-item"]}
-                  onClick={handleCloseUserMenu}
+
+              <Tooltip title="Open settings">
+                <IconButton
+                  onClick={handleOpenUserMenu}
+                  sx={{ p: 0 }}
                 >
-                  <Typography
-                    className={styles["menu-item-link"]}
-                    textAlign="center"
-                    component={Link}
-                    to={RouterPaths.Profile}
-                  >
-                    Profile
-                  </Typography>
-                </MenuItem>
-              )}
-              <MenuItem
-                className={styles["menu-item"]}
-                onClick={handleCloseUserMenu}
+                  <PermIdentityOutlinedIcon className={styles.icon} />
+                </IconButton>
+              </Tooltip>
+              <Menu
+                sx={{ mt: "45px" }}
+                id="menu-appbar"
+                anchorEl={anchorElUser}
+                anchorOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                open={Boolean(anchorElUser)}
+                onClose={handleCloseUserMenu}
               >
-                <Typography
-                  className={styles["menu-item-link"]}
-                  textAlign="center"
-                  component={Link}
-                  to={RouterPaths.Basket}
-                >
-                  Basket
-                </Typography>
-              </MenuItem>
-              {!userInfo ? (
-                <MenuItem
-                  className={styles["menu-item"]}
-                  onClick={handleCloseUserMenu}
-                >
-                  <Typography
-                    className={styles["menu-item-link"]}
-                    textAlign="center"
-                    component={Link}
-                    to={RouterPaths.Login}
+                {tokenCache.hasValidToken() && (
+                  <MenuItem
+                    className={styles["menu-item"]}
+                    onClick={handleCloseUserMenu}
                   >
-                    Log in
-                  </Typography>
-                </MenuItem>
-              ) : (
-                <MenuItem
-                  className={styles["menu-item"]}
-                  onClick={() => {
-                    handleCloseUserMenu();
-                    handleLogout();
-                  }}
-                >
-                  <Typography
-                    className={styles["menu-item-link"]}
-                    textAlign="center"
-                    component={Link}
-                    to={RouterPaths.Home}
+                    <Typography
+                      className={styles["menu-item-link"]}
+                      textAlign="center"
+                      component={Link}
+                      to={RouterPaths.Profile}
+                    >
+                      Profile
+                    </Typography>
+                  </MenuItem>
+                )}
+                {!tokenCache.hasValidToken() ? (
+                  <MenuItem
+                    className={styles["menu-item"]}
+                    onClick={handleCloseUserMenu}
                   >
-                    Log out
-                  </Typography>
-                </MenuItem>
-              )}
-              {!userInfo && (
-                <MenuItem
-                  className={styles["menu-item"]}
-                  onClick={handleCloseUserMenu}
-                >
-                  <Typography
-                    className={styles["menu-item-link"]}
-                    textAlign="center"
-                    component={Link}
-                    to={RouterPaths.Registration}
+                    <Typography
+                      className={styles["menu-item-link"]}
+                      textAlign="center"
+                      component={Link}
+                      to={RouterPaths.Login}
+                    >
+                      Log in
+                    </Typography>
+                  </MenuItem>
+                ) : (
+                  <MenuItem
+                    className={styles["menu-item"]}
+                    onClick={() => {
+                      handleCloseUserMenu();
+                      handleLogout();
+                    }}
                   >
-                    Registration
-                  </Typography>
-                </MenuItem>
-              )}
-            </Menu>
+                    <Typography
+                      className={styles["menu-item-link"]}
+                      textAlign="center"
+                      component={Link}
+                      to={RouterPaths.Home}
+                    >
+                      Log out
+                    </Typography>
+                  </MenuItem>
+                )}
+                {!tokenCache.hasValidToken() && (
+                  <MenuItem
+                    className={styles["menu-item"]}
+                    onClick={handleCloseUserMenu}
+                  >
+                    <Typography
+                      className={styles["menu-item-link"]}
+                      textAlign="center"
+                      component={Link}
+                      to={RouterPaths.Registration}
+                    >
+                      Registration
+                    </Typography>
+                  </MenuItem>
+                )}
+              </Menu>
+            </Box>
           </Box>
         </Toolbar>
       </Container>
