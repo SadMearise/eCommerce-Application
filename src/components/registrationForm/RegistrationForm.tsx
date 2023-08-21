@@ -69,8 +69,8 @@ export default function RegistrationForm() {
   });
 
   return (
-    <form onSubmit={formik.handleSubmit}>
-      <div className={styles["fields-wrapper"]}>
+    <div className={styles["content-wrapper"]}>
+      <form onSubmit={formik.handleSubmit}>
         <h2 className={styles["basic-info-title"]}>Basic information: </h2>
         <div className={styles["basic-info"]}>
           <TextField
@@ -406,7 +406,7 @@ export default function RegistrationForm() {
         >
           Already have an account? Login here
         </Button>
-      </div>
-    </form>
+      </form>
+    </div>
   );
 }

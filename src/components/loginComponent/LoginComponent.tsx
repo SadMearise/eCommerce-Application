@@ -53,72 +53,75 @@ function LoginComponent() {
         onSubmit={onSubmit}
       >
         {({ errors, touched, isSubmitting }) => (
-          <Form
-            className={styles.form}
-            onChange={() => {
-              setError({ show: false, message: "" });
-            }}
-          >
-            <Field
-              as={TextField}
-              className={
-                (errors.email && touched.email) || error.show ? `${styles.err} ${styles.field}` : `${styles.field}`
-              }
-              type="text"
-              variant="outlined"
-              name="email"
-              label="Email"
-              placeholder="Email"
-              validate={validateEmail}
-              fullWidth
-              required
-              helperText={<ErrorMessage name="email" />}
-              error={(errors.email && touched.email) || error.show}
-            />
-
-            <Field
-              as={TextField}
-              className={
-                (errors.password && touched.password) || error.show
-                  ? `${styles.err} ${styles.field}`
-                  : `${styles.field}`
-              }
-              type={showPassword ? "text" : "password"}
-              variant="outlined"
-              name="password"
-              label="Password"
-              placeholder="Password"
-              validate={validatePassword}
-              fullWidth
-              required
-              helperText={<ErrorMessage name="password" />}
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton onClick={togglePasswordVisibility}>
-                      {showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
-                    </IconButton>
-                  </InputAdornment>
-                ),
+          <div className={styles["content-wrapper"]}>
+            <Form
+              className={styles.form}
+              onChange={() => {
+                setError({ show: false, message: "" });
               }}
-              error={(errors.password && touched.password) || error.show}
-            />
-
-            <Button
-              variant="contained"
-              type="submit"
-              disabled={isSubmitting}
             >
-              {isSubmitting ? LoginBtn.loading : LoginBtn.signIn}
-            </Button>
+              <Field
+                as={TextField}
+                className={
+                  (errors.email && touched.email) || error.show ? `${styles.err} ${styles.field}` : `${styles.field}`
+                }
+                type="text"
+                variant="outlined"
+                name="email"
+                label="Email"
+                placeholder="Email"
+                validate={validateEmail}
+                fullWidth
+                required
+                helperText={<ErrorMessage name="email" />}
+                error={(errors.email && touched.email) || error.show}
+              />
 
-            <Link
-              to={RouterPaths.Registration}
-              className={styles.link}
-            >
-              Registration
-            </Link>
-          </Form>
+              <Field
+                as={TextField}
+                className={
+                  (errors.password && touched.password) || error.show
+                    ? `${styles.err} ${styles.field}`
+                    : `${styles.field}`
+                }
+                type={showPassword ? "text" : "password"}
+                variant="outlined"
+                name="password"
+                label="Password"
+                placeholder="Password"
+                validate={validatePassword}
+                fullWidth
+                required
+                helperText={<ErrorMessage name="password" />}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton onClick={togglePasswordVisibility}>
+                        {showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+                error={(errors.password && touched.password) || error.show}
+              />
+
+              <Button
+                variant="contained"
+                type="submit"
+                className={styles["submit-button"]}
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? LoginBtn.loading : LoginBtn.signIn}
+              </Button>
+
+              <Link
+                to={RouterPaths.Registration}
+                className={styles.link}
+              >
+                Registration
+              </Link>
+            </Form>
+          </div>
         )}
       </Formik>
     </>

@@ -1,6 +1,6 @@
-.fields-wrapper {
-  max-width: 1024px;
-  margin: 0 auto;
+.content-wrapper {
+  padding: 10px;
+  margin-top: 50px;
 }
 
 .basic-info-title {
@@ -8,18 +8,21 @@
   padding: 5px 0;
   font-size: 2rem;
   text-align: center;
+  margin-bottom: 30px;
 }
 
 .basic-info {
   display: flex;
   flex-direction: column;
   gap: 5px;
+  margin-bottom: 30px;
 }
 
 .data-wrapper {
   display: flex;
   justify-content: center;
   gap: 50px;
+  margin-bottom: 30px;
   * {
     margin: 0;
   }
