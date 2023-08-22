@@ -4,7 +4,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker as MuiDatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs from "dayjs";
 import { useFormik } from "formik";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import { Link, useNavigate } from "react-router-dom";
@@ -50,6 +50,7 @@ export default function RegistrationForm() {
       dateOfBirth: minDateOfBirth.format("YYYY-MM-DD"),
       defaultShippingAddress: true,
       defaultBillingAddress: true,
+      billingIsShipping: false,
       shippingAddress: { ...defaultAddress },
       billingAddress: { ...defaultAddress },
     },
@@ -67,6 +68,16 @@ export default function RegistrationForm() {
         });
     },
   });
+
+  useEffect(() => {
+    if (formik.values.billingIsShipping) {
+      formik.setFieldValue("billingAddress", {
+        ...formik.values.shippingAddress,
+        country: formik.values.shippingAddress.country,
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [formik.values.billingIsShipping, formik.values.shippingAddress]);
 
   return (
     <div className={styles["content-wrapper"]}>
@@ -284,109 +295,128 @@ export default function RegistrationForm() {
             />
           </div>
           <div className={styles["data-info"]}>
-            <h2>Billing address: </h2>
-            <TextField
-              id="outlined-billing-country-select"
-              variant="outlined"
-              select
-              name="billingAddress.country"
-              label="Select country"
-              value={formik.values.billingAddress.country}
-              onChange={(e) => {
-                formik.handleChange(e);
-                setBillingIsCountrySelected(true);
-              }}
-              onBlur={formik.handleBlur}
-              error={formik.touched.billingAddress?.country && Boolean(formik.errors.billingAddress?.country)}
-              fullWidth
-            >
-              {Array.from(countriesSet).map((country) => (
-                <MenuItem
-                  key={country}
-                  value={country}
+            <div className={styles["billing-title-wrapper"]}>
+              <h2>Billing address: </h2>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={formik.values.billingIsShipping}
+                    onChange={formik.handleChange}
+                    name="billingIsShipping"
+                  />
+                }
+                label="Billing address is the same as shipping"
+              />
+            </div>
+            {!formik.values.billingIsShipping && (
+              <>
+                <TextField
+                  id="outlined-billing-country-select"
+                  variant="outlined"
+                  select
+                  name="billingAddress.country"
+                  label="Select country"
+                  value={formik.values.billingAddress.country}
+                  onChange={(e) => {
+                    formik.handleChange(e);
+                    setBillingIsCountrySelected(true);
+                  }}
+                  onBlur={formik.handleBlur}
+                  disabled={formik.values.billingIsShipping}
+                  error={formik.touched.billingAddress?.country && Boolean(formik.errors.billingAddress?.country)}
+                  fullWidth
                 >
-                  {country}
-                </MenuItem>
-              ))}
-            </TextField>
-            <TextField
-              id="outlined-billing-city-input"
-              variant="outlined"
-              name="billingAddress.city"
-              label="City"
-              value={formik.values.billingAddress.city}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={formik.touched.billingAddress?.city && Boolean(formik.errors.billingAddress?.city)}
-              helperText={
-                formik.touched.billingAddress?.city &&
-                Boolean(formik.errors.billingAddress?.city) &&
-                "Must contain at least one character and no special characters or numbers, may contain only english letters"
-              }
-              disabled={!isBillingCountrySelected}
-              fullWidth
-            />
-            <TextField
-              id="outlined-billing-street-input"
-              variant="outlined"
-              name="billingAddress.streetName"
-              label="Street"
-              value={formik.values.billingAddress.streetName}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={formik.touched.billingAddress?.streetName && Boolean(formik.errors.billingAddress?.streetName)}
-              helperText={
-                formik.touched.billingAddress?.streetName &&
-                Boolean(formik.errors.billingAddress?.streetName) &&
-                "Must contain at least one character and no special characters or numbers, may contain only english letters"
-              }
-              disabled={!isBillingCountrySelected}
-              fullWidth
-            />
-            <TextField
-              id="outlined-billing-street-number-input"
-              variant="outlined"
-              name="billingAddress.streetNumber"
-              label="Street number"
-              value={formik.values.billingAddress.streetNumber}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={formik.touched.billingAddress?.streetNumber && Boolean(formik.errors.billingAddress?.streetNumber)}
-              helperText={
-                formik.touched.billingAddress?.streetNumber &&
-                Boolean(formik.errors.billingAddress?.streetNumber) &&
-                "Must contain at least one digit and should only be digits"
-              }
-              disabled={!isBillingCountrySelected}
-              fullWidth
-            />
-            <TextField
-              id="outlined-billing-postal-code-input"
-              variant="outlined"
-              name="billingAddress.postalCode"
-              label="Postal code"
-              value={formik.values.billingAddress?.postalCode}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={formik.touched.billingAddress?.postalCode && Boolean(formik.errors.billingAddress?.postalCode)}
-              helperText={
-                formik.touched.billingAddress?.postalCode &&
-                Boolean(formik.errors.billingAddress?.postalCode) &&
-                "Must follow the format for the country (e.g., 220022 for the Russia or A0A 0A0 for Canada"
-              }
-              disabled={!isBillingCountrySelected}
-              fullWidth
-            />
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={formik.values.defaultBillingAddress}
+                  {Array.from(countriesSet).map((country) => (
+                    <MenuItem
+                      key={country}
+                      value={country}
+                    >
+                      {country}
+                    </MenuItem>
+                  ))}
+                </TextField>
+                <TextField
+                  id="outlined-billing-city-input"
+                  variant="outlined"
+                  name="billingAddress.city"
+                  label="City"
+                  value={formik.values.billingAddress.city}
                   onChange={formik.handleChange}
-                  name="defaultBillingAddress"
+                  onBlur={formik.handleBlur}
+                  error={formik.touched.billingAddress?.city && Boolean(formik.errors.billingAddress?.city)}
+                  helperText={
+                    formik.touched.billingAddress?.city &&
+                    Boolean(formik.errors.billingAddress?.city) &&
+                    "Must contain at least one character and no special characters or numbers, may contain only english letters"
+                  }
+                  disabled={!isBillingCountrySelected || formik.values.billingIsShipping}
+                  fullWidth
                 />
-              }
-              label="Set as default billing address"
-            />
+                <TextField
+                  id="outlined-billing-street-input"
+                  variant="outlined"
+                  name="billingAddress.streetName"
+                  label="Street"
+                  value={formik.values.billingAddress.streetName}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  error={formik.touched.billingAddress?.streetName && Boolean(formik.errors.billingAddress?.streetName)}
+                  helperText={
+                    formik.touched.billingAddress?.streetName &&
+                    Boolean(formik.errors.billingAddress?.streetName) &&
+                    "Must contain at least one character and no special characters or numbers, may contain only english letters"
+                  }
+                  disabled={!isBillingCountrySelected || formik.values.billingIsShipping}
+                  fullWidth
+                />
+                <TextField
+                  id="outlined-billing-street-number-input"
+                  variant="outlined"
+                  name="billingAddress.streetNumber"
+                  label="Street number"
+                  value={formik.values.billingAddress.streetNumber}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  error={
+                    formik.touched.billingAddress?.streetNumber && Boolean(formik.errors.billingAddress?.streetNumber)
+                  }
+                  helperText={
+                    formik.touched.billingAddress?.streetNumber &&
+                    Boolean(formik.errors.billingAddress?.streetNumber) &&
+                    "Must contain at least one digit and should only be digits"
+                  }
+                  disabled={!isBillingCountrySelected || formik.values.billingIsShipping}
+                  fullWidth
+                />
+                <TextField
+                  id="outlined-billing-postal-code-input"
+                  variant="outlined"
+                  name="billingAddress.postalCode"
+                  label="Postal code"
+                  value={formik.values.billingAddress?.postalCode}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  error={formik.touched.billingAddress?.postalCode && Boolean(formik.errors.billingAddress?.postalCode)}
+                  helperText={
+                    formik.touched.billingAddress?.postalCode &&
+                    Boolean(formik.errors.billingAddress?.postalCode) &&
+                    "Must follow the format for the country (e.g., 220022 for the Russia or A0A 0A0 for Canada"
+                  }
+                  disabled={!isBillingCountrySelected || formik.values.billingIsShipping}
+                  fullWidth
+                />
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={formik.values.defaultBillingAddress}
+                      onChange={formik.handleChange}
+                      name="defaultBillingAddress"
+                    />
+                  }
+                  label="Set as default billing address"
+                />
+              </>
+            )}
           </div>
         </div>
         <div className={styles["submit-button-wrapper"]}>

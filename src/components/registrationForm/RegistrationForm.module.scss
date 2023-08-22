@@ -1,6 +1,9 @@
 .content-wrapper {
   padding: 10px;
-  margin-top: 50px;
+
+  h2 {
+    min-height: 42px;
+  }
 }
 
 .basic-info-title {
@@ -33,6 +36,12 @@
     gap: 5px;
     max-width: calc(100% - 50%);
   }
+}
+
+.billing-title-wrapper {
+  display: flex;
+  gap: 20px;
+  align-items: center;
 }
 
 .submit-button-wrapper {

@@ -14,6 +14,7 @@ const createCustomer = async (customerData: ICustomer): Promise<ClientResponse<C
     dateOfBirth,
     defaultShippingAddress,
     defaultBillingAddress,
+    billingIsShipping,
     shippingAddress,
     billingAddress,
   } = customerData;
@@ -22,12 +23,18 @@ const createCustomer = async (customerData: ICustomer): Promise<ClientResponse<C
   const billingAddressDraft = createDraftFromAddress(billingAddress);
 
   const DEFAULT_SHIPPING_INDEX = 0;
-  const DEFAULT_BILLING_INDEX = 1;
+  let billingIndex = 1;
+  const addressesDrafts = [shippingAddressDraft, billingAddressDraft];
+
+  if (billingIsShipping) {
+    billingIndex = 0;
+    addressesDrafts.pop();
+  }
 
   const defaultShippingAddressIndex = defaultShippingAddress ? DEFAULT_SHIPPING_INDEX : undefined;
-  const defaultBillingAddressIndex = defaultBillingAddress ? DEFAULT_BILLING_INDEX : undefined;
-
-  const addressesDrafts = [shippingAddressDraft, billingAddressDraft];
+  const defaultBillingAddressIndex = defaultBillingAddress ? billingIndex : undefined;
+  const shippingAddressIndex = 0;
+  const billingAddressIndex = billingIsShipping ? 0 : 1;
 
   const customerDraft: CustomerDraft = {
     email,
@@ -38,6 +45,8 @@ const createCustomer = async (customerData: ICustomer): Promise<ClientResponse<C
     addresses: addressesDrafts,
     defaultShippingAddress: defaultShippingAddressIndex,
     defaultBillingAddress: defaultBillingAddressIndex,
+    shippingAddresses: [shippingAddressIndex],
+    billingAddresses: [billingAddressIndex],
   };
 
   return apiRoot.customers().post({ body: customerDraft }).execute();
