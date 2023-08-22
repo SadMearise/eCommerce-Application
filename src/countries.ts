@@ -1,3 +1,3 @@
-const countriesSet: Set<string> = new Set(["Russia", "Georgia", "Belarus", "USA", "Canada"]);
+const countriesSet: Set<string> = new Set(["Russia", "Georgia", "Belarus"]);
 
 export default countriesSet;
