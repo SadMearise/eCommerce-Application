@@ -50,6 +50,7 @@ const regValidationSchema = yup.object().shape({
   email: yup.string().email().required(),
   password: yup
     .string()
+    .min(8)
     .matches(
       // eslint-disable-next-line max-len
       /^(?!.*^\s)(?!.*\s$)(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*()_~+= \t~!@#$%^&*()_+=?:;№"{}[\]/.,<>`-])[a-zA-Z0-9!@#$%^&*()_~+= \t~!@#$%^&*()_+=?:;№"{}[\]/.,<>`-]*$/
