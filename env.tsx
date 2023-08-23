@@ -16,4 +16,5 @@ export const CTP_SCOPES = [
   "manage_api_clients:kratkoe",
   "view_cart_discounts:kratkoe",
   "view_published_products:kratkoe",
+  // "view_products:kratkoe",
 ];
