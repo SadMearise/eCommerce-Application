@@ -47,11 +47,14 @@ export default function Product() {
         <>
           <h1>{product?.name[locale]}</h1>
           <p>{product?.description ? product?.description[locale] : "No description"}</p>
-          <img
+          {/* <img
             src={product?.masterVariant?.images ? product?.masterVariant?.images[0].url : ""}
             alt=""
+          /> */}
+          <ProductSlider
+            images={product?.masterVariant?.images ?? []}
+            // autoPlay={false}
           />
-          <ProductSlider />
         </>
       </Container>
     </>
