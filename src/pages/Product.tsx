@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import { ProductProjection } from "@commercetools/platform-sdk/";
 import Header from "../components/header/Header";
 import getApiRoot from "../services/BuildClient";
+import ProductSlider from "../components/slider/ProductSlider";
 
 export default function Product() {
   const params = useParams();
@@ -50,6 +51,7 @@ export default function Product() {
             src={product?.masterVariant?.images ? product?.masterVariant?.images[0].url : ""}
             alt=""
           />
+          <ProductSlider />
         </>
       </Container>
     </>
