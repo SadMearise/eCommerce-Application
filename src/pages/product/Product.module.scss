@@ -5,8 +5,9 @@
 
   @media (max-width: 960px) {
     flex-direction: column;
-    max-width: 400px;
+    max-width: 500px;
     margin: 0 auto;
+    padding: 40px 0;
   }
 }
 
@@ -26,6 +27,10 @@
   font-size: 40px;
   margin-top: 0;
   color: #575153;
+
+  @media (max-width: 960px) {
+    font-size: 30px;
+  }
 }
 
 .prices {
@@ -39,6 +44,10 @@
   color: #8e8c8c;
   margin: 0;
   padding-right: 20px;
+
+  @media (max-width: 960px) {
+    font-size: 20px;
+  }
 }
 
 .current-price {
@@ -46,4 +55,14 @@
   font-weight: 700;
   color: #575153;
   margin: 0;
+
+  @media (max-width: 960px) {
+    font-size: 24px;
+  }
+}
+
+.error-message {
+  // padding: 10px;
+  max-width: 500px;
+  margin: 50px auto 0 auto;
 }

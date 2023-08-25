@@ -1,13 +1,25 @@
 .slider {
   max-width: 400px;
   flex-basis: 50%;
+  overflow: inherit!important;
 
   @media (max-width: 960px) {
+    width: 400px;
+    // margin: 0 auto;
     order: 2;
+  }
+
+  @media (max-width: 480px) {
+    width: 285px;
   }
 
   img {
     display: block;
     cursor: pointer;
+  }
+
+  & .fullHeightHoverWrapper {
+    height: auto!important;
+    top: 0;
   }
 }

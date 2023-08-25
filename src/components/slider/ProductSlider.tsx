@@ -11,10 +11,27 @@ function ProductSlider(sliderProps: ISliderProps) {
   const [isOpen, setIsOpen] = useState(false);
   // const placeholderImage = images; // TODO: replace placeholder image
   const [currentImage, setCurrentImage] = useState<Image>();
+
   return (
     <>
       <Carousel
         autoPlay={false}
+        navButtonsAlwaysVisible={images.length > 1}
+        navButtonsAlwaysInvisible={images.length <= 1}
+        indicators={images.length > 1}
+        fullHeightHover={false}
+        navButtonsWrapperProps={{
+          style: {
+            height: "auto",
+            width: "auto",
+            margin: "-10px",
+          },
+        }}
+        navButtonsProps={{
+          style: {
+            margin: "0",
+          },
+        }}
         className={styles.slider}
       >
         {images.map((image, i) => (

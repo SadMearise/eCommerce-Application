@@ -1,4 +1,4 @@
-import { Container } from "@mui/material";
+import { Alert, AlertTitle, Container } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { ProductProjection } from "@commercetools/platform-sdk/";
@@ -31,19 +31,10 @@ function Product() {
         }
       })
       .catch((e) => {
-        setError(`Can't load product ${e}`);
+        setError(`Can't load product. ${e}`);
       });
     setIsLoading(false);
   }, [params.productId]);
-
-  if (error) {
-    return (
-      <>
-        <Header />
-        <h2>{error}</h2>
-      </>
-    );
-  }
 
   function getPrice(type: Prices) {
     if (!product?.masterVariant?.prices?.length) {
@@ -59,6 +50,23 @@ function Product() {
     return (centAmount / 100).toLocaleString(locale, { style: "currency", currency: currencyCode });
   }
 
+  if (error) {
+    return (
+      <>
+        <Header />
+        <Container maxWidth="lg">
+          <Alert
+            severity="error"
+            className={styles["error-message"]}
+          >
+            <AlertTitle>Oops!</AlertTitle>
+            {error}
+          </Alert>
+        </Container>
+      </>
+    );
+  }
+
   if (isLoading) {
     return <h1>loading..</h1>;
   }
@@ -66,7 +74,10 @@ function Product() {
   return (
     <>
       <Header />
-      <Container maxWidth="lg">
+      <Container
+        maxWidth="lg"
+        className={styles.container}
+      >
         <div className={styles.body}>
           <ProductSlider images={product?.masterVariant?.images ?? []} />
           <div className={styles.info}>
