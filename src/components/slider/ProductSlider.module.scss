@@ -1,7 +1,7 @@
 .slider {
   max-width: 400px;
   flex-basis: 50%;
-  overflow: inherit!important;
+  overflow: inherit !important;
 
   @media (max-width: 960px) {
     width: 400px;
@@ -19,7 +19,7 @@
   }
 
   & .fullHeightHoverWrapper {
-    height: auto!important;
+    height: auto !important;
     top: 0;
   }
 }
