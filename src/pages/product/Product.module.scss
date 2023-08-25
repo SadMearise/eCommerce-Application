@@ -35,10 +35,10 @@
 
 .original-price {
   font-size: 24px;
-  // font-weight: 700;
   text-decoration: line-through;
   color: #8e8c8c;
   margin: 0;
+  padding-right: 20px;
 }
 
 .current-price {
@@ -46,5 +46,4 @@
   font-weight: 700;
   color: #575153;
   margin: 0;
-  padding: 0 20px;
 }

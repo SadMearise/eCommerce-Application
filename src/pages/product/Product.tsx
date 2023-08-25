@@ -12,10 +12,12 @@ function Product() {
   const params = useParams();
   const [product, setProduct] = useState<ProductProjection>();
   const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
   const locale = "en-US";
 
   useEffect(() => {
     const keyValue = params.productId ?? "";
+    setIsLoading(true);
     getApiRoot()
       .productProjections()
       .withKey({ key: keyValue })
@@ -31,6 +33,7 @@ function Product() {
       .catch((e) => {
         setError(`Can't load product ${e}`);
       });
+    setIsLoading(false);
   }, [params.productId]);
 
   if (error) {
@@ -56,6 +59,10 @@ function Product() {
     return (centAmount / 100).toLocaleString(locale, { style: "currency", currency: currencyCode });
   }
 
+  if (isLoading) {
+    return <h1>loading..</h1>;
+  }
+
   return (
     <>
       <Header />
@@ -65,10 +72,15 @@ function Product() {
           <div className={styles.info}>
             <h1 className={styles.title}>{product?.name[locale]}</h1>
             <div className={styles.prices}>
-              <p className={styles["original-price"]}>{getPrice(Prices.Original)}</p>
-              <p className={styles["current-price"]}>{getPrice(Prices.Current)}</p>
+              {product?.masterVariant?.prices?.length && product.masterVariant?.prices[0].discounted ? (
+                <>
+                  <p className={styles["original-price"]}>{getPrice(Prices.Original)}</p>
+                  <p className={styles["current-price"]}>{getPrice(Prices.Current)}</p>
+                </>
+              ) : (
+                <p className={styles["current-price"]}>{getPrice(Prices.Original)}</p>
+              )}
             </div>
-
             <p>{product?.description ? product?.description[locale] : "No description"}</p>
           </div>
         </div>
