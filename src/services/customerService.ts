@@ -1,4 +1,4 @@
-import { ClientResponse, CustomerDraft, CustomerSignInResult } from "@commercetools/platform-sdk";
+import { ClientResponse, Customer, CustomerDraft, CustomerSignInResult } from "@commercetools/platform-sdk";
 import getApiRoot from "./BuildClient";
 import { ICustomer } from "../models/types";
 import createDraftFromAddress from "../utils/createDraftFromAddress";
@@ -53,3 +53,8 @@ const createCustomer = async (customerData: ICustomer): Promise<ClientResponse<C
 };
 
 export default createCustomer;
+
+export const getCustomerInfo = async (): Promise<ClientResponse<Customer>> => {
+  const getUser = await getApiRoot().me().get().execute();
+  return getUser;
+};
