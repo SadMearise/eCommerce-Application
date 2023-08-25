@@ -4,7 +4,7 @@ import { useState } from "react";
 import styles from "./ProductSlider.module.scss";
 import ProductPopup from "../popup/ProductPopup";
 import { ISliderProps } from "./types";
-import SliderItem from "./SliderItem";
+import SliderItem from "./sliderItem/SliderItem";
 
 function ProductSlider(sliderProps: ISliderProps) {
   const { images } = sliderProps;

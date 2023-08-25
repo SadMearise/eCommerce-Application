@@ -6,6 +6,7 @@ import Header from "../../components/header/Header";
 import getApiRoot from "../../services/BuildClient";
 import ProductSlider from "../../components/slider/ProductSlider";
 import styles from "./Product.module.scss";
+import Prices from "./types";
 
 function Product() {
   const params = useParams();
@@ -23,7 +24,6 @@ function Product() {
       .then((productResp) => {
         if (productResp.statusCode === 200) {
           setProduct(productResp.body);
-          console.log("product", productResp.body);
         } else {
           throw new Error("Server error");
         }
@@ -42,9 +42,18 @@ function Product() {
     );
   }
 
-  function getPrice() {
-    const centAmount = product?.masterVariant?.prices ? product?.masterVariant?.prices[0].value.centAmount : 0;
-    return (centAmount / 100).toFixed(2);
+  function getPrice(type: Prices) {
+    if (!product?.masterVariant?.prices?.length) {
+      return "";
+    }
+
+    let price = product.masterVariant.prices[0].value;
+    if (type === Prices.Current && product.masterVariant.prices[0].discounted) {
+      price = product.masterVariant.prices[0].discounted.value;
+    }
+
+    const { centAmount, currencyCode } = price;
+    return (centAmount / 100).toLocaleString(locale, { style: "currency", currency: currencyCode });
   }
 
   return (
@@ -55,7 +64,11 @@ function Product() {
           <ProductSlider images={product?.masterVariant?.images ?? []} />
           <div className={styles.info}>
             <h1 className={styles.title}>{product?.name[locale]}</h1>
-            <p>{getPrice()}</p>
+            <div className={styles.prices}>
+              <p className={styles["original-price"]}>{getPrice(Prices.Original)}</p>
+              <p className={styles["current-price"]}>{getPrice(Prices.Current)}</p>
+            </div>
+
             <p>{product?.description ? product?.description[locale] : "No description"}</p>
           </div>
         </div>
