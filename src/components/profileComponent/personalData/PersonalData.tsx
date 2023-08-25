@@ -1,56 +1,61 @@
-import React from "react";
-import { TextField } from "@mui/material";
-import { Customer } from "@commercetools/platform-sdk";
+import { useState } from "react";
+import { TextField, Button } from "@mui/material";
 import styles from "../ProfileComponent.module.scss";
-
-interface PersonalInfoProps {
-  userData: Customer;
-  handleReadOnlyClick: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
-}
+import { PersonalInfoProps } from "../types";
 
 export default function PersonalData({ userData, handleReadOnlyClick }: PersonalInfoProps) {
+  const [isChangingInfo, setIsChangingInfo] = useState(false);
+
+  const handleChangingInfoClick = () => setIsChangingInfo(!isChangingInfo);
   return (
     <div className={styles["personal-data"]}>
-      <h2 className={styles["personal-data-title"]}>Personal info:</h2>
+      <div className={styles["personal-data-title"]}>
+        <h2>Personal info:</h2>
+        <Button onClick={handleChangingInfoClick}>{isChangingInfo ? "save details" : "change details"}</Button>
+      </div>
       <div className={styles["flex-container"]}>
         <TextField
-          id="standard-read-only-input"
+          id="firstName-input"
           className={styles["half-width-field"]}
           label="First name:"
-          value={userData?.firstName}
+          defaultValue={userData?.firstName}
+          variant={isChangingInfo ? "standard" : "outlined"}
           InputProps={{
-            readOnly: true,
-            onMouseDown: handleReadOnlyClick,
+            readOnly: !isChangingInfo,
+            onMouseDown: !isChangingInfo ? handleReadOnlyClick : undefined,
           }}
         />
         <TextField
-          id="standard-read-only-input"
+          id="lastName-input"
           className={styles["half-width-field"]}
           label="Last name:"
-          value={userData?.lastName}
+          defaultValue={userData?.lastName}
+          variant={isChangingInfo ? "standard" : "outlined"}
           InputProps={{
-            readOnly: true,
-            onMouseDown: handleReadOnlyClick,
+            readOnly: !isChangingInfo,
+            onMouseDown: !isChangingInfo ? handleReadOnlyClick : undefined,
           }}
         />
         <TextField
-          id="standard-read-only-input"
+          id="birthday-input"
           className={styles["half-width-field"]}
           label="Birthday:"
-          value={userData?.dateOfBirth!.split("-").reverse().join("-")}
+          defaultValue={userData?.dateOfBirth!.split("-").reverse().join("-")}
+          variant={isChangingInfo ? "standard" : "outlined"}
           InputProps={{
-            readOnly: true,
-            onMouseDown: handleReadOnlyClick,
+            readOnly: !isChangingInfo,
+            onMouseDown: !isChangingInfo ? handleReadOnlyClick : undefined,
           }}
         />
         <TextField
-          id="standard-read-only-input"
+          id="email-input"
           className={styles["half-width-field"]}
           label="email:"
-          value={userData?.email}
+          defaultValue={userData?.email}
+          variant={isChangingInfo ? "standard" : "outlined"}
           InputProps={{
-            readOnly: true,
-            onMouseDown: handleReadOnlyClick,
+            readOnly: !isChangingInfo,
+            onMouseDown: !isChangingInfo ? handleReadOnlyClick : undefined,
           }}
         />
       </div>
