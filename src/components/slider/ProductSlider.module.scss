@@ -1,7 +1,13 @@
 .slider {
   max-width: 540px;
+  flex-basis: 50%;
+
+  @media (max-width: 960px){
+    order: 2;
+  }
 
   img {
     display: block;
+    cursor: pointer;
   }
 }

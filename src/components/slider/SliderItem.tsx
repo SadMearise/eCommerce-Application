@@ -11,9 +11,11 @@ function SliderItem(item: ISliderItemProps) {
   return (
     <Paper className={styles.paper}>
       <img
+        className={styles.enlarge}
         src={url}
         alt={label}
         height={dimensions.h}
+        width={dimensions.w}
         role="presentation"
         onClick={() => onClickHandle()}
       />

@@ -6,7 +6,7 @@ import Home from "../pages/Home";
 import About from "../pages/About";
 import Basket from "../pages/Basket";
 import Catalog from "../pages/Catalog";
-import Product from "../pages/Product";
+import Product from "../pages/product/Product";
 import Profile from "../pages/Profile";
 import tokenCache from "../services/TokenCash";
 import RouterPaths from "./routes";
