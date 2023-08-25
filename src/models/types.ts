@@ -33,8 +33,11 @@ export enum CountryCode {
   Russia = "RU",
   Belarus = "BY",
   Georgia = "GE",
-  UnitedStates = "US",
-  Canada = "CA",
+}
+export enum Country {
+  Russia = "Russia",
+  Belarus = "Belarus",
+  Georgia = "Georgia",
 }
 
 export enum AddressType {
