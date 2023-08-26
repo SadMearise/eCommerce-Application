@@ -3,19 +3,16 @@ import CloseIcon from "@mui/icons-material/Close";
 import InnerImageZoom from "react-inner-image-zoom";
 import "react-inner-image-zoom/lib/InnerImageZoom/styles.css";
 import IProductPopupProps from "./types";
-import styles from "./ProductPopup.module.scss";
 
 function ProductPopup(props: IProductPopupProps) {
   const { isOpen, closeFunc, image } = props;
 
   return (
     <Dialog
-      className={styles.popup}
       open={isOpen}
       onClose={closeFunc}
     >
       <InnerImageZoom
-        className={styles.picture}
         src={image?.url ?? ""}
         zoomSrc={image?.url}
         zoomScale={1.5}
