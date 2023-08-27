@@ -5,7 +5,7 @@ import Registration from "../pages/Registration";
 import Home from "../pages/Home";
 import About from "../pages/About";
 import Basket from "../pages/Basket";
-import Catalog from "../pages/Catalog";
+import Catalog from "../pages/catalog/Catalog";
 import Product from "../pages/Product";
 import Profile from "../pages/Profile";
 import tokenCache from "../services/TokenCash";

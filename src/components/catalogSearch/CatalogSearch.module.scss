@@ -1,0 +1,12 @@
+.search {
+  margin: 20px 0 !important;
+  border: 1px solid #1976d2;
+
+  &-body {
+    width: 100%;
+  }
+
+  &-input {
+    width: inherit;
+  }
+}

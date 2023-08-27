@@ -1,0 +1,13 @@
+.catalog-container {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  margin: -15px;
+}
+
+.pagination {
+  margin: 40px 0;
+
+  & ul {
+    justify-content: center;
+  }
+}
