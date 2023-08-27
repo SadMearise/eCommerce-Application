@@ -9,6 +9,7 @@ import Prices from "./types";
 import getPrice from "../../utils/getPrice";
 import locale from "../../settings";
 import { getProductByKey, getProductTypeById } from "../../services/productService";
+import sizeStringToNumber from "../../utils/sizeStringToNumber";
 
 function Product() {
   const params = useParams();
@@ -89,13 +90,27 @@ function Product() {
               )}
             </div>
             <p>{product?.description ? product?.description[locale] : "No description"}</p>
-            {(productType?.attributes ?? []).map((attrType: AttributeDefinition) => (
-              <p key={attrType.name}>
-                <b>{attrType.label[locale]}</b>
-                <b>: </b>
-                {product.masterVariant.attributes?.find((attr) => attr.name)?.value}
-              </p>
-            ))}
+            {(productType?.attributes ?? [])
+              .filter((attrType) => !attrType.name.endsWith("size"))
+              .map((attrType: AttributeDefinition) => (
+                <p key={attrType.name}>
+                  <b>{attrType.label[locale]}</b>
+                  <b>: </b>
+                  {product.masterVariant.attributes?.find((attr) => attr.name === attrType.name)?.value}
+                </p>
+              ))}
+            <p>
+              <b>Sizes: </b>
+              {product.variants
+                .concat([product.masterVariant])
+                .sort((a, b) => sizeStringToNumber(a) - sizeStringToNumber(b))
+                .map((variant) => (
+                  <span key={variant.id}>
+                    {variant.attributes?.find((attr) => attr.name.endsWith("size"))?.value}
+                    &nbsp;
+                  </span>
+                ))}
+            </p>
           </div>
         </div>
       </Container>
