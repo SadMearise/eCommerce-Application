@@ -50,7 +50,9 @@ function ProductSlider(sliderProps: ISliderProps) {
         closeFunc={() => {
           setIsOpen(false);
         }}
-        image={currentImage}
+        // image={currentImage}
+        images={images}
+        index={currentImage ? images.indexOf(currentImage) : 0}
       />
     </>
   );

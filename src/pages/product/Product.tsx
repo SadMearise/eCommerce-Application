@@ -9,6 +9,7 @@ import Prices from "./types";
 import getPrice from "../../utils/getPrice";
 import locale from "../../settings";
 import getProductByKey from "../../services/productService";
+// import getApiRoot from "../../services/BuildClient";
 
 function Product() {
   const params = useParams();
