@@ -18,7 +18,7 @@ function SliderItem(item: ISliderItemProps) {
           height={dimensions.h}
           width={dimensions.w}
           role="presentation"
-          onClick={() => onClickHandle()}
+          onClick={onClickHandle}
         />
       </div>
     </Paper>

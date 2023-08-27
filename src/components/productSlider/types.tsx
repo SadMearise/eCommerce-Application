@@ -3,7 +3,7 @@ import { Image } from "@commercetools/platform-sdk";
 export interface ISliderItemProps {
   key: number;
   info: Image;
-  onClickHandle: () => void;
+  onClickHandle?: () => void;
 }
 
 export interface ISliderProps {

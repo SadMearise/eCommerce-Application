@@ -5,7 +5,6 @@ interface IProductPopupProps {
   closeFunc: () => void;
   images: Image[];
   index: number;
-  // image: Image | undefined;
 }
 
 export default IProductPopupProps;
