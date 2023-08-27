@@ -1,14 +1,14 @@
 import { Alert, AlertTitle, CircularProgress, Container } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { ProductProjection } from "@commercetools/platform-sdk/";
+import { AttributeDefinition, ProductProjection, ProductType } from "@commercetools/platform-sdk/";
 import Header from "../../components/header/Header";
 import ProductSlider from "../../components/productSlider/ProductSlider";
 import styles from "./Product.module.scss";
 import Prices from "./types";
 import getPrice from "../../utils/getPrice";
 import locale from "../../settings";
-import getProductByKey from "../../services/productService";
+import { getProductByKey, getProductTypeById } from "../../services/productService";
 
 function Product() {
   const params = useParams();
@@ -16,16 +16,27 @@ function Product() {
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(true);
 
+  const [productType, setProductType] = useState<ProductType>();
+
   useEffect(() => {
     const keyValue = params.productId ?? "";
     setIsLoading(true);
     getProductByKey(keyValue)
       .then((prod) => {
         setProduct(prod);
+
+        getProductTypeById(prod.productType.id)
+          .then((type) => {
+            setProductType(type);
+          })
+          .catch((e) => {
+            setError(`Can't load product. ${e}`);
+          });
       })
       .catch((e) => {
         setError(`Can't load product. ${e}`);
       });
+
     setIsLoading(false);
   }, [params.productId]);
 
@@ -78,6 +89,13 @@ function Product() {
               )}
             </div>
             <p>{product?.description ? product?.description[locale] : "No description"}</p>
+            {(productType?.attributes ?? []).map((attrType: AttributeDefinition) => (
+              <p key={attrType.name}>
+                <b>{attrType.label[locale]}</b>
+                <b>: </b>
+                {product.masterVariant.attributes?.find((attr) => attr.name)?.value}
+              </p>
+            ))}
           </div>
         </div>
       </Container>

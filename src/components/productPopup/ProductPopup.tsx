@@ -19,6 +19,7 @@ function ProductPopup(props: IProductPopupProps) {
         index={index}
         navButtonsAlwaysVisible={images.length > 1}
         navButtonsAlwaysInvisible={images.length <= 1}
+        indicators={images.length > 1}
         fullHeightHover={false}
         className={styles.slider}
       >
