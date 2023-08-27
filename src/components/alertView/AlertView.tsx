@@ -5,7 +5,12 @@ import CloseIcon from "@mui/icons-material/Close";
 import { setRegistrationSuccess } from "../../store/features/registration/registrationSlice";
 import styles from "./AlertView.module.scss";
 
-export default function AlertView() {
+interface AlertViewProps {
+  textContent: string;
+  variant: "filled" | "outlined" | "standard";
+}
+
+export default function AlertView({ textContent, variant }: AlertViewProps) {
   const dispatch = useDispatch();
   const [open, setOpen] = useState(true);
 
@@ -28,7 +33,7 @@ export default function AlertView() {
     <div>
       {open && (
         <Alert
-          variant="outlined"
+          variant={variant}
           className={styles.alert}
           action={
             <IconButton
@@ -44,7 +49,7 @@ export default function AlertView() {
           }
         >
           <AlertTitle>Success</AlertTitle>
-          Registration successful! You&apos;re now logged in!
+          {textContent}
         </Alert>
       )}
     </div>
