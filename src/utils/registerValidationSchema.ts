@@ -28,7 +28,7 @@ export const addressValidationSchema = yup.object().shape({
     .string()
     .matches(/^[a-zA-Z0-9]+$/)
     .required(),
-  streetNumber: yup.string().matches(/^\d+/).required(),
+  streetNumber: yup.string().matches(/^\d+$/).required(),
   postalCode: yup
     .string()
     .test({
