@@ -5,6 +5,9 @@ import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 import { BaseAddress, ClientResponse, Customer } from "@commercetools/platform-sdk";
+import PersonPinIcon from "@mui/icons-material/PersonPin";
+import HomeIcon from "@mui/icons-material/Home";
+import HttpsIcon from "@mui/icons-material/Https";
 import { getCustomerInfo } from "../../services/customerService";
 import styles from "./ProfileComponent.module.scss";
 import PersonalData from "./personalData/PersonalData";
@@ -70,7 +73,7 @@ export default function ProfileComponent() {
   if (userData === null) {
     return <p>Loading...</p>;
   }
-  console.log(userData, 123, defaultShippingAddressesData);
+  console.log(userData);
   return (
     <div className={styles["profile-wrapper"]}>
       <Box sx={{ width: "100%", typography: "body1" }}>
@@ -83,14 +86,20 @@ export default function ProfileComponent() {
               <Tab
                 label="Personal info"
                 value="1"
+                icon={<PersonPinIcon />}
+                iconPosition="start"
               />
               <Tab
                 label="Address info"
                 value="2"
+                icon={<HomeIcon />}
+                iconPosition="start"
               />
               <Tab
                 label="Change password"
                 value="3"
+                icon={<HttpsIcon />}
+                iconPosition="start"
               />
             </TabList>
           </Box>
@@ -102,6 +111,8 @@ export default function ProfileComponent() {
           </TabPanel>
           <TabPanel value="2">
             <AddressData
+              userId={userData.id}
+              addressVersion={userData.version}
               shippingAddressData={shippingAddressesData}
               billingAddressData={billingAddressesData}
               defaultShippingAddressData={defaultShippingAddressesData}
