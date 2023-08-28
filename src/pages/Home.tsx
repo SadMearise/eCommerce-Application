@@ -13,7 +13,12 @@ export default function Home() {
       <Container maxWidth="lg">
         <h1>Home</h1>
       </Container>
-      {isSuccessSelector && <AlertView />}
+      {isSuccessSelector && (
+        <AlertView
+          variant="outlined"
+          textContent="Registration successful! You're now logged in!"
+        />
+      )}
     </>
   );
 }
