@@ -15,6 +15,8 @@ export interface PersonalDataProps {
 }
 
 export interface AddressDataProps extends Omit<PersonalDataProps, "userData"> {
+  userId: string;
+  addressVersion: number;
   shippingAddressData: BaseAddress[];
   billingAddressData: BaseAddress[];
   defaultShippingAddressData?: BaseAddress[];
@@ -28,6 +30,8 @@ export enum AddressType {
   DefaultBillingAddress = "Default billing address:",
 }
 export interface AddressFieldProps {
+  userId: string;
+  addressVersion: number;
   addressType: AddressType;
   addressData: BaseAddress[];
   handleReadOnlyClick: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
