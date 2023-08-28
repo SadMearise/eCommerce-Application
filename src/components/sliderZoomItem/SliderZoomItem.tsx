@@ -1,5 +1,6 @@
 import InnerImageZoom from "react-inner-image-zoom";
 import { ISliderItemProps } from "../productSlider/types";
+import styles from "./SliderZoomItem.module.scss";
 
 function SliderZoomItem(item: ISliderItemProps) {
   const {
@@ -8,6 +9,7 @@ function SliderZoomItem(item: ISliderItemProps) {
 
   return (
     <InnerImageZoom
+      className={styles.zoom}
       src={url ?? ""}
       zoomSrc={url}
       zoomScale={1.5}
