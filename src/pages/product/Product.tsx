@@ -5,11 +5,8 @@ import { ProductProjection, ProductType } from "@commercetools/platform-sdk/";
 import Header from "../../components/header/Header";
 import ProductSlider from "../../components/productSlider/ProductSlider";
 import styles from "./Product.module.scss";
-// import Prices from "./types";
-// import getPrice from "../../utils/getPrice";
 import locale from "../../settings";
 import { getProductByKey, getProductTypeById } from "../../services/productService";
-// import sizeStringToNumber from "../../utils/sizeStringToNumber";
 import ProductAttributes from "../../components/productAttributes/ProductAttributes";
 import ProductSizes from "../../components/productSizes/ProductSizes";
 import ProductPrices from "../../components/productPrices/ProductPrices";
@@ -23,25 +20,23 @@ function Product() {
   const [productType, setProductType] = useState<ProductType>();
 
   useEffect(() => {
-    const keyValue = params.productId ?? "";
-    setIsLoading(true);
-    getProductByKey(keyValue)
-      .then((prod) => {
+    const loadProductAndType = async () => {
+      try {
+        const keyValue = params.productId ?? "";
+        setIsLoading(true);
+
+        const prod = await getProductByKey(keyValue);
         setProduct(prod);
 
-        getProductTypeById(prod.productType.id)
-          .then((type) => {
-            setProductType(type);
-          })
-          .catch((e) => {
-            setError(`Can't load product. ${e}`);
-          });
-      })
-      .catch((e) => {
+        const type = await getProductTypeById(prod.productType.id);
+        setProductType(type);
+      } catch (e) {
         setError(`Can't load product. ${e}`);
-      });
+      }
+      setIsLoading(false);
+    };
 
-    setIsLoading(false);
+    loadProductAndType();
   }, [params.productId]);
 
   if (error) {
