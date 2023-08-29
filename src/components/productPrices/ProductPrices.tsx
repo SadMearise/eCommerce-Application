@@ -1,11 +1,7 @@
-import { ProductProjection } from "@commercetools/platform-sdk";
 import getPrice from "../../utils/getPrice";
 import Prices from "../../pages/product/types";
 import styles from "./ProductPrices.module.scss";
-
-interface IProductPricesProps {
-  product: ProductProjection;
-}
+import IProductPricesProps from "./types";
 
 function ProductPrices({ product }: IProductPricesProps) {
   return (
