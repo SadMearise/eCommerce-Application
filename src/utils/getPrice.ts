@@ -1,11 +1,11 @@
 import { Price, ProductProjection, TypedMoney } from "@commercetools/platform-sdk/";
 import Prices from "../pages/product/types";
 import locale from "../settings";
-import cent from "./constants";
+import CENT from "./constants";
 
 function formatPrice(price: TypedMoney): string {
   const { centAmount, currencyCode } = price;
-  return (centAmount * cent).toLocaleString(locale, { style: "currency", currency: currencyCode });
+  return (centAmount * CENT).toLocaleString(locale, { style: "currency", currency: currencyCode });
 }
 
 function getCurrentPrice(price: Price, type: Prices): TypedMoney {

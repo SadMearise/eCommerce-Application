@@ -1,2 +1,2 @@
-const cent = 0.01;
-export default cent;
+const CENT = 0.01;
+export default CENT;
