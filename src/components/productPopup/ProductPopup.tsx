@@ -6,7 +6,7 @@ import IProductPopupProps from "./types";
 import SliderZoomItem from "../sliderZoomItem/SliderZoomItem";
 import styles from "./ProductPopup.module.scss";
 
-function ProductPopup(props: IProductPopupProps) {
+export default function ProductPopup(props: IProductPopupProps) {
   const { isOpen, closeFunc, images, index } = props;
 
   return (
@@ -48,5 +48,3 @@ function ProductPopup(props: IProductPopupProps) {
     </Dialog>
   );
 }
-
-export default ProductPopup;
