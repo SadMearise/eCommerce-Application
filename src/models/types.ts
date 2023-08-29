@@ -42,4 +42,8 @@ export enum AddressType {
   Billing = "billing",
 }
 
+export enum StatusCodes {
+  Ok = 200,
+}
+
 export type AdditionalAddressType = AddressType.Shipping | AddressType.Billing;

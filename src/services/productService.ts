@@ -1,6 +1,6 @@
 import { ProductProjection, ProductType } from "@commercetools/platform-sdk";
 import getApiRoot from "./BuildClient";
-import StatusCodes from "../types";
+import { StatusCodes } from "../models/types";
 
 export async function getProductByKey(key: string): Promise<ProductProjection> {
   // eslint-disable-next-line newline-per-chained-call
