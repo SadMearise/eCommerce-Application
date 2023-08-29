@@ -42,38 +42,6 @@
   }
 }
 
-.prices {
-  display: flex;
-  align-items: center;
-}
-
-.original-price {
-  font-size: 24px;
-  text-decoration: line-through;
-  color: #8e8c8c;
-  margin: 0;
-  padding-right: 20px;
-
-  @media (max-width: 960px) {
-    font-size: 20px;
-  }
-
-  @media (max-width: 533px) {
-    font-size: 18px;
-  }
-}
-
-.current-price {
-  font-size: 28px;
-  font-weight: 700;
-  color: #575153;
-  margin: 0;
-
-  @media (max-width: 960px) {
-    font-size: 24px;
-  }
-}
-
 .error-message {
   max-width: 500px;
   margin: 90px auto 0 auto;

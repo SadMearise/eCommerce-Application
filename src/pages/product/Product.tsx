@@ -1,15 +1,18 @@
 import { Alert, AlertTitle, CircularProgress, Container } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { AttributeDefinition, ProductProjection, ProductType } from "@commercetools/platform-sdk/";
+import { ProductProjection, ProductType } from "@commercetools/platform-sdk/";
 import Header from "../../components/header/Header";
 import ProductSlider from "../../components/productSlider/ProductSlider";
 import styles from "./Product.module.scss";
-import Prices from "./types";
-import getPrice from "../../utils/getPrice";
+// import Prices from "./types";
+// import getPrice from "../../utils/getPrice";
 import locale from "../../settings";
 import { getProductByKey, getProductTypeById } from "../../services/productService";
-import sizeStringToNumber from "../../utils/sizeStringToNumber";
+// import sizeStringToNumber from "../../utils/sizeStringToNumber";
+import ProductAttributes from "../../components/productAttributes/ProductAttributes";
+import ProductSizes from "../../components/productSizes/ProductSizes";
+import ProductPrices from "../../components/productPrices/ProductPrices";
 
 function Product() {
   const params = useParams();
@@ -79,38 +82,13 @@ function Product() {
           <ProductSlider images={product?.masterVariant?.images ?? []} />
           <div className={styles.info}>
             <h1 className={styles.title}>{product?.name[locale]}</h1>
-            <div className={styles.prices}>
-              {product?.masterVariant?.prices?.length && product.masterVariant?.prices[0].discounted ? (
-                <>
-                  <p className={styles["original-price"]}>{getPrice(product, Prices.Original)}</p>
-                  <p className={styles["current-price"]}>{getPrice(product, Prices.Current)}</p>
-                </>
-              ) : (
-                <p className={styles["current-price"]}>{getPrice(product, Prices.Original)}</p>
-              )}
-            </div>
+            <ProductPrices product={product} />
             <p>{product?.description ? product?.description[locale] : "No description"}</p>
-            {(productType?.attributes ?? [])
-              .filter((attrType) => !attrType.name.endsWith("size"))
-              .map((attrType: AttributeDefinition) => (
-                <p key={attrType.name}>
-                  <b>{attrType.label[locale]}</b>
-                  <b>: </b>
-                  {product.masterVariant.attributes?.find((attr) => attr.name === attrType.name)?.value}
-                </p>
-              ))}
-            <p>
-              <b>Sizes: </b>
-              {product.variants
-                .concat([product.masterVariant])
-                .sort((a, b) => sizeStringToNumber(a) - sizeStringToNumber(b))
-                .map((variant) => (
-                  <span key={variant.id}>
-                    {variant.attributes?.find((attr) => attr.name.endsWith("size"))?.value}
-                    &nbsp;
-                  </span>
-                ))}
-            </p>
+            <ProductAttributes
+              product={product}
+              productType={productType}
+            />
+            <ProductSizes product={product} />
           </div>
         </div>
       </Container>
