@@ -1,26 +1,13 @@
-import { ProductVariant } from "@commercetools/platform-sdk/";
-import Sizes from "./types";
+import { Attribute, ProductVariant } from "@commercetools/platform-sdk/";
+import { Attributes, Sizes } from "./types";
+
+function findAttributeByName(attributes: Attribute[], attributeName: string) {
+  return attributes.find((attr) => attr.name.endsWith(attributeName))?.value.toUpperCase();
+}
 
 function sizeStringToNumber(variant: ProductVariant): number {
-  const attrSizeValue = variant.attributes?.find((x) => x.name.endsWith("size"))?.value.toUpperCase();
-  switch (attrSizeValue) {
-    case Sizes.XS:
-      return 0;
-    case Sizes.S:
-      return 1;
-    case Sizes.M:
-      return 2;
-    case Sizes.L:
-      return 3;
-    case Sizes.XL:
-      return 4;
-    case Sizes.XXL:
-      return 5;
-    case Sizes["3XL"]:
-      return 5;
-    default:
-      return -1;
-  }
+  const attrSizeValue = findAttributeByName(variant?.attributes ?? [], Attributes.Size);
+  return +Sizes[attrSizeValue] || -1;
 }
 
 export default sizeStringToNumber;

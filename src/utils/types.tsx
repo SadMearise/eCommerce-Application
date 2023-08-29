@@ -1,11 +1,13 @@
-enum Sizes {
-  "XS" = "XS",
-  "S" = "S",
-  "M" = "M",
-  "L" = "L",
-  "XL" = "XL",
-  "XXL" = "XXL",
-  "3XL" = "3XL",
+export enum Attributes {
+  Size = "size",
 }
 
-export default Sizes;
+export enum Sizes {
+  XS = 0,
+  S = 1,
+  M = 2,
+  L = 3,
+  XL = 4,
+  XXL = 5,
+  XXXL = 6,
+}
