@@ -1,6 +1,6 @@
 export const CTP_PROJECT_KEY = "kratkoe";
-export const CTP_CLIENT_SECRET = "kqDUba4Kic80DroP55ZJGf31fPZSo5aM";
-export const CTP_CLIENT_ID = "dRNDZ4QTkb1DlBx2-nXKWPQ6";
+export const CTP_CLIENT_SECRET = "zq4KjcOfCABTuyGFI9RLNQe3xnKeuK7q";
+export const CTP_CLIENT_ID = "T-0KbznMFacGGIxSEJVRpCni";
 export const CTP_AUTH_URL = "https://auth.europe-west1.gcp.commercetools.com";
 export const CTP_API_URL = "https://api.europe-west1.gcp.commercetools.com";
 export const CTP_SCOPES = [
