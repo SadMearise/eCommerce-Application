@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { TextField, Button } from "@mui/material";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import "dayjs/locale/en-gb";
@@ -7,25 +7,49 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { useFormik } from "formik";
 import { DatePicker as MuiDatePicker } from "@mui/x-date-pickers/DatePicker";
 import styles from "../ProfileComponent.module.scss";
-import { PersonalDataProps } from "../types";
+import { PersonalDataProps, TouchedFieldsPersonal } from "../types";
 import profValidationSchema from "../../../utils/profileValidationSchema";
+import { updatePersonalDataCustomer } from "../../../services/customerService";
 
 export default function PersonalData({ userData, handleReadOnlyClick }: PersonalDataProps) {
   const [isChangingInfo, setIsChangingInfo] = useState(false);
+  const [fieldsChanged, setFieldsChanged] = useState(false);
+  const [firstInputDone, setFirstInputDone] = useState(false);
 
   const handleChangingInfoClick = () => setIsChangingInfo(!isChangingInfo);
-
   const formik = useFormik({
     initialValues: {
       firstName: userData.firstName,
       lastName: userData.lastName,
-      dateOfBirth: dayjs(userData.dateOfBirth),
+      dateOfBirth: userData.dateOfBirth,
       email: userData.email,
     },
     validationSchema: profValidationSchema,
-    onSubmit: (values) => console.log(values),
+    onSubmit: (values) => {
+      updatePersonalDataCustomer(userData.id, userData.version, values);
+      console.log(values);
+    },
   });
-  console.log(formik.errors);
+
+  useEffect(() => {
+    if (firstInputDone && !formik.isSubmitting) {
+      const touchedFields: TouchedFieldsPersonal = {
+        firstName: true,
+        lastName: true,
+        email: true,
+      };
+      formik.setTouched(touchedFields);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [firstInputDone, formik.isSubmitting]);
+
+  const handleFieldChange = (field: keyof TouchedFieldsPersonal, value: string) => {
+    formik.setFieldValue(field, value);
+    if (!fieldsChanged) {
+      setFieldsChanged(true);
+      setFirstInputDone(true);
+    }
+  };
   return (
     <div className={styles["personal-data"]}>
       <form
@@ -53,13 +77,13 @@ export default function PersonalData({ userData, handleReadOnlyClick }: Personal
             label="First name:"
             value={formik.values.firstName}
             onBlur={formik.handleBlur}
-            onChange={formik.handleChange}
+            onChange={(e) => handleFieldChange("firstName", e.target.value)}
             error={formik.touched.firstName && Boolean(formik.errors.firstName)}
             variant={isChangingInfo ? "standard" : "outlined"}
             helperText={
               formik.touched.firstName &&
               Boolean(formik.errors.firstName) &&
-              "email address is not valid (e.g., example@email.com), may contain only english letters"
+              "Must contain at least one character and no special characters or numbers, may contain only english letters"
             }
             InputProps={{
               onMouseDown: !isChangingInfo ? handleReadOnlyClick : undefined,
@@ -68,42 +92,70 @@ export default function PersonalData({ userData, handleReadOnlyClick }: Personal
           <TextField
             id="lastName-input"
             className={styles["half-width-field"]}
+            variant={isChangingInfo ? "standard" : "outlined"}
             name="lastName"
             label="Last name:"
             value={formik.values.lastName}
-            onChange={formik.handleChange}
-            variant={isChangingInfo ? "standard" : "outlined"}
+            onChange={(e) => handleFieldChange("lastName", e.target.value)}
+            onBlur={formik.handleBlur}
+            error={formik.touched.lastName && Boolean(formik.errors.lastName)}
+            helperText={
+              formik.touched.lastName &&
+              Boolean(formik.errors.lastName) &&
+              "Must contain at least one character and no special characters or numbers, may contain only english letters"
+            }
             InputProps={{
               onMouseDown: !isChangingInfo ? handleReadOnlyClick : undefined,
             }}
           />
-          <LocalizationProvider
-            dateAdapter={AdapterDayjs}
-            adapterLocale="en-gb"
-          >
-            <MuiDatePicker
+          {isChangingInfo ? (
+            <LocalizationProvider
+              dateAdapter={AdapterDayjs}
+              adapterLocale="en-gb"
+            >
+              <MuiDatePicker
+                slotProps={{ textField: { variant: "standard" } }}
+                className={styles["half-width-field"]}
+                label="Birthday"
+                value={dayjs(userData.dateOfBirth) || formik.values.dateOfBirth}
+                onChange={(date) => {
+                  // eslint-disable-next-line newline-per-chained-call
+                  formik.setFieldValue("dateOfBirth", dayjs(date).format("YYYY-MM-DD"));
+                }}
+                shouldDisableDate={(date) => {
+                  const MIN_AGE = 13;
+                  const birthDate = dayjs(date);
+                  const age = dayjs().diff(birthDate, "years");
+                  return age < MIN_AGE;
+                }}
+              />
+            </LocalizationProvider>
+          ) : (
+            <TextField
               className={styles["half-width-field"]}
-              label="Birthday"
+              name="dateOfBirth"
+              label="Birthday:"
               value={formik.values.dateOfBirth}
-              onChange={(date) => {
-                formik.setFieldValue("dateOfBirth", dayjs(date).format("YYYY-MM-DD"));
-              }}
-              shouldDisableDate={(date) => {
-                const MIN_AGE = 13;
-                const birthDate = dayjs(date);
-                const age = dayjs().diff(birthDate, "years");
-                return age < MIN_AGE;
+              InputProps={{
+                onMouseDown: !isChangingInfo ? handleReadOnlyClick : undefined,
               }}
             />
-          </LocalizationProvider>
+          )}
           <TextField
             id="email-input"
             className={styles["half-width-field"]}
             name="email"
             label="email:"
             value={formik.values.email}
-            onChange={formik.handleChange}
+            onChange={(e) => handleFieldChange("email", e.target.value)}
             variant={isChangingInfo ? "standard" : "outlined"}
+            onBlur={formik.handleBlur}
+            error={formik.touched.email && Boolean(formik.errors.email)}
+            helperText={
+              formik.touched.email &&
+              Boolean(formik.errors.email) &&
+              "email address is not valid (e.g., example@email.com), may contain only english letters"
+            }
             InputProps={{
               onMouseDown: !isChangingInfo ? handleReadOnlyClick : undefined,
             }}
