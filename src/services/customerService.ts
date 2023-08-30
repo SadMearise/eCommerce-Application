@@ -3,7 +3,12 @@ import {
   ClientResponse,
   Customer,
   CustomerChangeAddressAction,
+  CustomerChangeEmailAction,
+  CustomerChangePassword,
   CustomerDraft,
+  CustomerSetDateOfBirthAction,
+  CustomerSetFirstNameAction,
+  CustomerSetLastNameAction,
   CustomerSignInResult,
 } from "@commercetools/platform-sdk";
 import getApiRoot from "./BuildClient";
@@ -84,3 +89,46 @@ export const updateCustomerInfo = async (
     })
     .execute();
 };
+export const updatePersonalDataCustomer = async (customerID: string, version: number, value: CustomerDraft) => {
+  const setFirstName: CustomerSetFirstNameAction = {
+    action: "setFirstName",
+    firstName: value.firstName,
+  };
+  const setLastName: CustomerSetLastNameAction = {
+    action: "setLastName",
+    lastName: value.lastName,
+  };
+  const setBirthday: CustomerSetDateOfBirthAction = {
+    action: "setDateOfBirth",
+    dateOfBirth: value.dateOfBirth,
+  };
+  const setEmail: CustomerChangeEmailAction = {
+    action: "changeEmail",
+    email: value.email,
+  };
+
+  return apiRoot
+    .customers()
+    .withId({ ID: customerID })
+    .post({
+      body: {
+        version,
+        actions: [setFirstName, setLastName, setBirthday, setEmail],
+      },
+    })
+    .execute();
+};
+
+export const changeCustomerPassword = ({ id, version, currentPassword, newPassword }: CustomerChangePassword) =>
+  apiRoot
+    .customers()
+    .password()
+    .post({
+      body: {
+        id,
+        version,
+        currentPassword,
+        newPassword,
+      },
+    })
+    .execute();

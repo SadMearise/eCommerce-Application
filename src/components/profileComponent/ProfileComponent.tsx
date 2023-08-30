@@ -13,6 +13,7 @@ import styles from "./ProfileComponent.module.scss";
 import PersonalData from "./personalData/PersonalData";
 import AddressData from "./addressData/AddressData";
 import { extractAddressesFromIds } from "../../utils/extractAddresses";
+import PasswordData from "./passwordData/PasswordData";
 
 export default function ProfileComponent() {
   const [userData, setUserData] = useState<Customer | null>(null);
@@ -112,7 +113,7 @@ export default function ProfileComponent() {
           <TabPanel value="2">
             <AddressData
               userId={userData.id}
-              addressVersion={userData.version}
+              version={userData.version}
               shippingAddressData={shippingAddressesData}
               billingAddressData={billingAddressesData}
               defaultShippingAddressData={defaultShippingAddressesData}
@@ -120,7 +121,12 @@ export default function ProfileComponent() {
               handleReadOnlyClick={handleReadOnlyClick}
             />
           </TabPanel>
-          <TabPanel value="3">Password</TabPanel>
+          <TabPanel value="3">
+            <PasswordData
+              userId={userData.id}
+              version={userData.version}
+            />
+          </TabPanel>
         </TabContext>
       </Box>
     </div>
