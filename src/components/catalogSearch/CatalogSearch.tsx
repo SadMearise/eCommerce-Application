@@ -1,3 +1,4 @@
+import React from "react";
 import { styled, alpha } from "@mui/material/styles";
 import SearchIcon from "@mui/icons-material/Search";
 import InputBase from "@mui/material/InputBase";
@@ -40,14 +41,23 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-export default function CatalogSearch({ setInputValue }: { setInputValue: TSetInputValue }) {
+export default function CatalogSearch({
+  setInputValue,
+  setCurrentPage,
+}: {
+  setInputValue: TSetInputValue;
+  setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
+}) {
   return (
     <Search className={styles.search}>
       <SearchIconWrapper>
         <SearchIcon />
       </SearchIconWrapper>
       <StyledInputBase
-        onChange={(event) => setInputValue(event.target.value)}
+        onChange={(event) => {
+          setInputValue(event.target.value);
+          setCurrentPage(1);
+        }}
         className={styles["search-body"]}
         placeholder="Search…"
         inputProps={{ "aria-label": "search" }}

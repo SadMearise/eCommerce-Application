@@ -4,7 +4,7 @@ import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import { ProductProjection } from "@commercetools/platform-sdk";
-import styles from "./ProductCard.module.scss";
+import styles from "./CatalogProductCard.module.scss";
 
 export default function ProductCard({ product }: { product: ProductProjection }) {
   if (product) {

@@ -5,55 +5,73 @@ import Box from "@mui/material/Box";
 import Pagination from "@mui/material/Pagination";
 import Grid from "@mui/material/Grid";
 import Header from "../../components/header/Header";
-import ProductCard from "../../components/productCard/ProductCard";
+import ProductCard from "../../components/catalogProductCard/CatalogProductCard";
 import getApiRoot from "../../services/BuildClient";
 import styles from "./Catalog.module.scss";
 import CatalogSearch from "../../components/catalogSearch/CatalogSearch";
 import PAGE_LIMIT from "./constants";
 import CatalogFilter from "../../components/catalogFilter/CatalogFilter";
+import { TFilterValues, TPriceSliderDefaultValues } from "./types";
 
 export default function Catalog() {
-  const priceSliderDefaultValues = [0, 10];
+  const priceSliderDefaultValues: TPriceSliderDefaultValues = {
+    min: 0,
+    max: 100,
+  };
   const [products, setProducts] = useState<ProductProjection[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [inputValue, setInputValue] = useState("");
-  const [priceSliderValues, setPriceSliderValues] = useState<number[]>(priceSliderDefaultValues);
+  const [priceSliderValues, setPriceSliderValues] = useState<TPriceSliderDefaultValues>(priceSliderDefaultValues);
   const [countPages, setCountPages] = useState(1);
+  const [filterValues, setFilterValues] = useState<TFilterValues>({
+    brands: [],
+    colors: [],
+    sizes: [],
+  });
+
+  const ucFirst = (str: string) => {
+    if (!str) return str;
+
+    return str[0].toUpperCase() + str.slice(1);
+  };
+
+  const getAttributePath = (attribute: string, values: string[]) => {
+    let path = `variants.attributes.${attribute}:`;
+
+    values.forEach((value: string, index: number) => {
+      if (index === values.length - 1) {
+        path += `"${value}", `;
+        path += `"${ucFirst(value)}"`;
+      } else {
+        path += `"${value}", `;
+        path += `"${ucFirst(value)}", `;
+      }
+    });
+
+    return path;
+  };
+
+  const filterRules: string[] = [];
 
   const apiRoot = getApiRoot();
 
-  const updateSearchInputValue = (value: string): void => {
-    setInputValue(value);
-  };
-
-  const updatePriceSliderValues = (value: number[]): void => {
-    setPriceSliderValues(value);
-  };
-
   useEffect(() => {
-    const min = priceSliderValues[0] * 100;
-    const max = priceSliderValues[1] * 100;
+    filterRules.push(
+      `variants.price.centAmount:range (${priceSliderValues.min * 100} to ${priceSliderValues.max * 100})`
+    );
 
-    apiRoot
-      .productProjections()
-      .search()
-      .get({
-        queryArgs: {
-          filter: `variants.price.centAmount:range (${min} to ${max})`,
-          limit: PAGE_LIMIT,
-          offset: (currentPage - 1) * PAGE_LIMIT,
-        },
-      })
-      .execute()
-      .then((response) => {
-        if (response.body.total) {
-          setCountPages(Math.ceil(response.body.total / PAGE_LIMIT));
-        }
-        setProducts(response.body.results);
-      });
-  }, [priceSliderValues]);
+    if (filterValues.brands.length) {
+      filterRules.push(getAttributePath("brand", filterValues.brands));
+    }
 
-  useEffect(() => {
+    if (filterValues.colors.length) {
+      filterRules.push(getAttributePath("color", filterValues.colors));
+    }
+
+    if (filterValues.sizes.length) {
+      filterRules.push(getAttributePath("size", filterValues.sizes));
+    }
+
     apiRoot
       .productProjections()
       .search()
@@ -61,6 +79,7 @@ export default function Catalog() {
         queryArgs: {
           "text.en-US": `${inputValue}`,
           fuzzy: true,
+          filter: filterRules,
           limit: PAGE_LIMIT,
           offset: (currentPage - 1) * PAGE_LIMIT,
         },
@@ -72,7 +91,8 @@ export default function Catalog() {
         }
         setProducts(response.body.results);
       });
-  }, [currentPage, inputValue]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filterValues, priceSliderValues, currentPage, inputValue]);
 
   return (
     <>
@@ -89,8 +109,9 @@ export default function Catalog() {
             xs={2}
           >
             <CatalogFilter
-              setPriceSliderValues={updatePriceSliderValues}
+              setPriceSliderValues={setPriceSliderValues}
               priceSliderDefaultValues={priceSliderDefaultValues}
+              setFilterValues={setFilterValues}
             />
           </Grid>
 
@@ -98,7 +119,10 @@ export default function Catalog() {
             item
             xs={10}
           >
-            <CatalogSearch setInputValue={updateSearchInputValue} />
+            <CatalogSearch
+              setInputValue={setInputValue}
+              setCurrentPage={setCurrentPage}
+            />
             {products.length ? (
               <>
                 <Box className={styles["catalog-container"]}>
@@ -130,16 +154,3 @@ export default function Catalog() {
     </>
   );
 }
-// const filterStr = 'variants.attributes.brand.key:"new-googles"'
-// apiRoot
-//     .productProjections()
-//     .search()
-//     .get({
-//       queryArgs: {
-//         limit: 30,
-//         offset: 0,
-//         filter: filterStr,
-//         markMatchingVariants: true,
-//       },
-//     })
-//     .execute();

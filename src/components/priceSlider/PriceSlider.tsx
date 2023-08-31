@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Slider from "@mui/material/Slider";
 import FormControl from "@mui/material/FormControl";
 import FormLabel from "@mui/material/FormLabel";
-import { TSetPriceSliderValues } from "./types";
+import { TPriceSliderDefaultValues } from "../../pages/catalog/types";
 
 function valuetext(value: number) {
   return `${value}$`;
@@ -14,10 +14,10 @@ export default function PriceSlider({
   setPriceSliderValues,
   priceSliderDefaultValues,
 }: {
-  setPriceSliderValues: TSetPriceSliderValues;
-  priceSliderDefaultValues: number[];
+  setPriceSliderValues: React.Dispatch<React.SetStateAction<TPriceSliderDefaultValues>>;
+  priceSliderDefaultValues: TPriceSliderDefaultValues;
 }) {
-  const [value, setValue] = useState<number[]>(priceSliderDefaultValues);
+  const [value, setValue] = useState<TPriceSliderDefaultValues>(priceSliderDefaultValues);
 
   useEffect(() => {
     setPriceSliderValues(value);
@@ -29,9 +29,9 @@ export default function PriceSlider({
     }
 
     if (activeThumb === 0) {
-      setValue([Math.min(newValue[0], value[1] - minDistance), value[1]]);
+      setValue({ min: Math.min(newValue[0], value.max - minDistance), max: value.max });
     } else {
-      setValue([value[0], Math.max(newValue[1], value[0] + minDistance)]);
+      setValue({ min: value.min, max: Math.max(newValue[1], value.min + minDistance) });
     }
   };
 
@@ -41,13 +41,13 @@ export default function PriceSlider({
       <Slider
         size="small"
         getAriaLabel={() => "Minimum distance"}
-        value={value}
+        value={[value.min, value.max]}
         onChange={handleChange}
         valueLabelDisplay="auto"
         getAriaValueText={valuetext}
         disableSwap
-        min={0}
-        max={200}
+        min={priceSliderDefaultValues.min}
+        max={priceSliderDefaultValues.max}
         step={minDistance}
       />
     </FormControl>
