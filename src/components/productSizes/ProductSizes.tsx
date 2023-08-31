@@ -11,7 +11,7 @@ function ProductSizes({ product }: IProductSizesProps) {
         .sort((a, b) => sizeStringToNumber(a) - sizeStringToNumber(b))
         .map((variant) => (
           <span key={variant.id}>
-            {variant.attributes?.find((attr) => attr.name.endsWith(Attributes.Size))?.value}
+            {variant.attributes?.find((attr) => attr.name.endsWith(Attributes.Size))?.value.toUpperCase()}
             &nbsp;
           </span>
         ))}
