@@ -3,10 +3,11 @@ import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
+import { Link } from "react-router-dom";
 import styles from "./CatalogProductCard.module.scss";
 import { IProductCardProps } from "./types";
 
-export default function ProductCard({ product }: IProductCardProps) {
+export default function ProductCard({ product, url }: IProductCardProps) {
   if (product) {
     const productDescription = product.description ? product.description["en-US"] : "";
     const productName = product.name ? product.name["en-US"] : "";
@@ -56,6 +57,10 @@ export default function ProductCard({ product }: IProductCardProps) {
                 </Box>
               ))}
           </CardContent>
+          <Link
+            to={url}
+            className={styles.link}
+          />
         </Card>
       </div>
     );

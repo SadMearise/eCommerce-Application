@@ -153,6 +153,7 @@ export default function Catalog() {
                     <ProductCard
                       product={product}
                       key={product.id}
+                      url={`/product/${product.key}`}
                     />
                   ))}
                 </Box>
