@@ -1,28 +1,22 @@
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import PriceSlider from "../priceSlider/PriceSlider";
 import styles from "./CatalogFilter.module.scss";
 import RadioButtonsGroup from "./radioGroup/RadioButtonsGroup";
-import { TPriceSliderDefaultValues } from "../../pages/catalog/types";
 import getApiRoot from "../../services/BuildClient";
+import { ICatalogFilterProps } from "./types";
 
 export default function CatalogFilter({
   setPriceSliderValues,
   priceSliderDefaultValues,
   setFilterValues,
   setCurrentPage,
-}: {
-  setPriceSliderValues: React.Dispatch<React.SetStateAction<TPriceSliderDefaultValues>>;
-  priceSliderDefaultValues: TPriceSliderDefaultValues;
-  setFilterValues: React.Dispatch<React.SetStateAction<Record<string, string[]>>>;
-  setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
-}) {
+}: ICatalogFilterProps) {
   const [filterInitValues, setFilterInitValues] = useState<Record<string, string[]>>({});
+  const apiRoot = getApiRoot();
 
   useEffect(() => {
-    const apiRoot = getApiRoot();
-
     apiRoot
       .productTypes()
       .get()

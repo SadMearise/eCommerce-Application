@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Slider from "@mui/material/Slider";
 import FormControl from "@mui/material/FormControl";
 import FormLabel from "@mui/material/FormLabel";
 import { TPriceSliderDefaultValues } from "../../pages/catalog/types";
+import { IPriceSliderProps } from "./types";
 
 function valuetext(value: number) {
   return `${value}$`;
@@ -14,11 +15,7 @@ export default function PriceSlider({
   setPriceSliderValues,
   priceSliderDefaultValues,
   setCurrentPage,
-}: {
-  setPriceSliderValues: React.Dispatch<React.SetStateAction<TPriceSliderDefaultValues>>;
-  priceSliderDefaultValues: TPriceSliderDefaultValues;
-  setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
-}) {
+}: IPriceSliderProps) {
   const [value, setValue] = useState<TPriceSliderDefaultValues>(priceSliderDefaultValues);
 
   useEffect(() => {

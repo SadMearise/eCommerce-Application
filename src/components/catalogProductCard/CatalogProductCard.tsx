@@ -3,10 +3,10 @@ import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
-import { ProductProjection } from "@commercetools/platform-sdk";
 import styles from "./CatalogProductCard.module.scss";
+import { IProductCardProps } from "./types";
 
-export default function ProductCard({ product }: { product: ProductProjection }) {
+export default function ProductCard({ product }: IProductCardProps) {
   if (product) {
     const productDescription = product.description ? product.description["en-US"] : "";
     const productName = product.name ? product.name["en-US"] : "";

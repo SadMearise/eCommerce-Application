@@ -4,8 +4,7 @@ import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
-import { TSortValues } from "../../pages/catalog/types";
-import { TSortingOptions } from "./types";
+import { ICatalogSortingDopdownMenuProps, TSortingOptions } from "./types";
 
 const options: TSortingOptions[] = [
   { label: "Default", method: "asc", key: "default" },
@@ -15,11 +14,7 @@ const options: TSortingOptions[] = [
   { label: "Name-Z to A", method: "desc", key: "name" },
 ];
 
-export default function CatalogSortingDopdownMenu({
-  setSortValues,
-}: {
-  setSortValues: React.Dispatch<React.SetStateAction<TSortValues>>;
-}) {
+export default function CatalogSortingDopdownMenu({ setSortValues }: ICatalogSortingDopdownMenuProps) {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [selectedIndex, setSelectedIndex] = React.useState(0);
   const open = Boolean(anchorEl);

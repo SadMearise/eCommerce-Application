@@ -3,7 +3,7 @@ import { styled, alpha } from "@mui/material/styles";
 import SearchIcon from "@mui/icons-material/Search";
 import InputBase from "@mui/material/InputBase";
 import styles from "./CatalogSearch.module.scss";
-import { TSetInputValue } from "./types";
+import { ICatalogSearchProps } from "./types";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -41,13 +41,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-export default function CatalogSearch({
-  setInputValue,
-  setCurrentPage,
-}: {
-  setInputValue: TSetInputValue;
-  setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
-}) {
+export default function CatalogSearch({ setInputValue, setCurrentPage }: ICatalogSearchProps) {
   return (
     <Search className={styles.search}>
       <SearchIconWrapper>

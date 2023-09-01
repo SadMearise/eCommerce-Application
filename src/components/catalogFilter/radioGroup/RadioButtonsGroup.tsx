@@ -1,21 +1,13 @@
+import React from "react";
 import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
-import React from "react";
+
 import FormLabel from "@mui/material/FormLabel";
 import FormControl from "@mui/material/FormControl";
+import { IRadioButtonsGroupProps } from "./types";
 
-export default function RadioButtonsGroup({
-  label,
-  fields,
-  setFilterValues,
-  setCurrentPage,
-}: {
-  label: string;
-  fields: string[];
-  setFilterValues: React.Dispatch<React.SetStateAction<Record<string, string[]>>>;
-  setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
-}) {
+export default function RadioButtonsGroup({ label, fields, setFilterValues, setCurrentPage }: IRadioButtonsGroupProps) {
   const handleFormGroup = (event: React.FormEvent<HTMLDivElement>) => {
     const target = event.target as HTMLInputElement;
 
