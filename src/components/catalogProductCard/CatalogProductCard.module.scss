@@ -7,6 +7,13 @@
   display: flex;
   flex-direction: column;
   height: 100%;
+  cursor: pointer;
+  transition: all .3s ease 0s !important;
+  will-change: transform;
+  
+  &:hover {
+    transform: scale(1.02);
+  }
 }
 
 .content {
