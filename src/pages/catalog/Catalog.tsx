@@ -11,7 +11,7 @@ import styles from "./Catalog.module.scss";
 import CatalogSearch from "../../components/catalogSearch/CatalogSearch";
 import PAGE_LIMIT from "./constants";
 import CatalogFilter from "../../components/catalogFilter/CatalogFilter";
-import { TFilterValues, TPriceSliderDefaultValues } from "./types";
+import { TPriceSliderDefaultValues } from "./types";
 
 export default function Catalog() {
   const priceSliderDefaultValues: TPriceSliderDefaultValues = {
@@ -23,11 +23,7 @@ export default function Catalog() {
   const [inputValue, setInputValue] = useState("");
   const [priceSliderValues, setPriceSliderValues] = useState<TPriceSliderDefaultValues>(priceSliderDefaultValues);
   const [countPages, setCountPages] = useState(1);
-  const [filterValues, setFilterValues] = useState<TFilterValues>({
-    brands: [],
-    colors: [],
-    sizes: [],
-  });
+  const [filterValues, setFilterValues] = useState<Record<string, string[]>>({});
 
   const ucFirst = (str: string) => {
     if (!str) return str;
@@ -60,17 +56,11 @@ export default function Catalog() {
       `variants.price.centAmount:range (${priceSliderValues.min * 100} to ${priceSliderValues.max * 100})`
     );
 
-    if (filterValues.brands.length) {
-      filterRules.push(getAttributePath("brand", filterValues.brands));
-    }
-
-    if (filterValues.colors.length) {
-      filterRules.push(getAttributePath("color", filterValues.colors));
-    }
-
-    if (filterValues.sizes.length) {
-      filterRules.push(getAttributePath("size", filterValues.sizes));
-    }
+    Object.keys(filterValues).forEach((key) => {
+      if (filterValues[key].length) {
+        filterRules.push(getAttributePath(key, filterValues[key]));
+      }
+    });
 
     apiRoot
       .productProjections()

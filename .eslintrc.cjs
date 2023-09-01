@@ -26,6 +26,7 @@ module.exports = {
   },
   plugins: ["react-refresh", "@typescript-eslint", "react", "prettier", "react-hooks"],
   rules: {
+    "@typescript-eslint/ban-ts-comment": "error",
     indent: "off",
     "max-len": [
       "error",

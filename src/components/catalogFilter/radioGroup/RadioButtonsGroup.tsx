@@ -4,7 +4,6 @@ import Checkbox from "@mui/material/Checkbox";
 import React from "react";
 import FormLabel from "@mui/material/FormLabel";
 import FormControl from "@mui/material/FormControl";
-import { TFilterValues } from "../../../pages/catalog/types";
 
 export default function RadioButtonsGroup({
   label,
@@ -13,7 +12,7 @@ export default function RadioButtonsGroup({
 }: {
   label: string;
   fields: string[];
-  setFilterValues: React.Dispatch<React.SetStateAction<TFilterValues>>;
+  setFilterValues: React.Dispatch<React.SetStateAction<Record<string, string[]>>>;
 }) {
   return (
     <FormControl>
@@ -33,19 +32,24 @@ export default function RadioButtonsGroup({
           const { value } = changedElement.dataset;
 
           if (target.checked) {
-            setFilterValues((filterValues) => ({
-              ...filterValues,
-              [`${label.toLowerCase()}s`]: [
-                ...filterValues[`${label.toLowerCase()}s` as keyof typeof filterValues],
-                value,
-              ],
-            }));
+            // @ts-expect-error: Unreachable code error
+            setFilterValues((filterValues) => {
+              if (!Object.prototype.hasOwnProperty.call(filterValues, label)) {
+                return {
+                  ...filterValues,
+                  [label]: [value],
+                };
+              }
+
+              return {
+                ...filterValues,
+                [label]: [...filterValues[label], value],
+              };
+            });
           } else {
             setFilterValues((filterValues) => ({
               ...filterValues,
-              [`${label.toLowerCase()}s`]: filterValues[`${label.toLowerCase()}s` as keyof typeof filterValues].filter(
-                (el: string) => el !== value
-              ),
+              [label]: filterValues[label].filter((el: string) => el !== value),
             }));
           }
         }}
@@ -56,7 +60,7 @@ export default function RadioButtonsGroup({
             key={id}
             control={<Checkbox />}
             label={field}
-            data-value={field.toLowerCase()}
+            data-value={field}
           />
         ))}
       </FormGroup>
