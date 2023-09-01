@@ -13,9 +13,11 @@ const minDistance = 5;
 export default function PriceSlider({
   setPriceSliderValues,
   priceSliderDefaultValues,
+  setCurrentPage,
 }: {
   setPriceSliderValues: React.Dispatch<React.SetStateAction<TPriceSliderDefaultValues>>;
   priceSliderDefaultValues: TPriceSliderDefaultValues;
+  setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
 }) {
   const [value, setValue] = useState<TPriceSliderDefaultValues>(priceSliderDefaultValues);
 
@@ -33,6 +35,8 @@ export default function PriceSlider({
     } else {
       setValue({ min: value.min, max: Math.max(newValue[1], value.min + minDistance) });
     }
+
+    setCurrentPage(1);
   };
 
   return (

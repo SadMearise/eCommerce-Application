@@ -11,10 +11,12 @@ export default function CatalogFilter({
   setPriceSliderValues,
   priceSliderDefaultValues,
   setFilterValues,
+  setCurrentPage,
 }: {
   setPriceSliderValues: React.Dispatch<React.SetStateAction<TPriceSliderDefaultValues>>;
   priceSliderDefaultValues: TPriceSliderDefaultValues;
   setFilterValues: React.Dispatch<React.SetStateAction<Record<string, string[]>>>;
+  setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
 }) {
   const [filterInitValues, setFilterInitValues] = useState<Record<string, string[]>>({});
 
@@ -26,12 +28,12 @@ export default function CatalogFilter({
       .get()
       .execute()
       .then((response) => {
-        response.body.results.forEach((result) => {
+        response.body.results?.forEach((result) => {
           if (!result.attributes) {
             return;
           }
 
-          result.attributes.forEach((attribute) => {
+          result.attributes?.forEach((attribute) => {
             if (!Object.prototype.hasOwnProperty.call(attribute.type, "values")) {
               return;
             }
@@ -42,8 +44,14 @@ export default function CatalogFilter({
                 [attribute.name]: [],
               }));
             }
-            // @ts-expect-error: Unreachable code error
-            attribute.type.values.forEach((value: { key: string; label: string }) => {
+
+            const { type } = attribute;
+
+            if (type?.name !== "enum") {
+              return;
+            }
+
+            type.values.forEach((value: { key: string; label: string }) => {
               setFilterInitValues((prev) => {
                 if (prev[attribute.name].includes(value.label)) {
                   return prev;
@@ -70,6 +78,7 @@ export default function CatalogFilter({
       <PriceSlider
         setPriceSliderValues={setPriceSliderValues}
         priceSliderDefaultValues={priceSliderDefaultValues}
+        setCurrentPage={setCurrentPage}
       />
       {Object.keys(filterInitValues).map((key, id) => (
         <RadioButtonsGroup
@@ -78,6 +87,7 @@ export default function CatalogFilter({
           label={key}
           fields={filterInitValues[key]}
           setFilterValues={setFilterValues}
+          setCurrentPage={setCurrentPage}
         />
       ))}
     </Paper>
