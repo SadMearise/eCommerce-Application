@@ -16,3 +16,8 @@ export type TSortValues = {
   method: string;
   key: string;
 };
+
+export type TCategories = {
+  name: string;
+  id: string;
+};

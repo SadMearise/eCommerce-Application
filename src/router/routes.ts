@@ -5,6 +5,7 @@ enum RouterPaths {
   Basket = "/basket",
   Catalog = "/catalog",
   Product = "/product/:productId",
+  Category = "/category/:categoryId",
   Profile = "/profile",
   Registration = "/registration",
   Login = "/login",

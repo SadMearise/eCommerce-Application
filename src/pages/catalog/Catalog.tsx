@@ -4,6 +4,7 @@ import { ProductProjection } from "@commercetools/platform-sdk";
 import Box from "@mui/material/Box";
 import Pagination from "@mui/material/Pagination";
 import Grid from "@mui/material/Grid";
+import { useLocation } from "react-router-dom";
 import Header from "../../components/header/Header";
 import ProductCard from "../../components/catalogProductCard/CatalogProductCard";
 import getApiRoot from "../../services/BuildClient";
@@ -11,14 +12,20 @@ import styles from "./Catalog.module.scss";
 import CatalogSearch from "../../components/catalogSearch/CatalogSearch";
 import PAGE_LIMIT from "./constants";
 import CatalogFilter from "../../components/catalogFilter/CatalogFilter";
-import { TPriceSliderDefaultValues, TQueryArgs, TSortValues } from "./types";
+import { TCategories, TPriceSliderDefaultValues, TQueryArgs, TSortValues } from "./types";
 import CatalogSortingDopdownMenu from "../../components/catalogSortingDopdownMenu/CatalogSortingDopdownMenu";
+import CatalogCategories from "../../components/catalogCategories/CatalogCategories";
+import CatalogBreadcrumbs from "../../components/catalogBreadcrumbs/CatalogBreadcrumbs";
+import RouterPaths from "../../router/routes";
 
 export default function Catalog() {
+  const location = useLocation();
+
   const priceSliderDefaultValues: TPriceSliderDefaultValues = {
     min: 0,
     max: 100,
   };
+
   const [products, setProducts] = useState<ProductProjection[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [inputValue, setInputValue] = useState("");
@@ -26,6 +33,9 @@ export default function Catalog() {
   const [countPages, setCountPages] = useState(1);
   const [filterValues, setFilterValues] = useState<Record<string, string[]>>({});
   const [sortValues, setSortValues] = useState<TSortValues>({ key: "", method: "" });
+  const [categoriesBreadcrumbs, setCategoriesBreadcrumbs] = useState<TCategories[]>([]);
+  const [categories, setCategories] = useState<TCategories[]>([]);
+  const [currentId, setCurrentId] = useState("");
 
   const setUpperCaseFirstSymbol = (str: string) => {
     if (!str) return str;
@@ -69,10 +79,12 @@ export default function Catalog() {
   const filterRules: string[] = [];
   let sortRules: string = "";
 
-  const apiRoot = getApiRoot();
-
   if (sortValues.key && sortValues.method) {
     sortRules = getSortingPath(sortValues.key, sortValues.method);
+  }
+
+  if (categoriesBreadcrumbs.length) {
+    filterRules.push(`categories.id:"${categoriesBreadcrumbs[categoriesBreadcrumbs.length - 1].id}"`);
   }
 
   filterRules.push(
@@ -100,6 +112,15 @@ export default function Catalog() {
     };
   }
 
+  const apiRoot = getApiRoot();
+
+  useEffect(() => {
+    if (location.pathname === RouterPaths.Catalog) {
+      setCategoriesBreadcrumbs([]);
+      setCurrentId("");
+    }
+  }, [location]);
+
   useEffect(() => {
     apiRoot
       .productProjections()
@@ -113,12 +134,24 @@ export default function Catalog() {
         setProducts(response.body.results);
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filterValues, priceSliderValues, currentPage, inputValue, sortValues]);
+  }, [filterValues, priceSliderValues, currentPage, inputValue, sortValues, categoriesBreadcrumbs]);
 
   return (
     <>
       <Header />
       <Container maxWidth="lg">
+        <CatalogCategories
+          setCategoriesBreadcrumbs={setCategoriesBreadcrumbs}
+          categories={categories}
+          setCategories={setCategories}
+          currentId={currentId}
+          setCurrentId={setCurrentId}
+        />
+        <CatalogBreadcrumbs
+          breadcrumbs={categoriesBreadcrumbs}
+          setCategoriesBreadcrumbs={setCategoriesBreadcrumbs}
+          setCurrentId={setCurrentId}
+        />
         <Grid
           className={styles["content-container"]}
           container
