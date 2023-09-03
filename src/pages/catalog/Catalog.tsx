@@ -85,7 +85,6 @@ export default function Catalog() {
   useEffect(() => {
     if (location.pathname === RouterPaths.Catalog) {
       setCategoriesBreadcrumbs([]);
-      setCurrentId("");
     }
   }, [location]);
 

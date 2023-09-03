@@ -2,7 +2,6 @@ import React, { useEffect } from "react";
 import Button from "@mui/material/Button";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import Box from "@mui/material/Box";
-import { Link } from "react-router-dom";
 import styles from "./CatalogCategories.module.scss";
 import { ICatalogBreadcrumbsProps } from "./types";
 import locale from "../../settings";
@@ -15,7 +14,7 @@ export default function CatalogCategories({
   currentId,
   setCurrentId,
 }: ICatalogBreadcrumbsProps) {
-  const handleButtonClick = (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+  const handleButtonClick = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     const target = event.target as HTMLInputElement;
 
     const category = target.closest("button");
@@ -71,14 +70,9 @@ export default function CatalogCategories({
             key={category.id}
             name={category.name}
             id={category.id}
+            onClick={(event) => handleButtonClick(event)}
           >
-            <Link
-              onClick={(event) => handleButtonClick(event)}
-              className={styles.link}
-              to={`category/${category.name}`}
-            >
-              {category.name}
-            </Link>
+            {category.name}
           </Button>
         ))}
       </ButtonGroup>

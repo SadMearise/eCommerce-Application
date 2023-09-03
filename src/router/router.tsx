@@ -31,12 +31,6 @@ const router = createBrowserRouter([
   {
     path: RouterPaths.Catalog,
     element: <Catalog />,
-    children: [
-      {
-        path: `${RouterPaths.Catalog}/${RouterPaths.Category}`,
-        element: <Catalog />,
-      },
-    ],
   },
   {
     path: RouterPaths.Product,

@@ -1,10 +1,10 @@
 import React from "react";
 import Typography from "@mui/material/Typography";
 import Breadcrumbs from "@mui/material/Breadcrumbs";
-import Link from "@mui/material/Link";
 import { Link as RouterLink } from "react-router-dom";
 import RouterPaths from "../../router/routes";
 import { ICatalogBreadcrumbsProps } from "./types";
+import styles from "./CatalogBreadcrumbs.module.scss";
 
 function handleClick(event: React.MouseEvent<HTMLDivElement, MouseEvent>) {
   event.preventDefault();
@@ -15,7 +15,7 @@ export default function CatalogBreadcrumbs({
   setCategoriesBreadcrumbs,
   setCurrentId,
 }: ICatalogBreadcrumbsProps) {
-  const removeBreadcrumbs = (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+  const removeBreadcrumbs = (event: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
     const target = event.target as HTMLInputElement;
 
     for (let i = 0; i < breadcrumbs.length; i += 1) {
@@ -33,8 +33,8 @@ export default function CatalogBreadcrumbs({
       onClick={handleClick}
     >
       <Breadcrumbs aria-label="breadcrumb">
-        <Link
-          underline="hover"
+        <Typography
+          className={[styles.link, styles["link-default"]].join(" ")}
           color="inherit"
           to={RouterPaths.Catalog}
           component={RouterLink}
@@ -44,7 +44,7 @@ export default function CatalogBreadcrumbs({
           }}
         >
           Catalog
-        </Link>
+        </Typography>
         {breadcrumbs.map((breadcrumb, index) => {
           if (index === breadcrumbs.length - 1) {
             return (
@@ -58,13 +58,11 @@ export default function CatalogBreadcrumbs({
           }
 
           return (
-            <Link
-              key={breadcrumb.id}
-              underline="hover"
+            <Typography
+              className={styles.link}
               color="inherit"
-              to={`category/${breadcrumb.name}`}
+              key={breadcrumb.id}
               id={breadcrumb.id}
-              component={RouterLink}
               onClick={(event) => {
                 const target = event.target as HTMLInputElement;
 
@@ -73,7 +71,7 @@ export default function CatalogBreadcrumbs({
               }}
             >
               {breadcrumb.name}
-            </Link>
+            </Typography>
           );
         })}
       </Breadcrumbs>
