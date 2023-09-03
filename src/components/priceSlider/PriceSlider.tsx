@@ -22,7 +22,7 @@ export default function PriceSlider({
     setPriceSliderValues(value);
   }, [value, setPriceSliderValues]);
 
-  const handleChange = (event: Event, newValue: number | number[], activeThumb: number) => {
+  const handleChange = (_event: Event, newValue: number | number[], activeThumb: number) => {
     if (!Array.isArray(newValue)) {
       return;
     }
