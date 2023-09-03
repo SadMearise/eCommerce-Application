@@ -3,7 +3,7 @@ import Prices from "../pages/product/types";
 import locale from "../settings";
 import CENT from "./constants";
 
-function formatPrice(price: TypedMoney): string {
+export function formatPrice(price: TypedMoney): string {
   const { centAmount, currencyCode } = price;
   return (centAmount * CENT).toLocaleString(locale, { style: "currency", currency: currencyCode });
 }

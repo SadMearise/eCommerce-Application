@@ -3,9 +3,9 @@ import Button from "@mui/material/Button";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import Box from "@mui/material/Box";
 import { Link } from "react-router-dom";
-import getApiRoot from "../../services/BuildClient";
 import styles from "./CatalogCategories.module.scss";
 import { ICatalogBreadcrumbsProps } from "./types";
+import locale from "../../settings";
 
 export default function CatalogCategories({
   setCategoriesBreadcrumbs,
@@ -13,9 +13,8 @@ export default function CatalogCategories({
   setCategories,
   currentId,
   setCurrentId,
+  apiRoot,
 }: ICatalogBreadcrumbsProps) {
-  const apiRoot = getApiRoot();
-
   const handleButtonClick = (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
     const target = event.target as HTMLInputElement;
 
@@ -39,11 +38,11 @@ export default function CatalogCategories({
         response.body.results.forEach((result) => {
           if (!currentId) {
             if (!result.parent) {
-              setCategories((prev) => [...prev, { name: result.name["en-US"], id: result.id }]);
+              setCategories((prev) => [...prev, { name: result.name[locale], id: result.id }]);
             }
           } else if (currentId) {
             if (result.parent?.id === currentId) {
-              setCategories((prev) => [...prev, { name: result.name["en-US"], id: result.id }]);
+              setCategories((prev) => [...prev, { name: result.name[locale], id: result.id }]);
             }
           }
         });
@@ -63,6 +62,7 @@ export default function CatalogCategories({
       }}
     >
       <ButtonGroup
+        className={styles["button-group"]}
         variant="text"
         aria-label="text button group"
       >

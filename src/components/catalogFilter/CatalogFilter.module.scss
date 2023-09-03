@@ -4,3 +4,15 @@
   border: 1px solid #1976d2;
   padding: 20px;
 }
+
+.radio-buttons-group {
+  @media (max-width: 900px) {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+  }
+
+  @media (max-width: 468px) {
+    display: block;
+  }
+}

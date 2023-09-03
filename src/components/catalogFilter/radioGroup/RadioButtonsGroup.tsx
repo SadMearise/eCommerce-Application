@@ -2,10 +2,11 @@ import React from "react";
 import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
-
 import FormLabel from "@mui/material/FormLabel";
 import FormControl from "@mui/material/FormControl";
 import { IRadioButtonsGroupProps } from "./types";
+import { setUpperCaseFirstSymbol } from "../../../utils/textTransform";
+import styles from "./RadioButtonGroup.module.scss";
 
 export default function RadioButtonsGroup({ label, fields, setFilterValues, setCurrentPage }: IRadioButtonsGroupProps) {
   const handleFormGroup = (event: React.FormEvent<HTMLDivElement>) => {
@@ -47,13 +48,12 @@ export default function RadioButtonsGroup({ label, fields, setFilterValues, setC
   };
 
   return (
-    <FormControl>
-      <FormLabel id={`demo-radio-buttons-group-${label}`}>{label}</FormLabel>
+    <FormControl className={styles["form-control"]}>
+      <FormLabel id={`demo-radio-buttons-group-${label}`}>{setUpperCaseFirstSymbol(label)}</FormLabel>
       <FormGroup onChange={(event) => handleFormGroup(event)}>
-        {fields.map((field, id) => (
+        {fields.map((field) => (
           <FormControlLabel
-            // eslint-disable-next-line react/no-array-index-key
-            key={id}
+            key={field}
             control={<Checkbox />}
             label={field}
             data-value={field}

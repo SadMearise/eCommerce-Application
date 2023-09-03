@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import PriceSlider from "../priceSlider/PriceSlider";
 import styles from "./CatalogFilter.module.scss";
 import RadioButtonsGroup from "./radioGroup/RadioButtonsGroup";
-import getApiRoot from "../../services/BuildClient";
 import { ICatalogFilterProps } from "./types";
 
 export default function CatalogFilter({
@@ -12,9 +11,9 @@ export default function CatalogFilter({
   priceSliderDefaultValues,
   setFilterValues,
   setCurrentPage,
+  apiRoot,
 }: ICatalogFilterProps) {
   const [filterInitValues, setFilterInitValues] = useState<Record<string, string[]>>({});
-  const apiRoot = getApiRoot();
 
   useEffect(() => {
     apiRoot
@@ -65,6 +64,7 @@ export default function CatalogFilter({
 
   return (
     <Paper
+      id="catalog-filter-form"
       className={styles["filter-content"]}
       elevation={0}
     >
@@ -74,16 +74,18 @@ export default function CatalogFilter({
         priceSliderDefaultValues={priceSliderDefaultValues}
         setCurrentPage={setCurrentPage}
       />
-      {Object.keys(filterInitValues).map((key, id) => (
-        <RadioButtonsGroup
-          // eslint-disable-next-line react/no-array-index-key
-          key={id}
-          label={key}
-          fields={filterInitValues[key]}
-          setFilterValues={setFilterValues}
-          setCurrentPage={setCurrentPage}
-        />
-      ))}
+      <div className={styles["radio-buttons-group"]}>
+        {Object.keys(filterInitValues).map((key, id) => (
+          <RadioButtonsGroup
+            // eslint-disable-next-line react/no-array-index-key
+            key={id}
+            label={key}
+            fields={filterInitValues[key]}
+            setFilterValues={setFilterValues}
+            setCurrentPage={setCurrentPage}
+          />
+        ))}
+      </div>
     </Paper>
   );
 }

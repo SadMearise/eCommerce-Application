@@ -17,9 +17,11 @@ import CatalogSortingDopdownMenu from "../../components/catalogSortingDopdownMen
 import CatalogCategories from "../../components/catalogCategories/CatalogCategories";
 import CatalogBreadcrumbs from "../../components/catalogBreadcrumbs/CatalogBreadcrumbs";
 import RouterPaths from "../../router/routes";
+import { getAttributePath, getSortingPath } from "../../utils/getPaths";
 
 export default function Catalog() {
   const location = useLocation();
+  const apiRoot = getApiRoot();
 
   const priceSliderDefaultValues: TPriceSliderDefaultValues = {
     min: 0,
@@ -36,45 +38,6 @@ export default function Catalog() {
   const [categoriesBreadcrumbs, setCategoriesBreadcrumbs] = useState<TCategories[]>([]);
   const [categories, setCategories] = useState<TCategories[]>([]);
   const [currentId, setCurrentId] = useState("");
-
-  const setUpperCaseFirstSymbol = (str: string) => {
-    if (!str) return str;
-
-    return str[0].toUpperCase() + str.slice(1);
-  };
-
-  const setLowerCaseFirstSymbol = (str: string) => {
-    if (!str) return str;
-
-    return str[0].toLowerCase() + str.slice(1);
-  };
-
-  const getAttributePath = (attribute: string, values: string[]) => {
-    let path = `variants.attributes.${attribute}.key:`;
-
-    values.forEach((value: string, index: number) => {
-      if (index === values.length - 1) {
-        path += `"${setLowerCaseFirstSymbol(value)}", `;
-        path += `"${setUpperCaseFirstSymbol(value)}"`;
-      } else {
-        path += `"${setLowerCaseFirstSymbol(value)}", `;
-        path += `"${setUpperCaseFirstSymbol(value)}", `;
-      }
-    });
-
-    return path;
-  };
-
-  const getSortingPath = (key: string, method: string) => {
-    if (key === "name") {
-      return `${key}.en-US ${method}`;
-    }
-    if (key === "default") {
-      return "";
-    }
-
-    return `${key} ${method}`;
-  };
 
   const filterRules: string[] = [];
   let sortRules: string = "";
@@ -112,8 +75,6 @@ export default function Catalog() {
     };
   }
 
-  const apiRoot = getApiRoot();
-
   useEffect(() => {
     if (location.pathname === RouterPaths.Catalog) {
       setCategoriesBreadcrumbs([]);
@@ -146,6 +107,7 @@ export default function Catalog() {
           setCategories={setCategories}
           currentId={currentId}
           setCurrentId={setCurrentId}
+          apiRoot={apiRoot}
         />
         <CatalogBreadcrumbs
           breadcrumbs={categoriesBreadcrumbs}
@@ -160,19 +122,22 @@ export default function Catalog() {
         >
           <Grid
             item
-            xs={2}
+            xs={3}
+            className={styles["content-left"]}
           >
             <CatalogFilter
               setPriceSliderValues={setPriceSliderValues}
               priceSliderDefaultValues={priceSliderDefaultValues}
               setFilterValues={setFilterValues}
               setCurrentPage={setCurrentPage}
+              apiRoot={apiRoot}
             />
           </Grid>
 
           <Grid
             item
-            xs={10}
+            xs={9}
+            className={styles["content-right"]}
           >
             <CatalogSearch
               setInputValue={setInputValue}

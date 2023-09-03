@@ -6,11 +6,13 @@ import Box from "@mui/material/Box";
 import { Link } from "react-router-dom";
 import styles from "./CatalogProductCard.module.scss";
 import { IProductCardProps } from "./types";
+import { formatPrice } from "../../utils/getPrice";
+import locale from "../../settings";
 
 export default function ProductCard({ product, url }: IProductCardProps) {
   if (product) {
-    const productDescription = product.description ? product.description["en-US"] : "";
-    const productName = product.name ? product.name["en-US"] : "";
+    const productDescription = product.description ? product.description[locale] : "";
+    const productName = product.name ? product.name[locale] : "";
     const productImages = product.masterVariant.images ? product.masterVariant.images : [];
     const productUrl = productImages.length ? productImages[0].url : "no-image.png";
     const productPrices = product.masterVariant.prices ? product.masterVariant.prices : [];
@@ -23,8 +25,8 @@ export default function ProductCard({ product, url }: IProductCardProps) {
           className={styles.card}
         >
           <CardMedia
+            className={styles.image}
             component="img"
-            height="194"
             image={productUrl}
             alt="Paella dish"
           />
@@ -45,15 +47,15 @@ export default function ProductCard({ product, url }: IProductCardProps) {
               (Object.prototype.hasOwnProperty.call(prices, "discounted") && prices.discounted ? (
                 <Box className={styles["price-wrapper"]}>
                   <Typography className={[styles.price, styles["price-line-through"]].join(" ")}>
-                    {prices.value.centAmount}
+                    {formatPrice(prices.value)}
                   </Typography>
                   <Typography className={[styles.price, styles["price-discount"]].join(" ")}>
-                    {prices.discounted.value.centAmount}
+                    {formatPrice(prices.discounted.value)}
                   </Typography>
                 </Box>
               ) : (
                 <Box className={styles["price-wrapper"]}>
-                  <Typography className={styles.price}>{prices.value.centAmount}</Typography>
+                  <Typography className={styles.price}>{formatPrice(prices.value)}</Typography>
                 </Box>
               ))}
           </CardContent>
