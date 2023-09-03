@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import styles from "./CatalogCategories.module.scss";
 import { ICatalogBreadcrumbsProps } from "./types";
 import locale from "../../settings";
+import getCategories from "../../services/categories.service";
 
 export default function CatalogCategories({
   setCategoriesBreadcrumbs,
@@ -13,7 +14,6 @@ export default function CatalogCategories({
   setCategories,
   currentId,
   setCurrentId,
-  apiRoot,
 }: ICatalogBreadcrumbsProps) {
   const handleButtonClick = (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
     const target = event.target as HTMLInputElement;
@@ -29,26 +29,26 @@ export default function CatalogCategories({
   };
 
   useEffect(() => {
-    apiRoot
-      .categories()
-      .get({ queryArgs: { expand: "parent" } })
-      .execute()
-      .then((response) => {
-        setCategories([]);
-        response.body.results.forEach((result) => {
-          if (!currentId) {
-            if (!result.parent) {
-              setCategories((prev) => [...prev, { name: result.name[locale], id: result.id }]);
-            }
-          } else if (currentId) {
-            if (result.parent?.id === currentId) {
-              setCategories((prev) => [...prev, { name: result.name[locale], id: result.id }]);
-            }
+    const updateCategories = async () => {
+      const categoriesResp = await getCategories({ queryArgs: { expand: "parent" } });
+
+      setCategories([]);
+
+      categoriesResp.results.forEach((result) => {
+        if (!currentId) {
+          if (!result.parent) {
+            setCategories((prev) => [...prev, { name: result.name[locale], id: result.id }]);
           }
-        });
+        } else if (currentId) {
+          if (result.parent?.id === currentId) {
+            setCategories((prev) => [...prev, { name: result.name[locale], id: result.id }]);
+          }
+        }
       });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentId]);
+    };
+
+    updateCategories();
+  }, [currentId, setCategories]);
 
   return (
     <Box

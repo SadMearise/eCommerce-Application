@@ -7,7 +7,6 @@ import Grid from "@mui/material/Grid";
 import { useLocation } from "react-router-dom";
 import Header from "../../components/header/Header";
 import ProductCard from "../../components/catalogProductCard/CatalogProductCard";
-import getApiRoot from "../../services/BuildClient";
 import styles from "./Catalog.module.scss";
 import CatalogSearch from "../../components/catalogSearch/CatalogSearch";
 import PAGE_LIMIT from "./constants";
@@ -18,11 +17,10 @@ import CatalogCategories from "../../components/catalogCategories/CatalogCategor
 import CatalogBreadcrumbs from "../../components/catalogBreadcrumbs/CatalogBreadcrumbs";
 import RouterPaths from "../../router/routes";
 import { getAttributePath, getSortingPath } from "../../utils/getPaths";
+import { getSearchProductProjections } from "../../services/product.service";
 
 export default function Catalog() {
   const location = useLocation();
-  const apiRoot = getApiRoot();
-
   const priceSliderDefaultValues: TPriceSliderDefaultValues = {
     min: 0,
     max: 100,
@@ -39,41 +37,50 @@ export default function Catalog() {
   const [categories, setCategories] = useState<TCategories[]>([]);
   const [currentId, setCurrentId] = useState("");
 
-  const filterRules: string[] = [];
-  let sortRules: string = "";
+  const updateProducts = async () => {
+    const filterRules: string[] = [];
+    let sortRules: string = "";
 
-  if (sortValues.key && sortValues.method) {
-    sortRules = getSortingPath(sortValues.key, sortValues.method);
-  }
-
-  if (categoriesBreadcrumbs.length) {
-    filterRules.push(`categories.id:"${categoriesBreadcrumbs[categoriesBreadcrumbs.length - 1].id}"`);
-  }
-
-  filterRules.push(
-    `variants.price.centAmount:range (${priceSliderValues.min * 100} to ${priceSliderValues.max * 100})`
-  );
-
-  Object.keys(filterValues).forEach((key) => {
-    if (filterValues[key].length) {
-      filterRules.push(getAttributePath(key, filterValues[key]));
+    if (sortValues.key && sortValues.method) {
+      sortRules = getSortingPath(sortValues.key, sortValues.method);
     }
-  });
 
-  let queryArgs: TQueryArgs = {
-    "text.en-US": `${inputValue}`,
-    fuzzy: true,
-    filter: filterRules,
-    limit: PAGE_LIMIT,
-    offset: (currentPage - 1) * PAGE_LIMIT,
-  };
+    if (categoriesBreadcrumbs.length) {
+      filterRules.push(`categories.id:"${categoriesBreadcrumbs[categoriesBreadcrumbs.length - 1].id}"`);
+    }
 
-  if (sortRules.length) {
-    queryArgs = {
-      ...queryArgs,
-      sort: sortRules,
+    filterRules.push(
+      `variants.price.centAmount:range (${priceSliderValues.min * 100} to ${priceSliderValues.max * 100})`
+    );
+
+    Object.keys(filterValues).forEach((key) => {
+      if (filterValues[key].length) {
+        filterRules.push(getAttributePath(key, filterValues[key]));
+      }
+    });
+
+    let queryArgs: TQueryArgs = {
+      "text.en-US": `${inputValue}`,
+      fuzzy: true,
+      filter: filterRules,
+      limit: PAGE_LIMIT,
+      offset: (currentPage - 1) * PAGE_LIMIT,
     };
-  }
+
+    if (sortRules.length) {
+      queryArgs = {
+        ...queryArgs,
+        sort: sortRules,
+      };
+    }
+
+    const searchedProduct = await getSearchProductProjections(queryArgs);
+
+    if (searchedProduct.total) {
+      setCountPages(Math.ceil(searchedProduct.total / PAGE_LIMIT));
+    }
+    setProducts(searchedProduct.results);
+  };
 
   useEffect(() => {
     if (location.pathname === RouterPaths.Catalog) {
@@ -83,17 +90,7 @@ export default function Catalog() {
   }, [location]);
 
   useEffect(() => {
-    apiRoot
-      .productProjections()
-      .search()
-      .get({ queryArgs })
-      .execute()
-      .then((response) => {
-        if (response.body.total) {
-          setCountPages(Math.ceil(response.body.total / PAGE_LIMIT));
-        }
-        setProducts(response.body.results);
-      });
+    updateProducts();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filterValues, priceSliderValues, currentPage, inputValue, sortValues, categoriesBreadcrumbs]);
 
@@ -107,7 +104,6 @@ export default function Catalog() {
           setCategories={setCategories}
           currentId={currentId}
           setCurrentId={setCurrentId}
-          apiRoot={apiRoot}
         />
         <CatalogBreadcrumbs
           breadcrumbs={categoriesBreadcrumbs}
@@ -130,7 +126,6 @@ export default function Catalog() {
               priceSliderDefaultValues={priceSliderValues}
               setFilterValues={setFilterValues}
               setCurrentPage={setCurrentPage}
-              apiRoot={apiRoot}
             />
           </Grid>
 

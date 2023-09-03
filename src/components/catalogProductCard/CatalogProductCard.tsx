@@ -49,13 +49,19 @@ export default function ProductCard({ product, url }: IProductCardProps) {
             <p className={styles.attributes}>
               <b>Brand:</b>
               {product.masterVariant.attributes?.map(
-                (attribute) => attribute.name === "brand" && <span>{attribute.value.label}</span>
+                (attribute) =>
+                  attribute.name === "brand" && (
+                    <span key={`${Math.random()}${attribute.value.label}`}>{attribute.value.label}</span>
+                  )
               )}
             </p>
             <p className={styles.attributes}>
               <b>Color:</b>
               {product.masterVariant.attributes?.map(
-                (attribute) => attribute.name === "color" && <span>{attribute.value.label}</span>
+                (attribute) =>
+                  attribute.name === "color" && (
+                    <span key={`${Math.random()}${attribute.value.label}`}>{attribute.value.label}</span>
+                  )
               )}
             </p>
             <p className={styles.attributes}>

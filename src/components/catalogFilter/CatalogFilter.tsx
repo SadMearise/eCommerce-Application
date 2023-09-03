@@ -5,61 +5,61 @@ import PriceSlider from "../priceSlider/PriceSlider";
 import styles from "./CatalogFilter.module.scss";
 import RadioButtonsGroup from "./radioGroup/RadioButtonsGroup";
 import { ICatalogFilterProps } from "./types";
+import { getProductTypes } from "../../services/product.service";
 
 export default function CatalogFilter({
   setPriceSliderValues,
   priceSliderDefaultValues,
   setFilterValues,
   setCurrentPage,
-  apiRoot,
 }: ICatalogFilterProps) {
   const [filterInitValues, setFilterInitValues] = useState<Record<string, string[]>>({});
   const [priceSliderState, setPriceSliderState] = useState(false);
 
   useEffect(() => {
-    apiRoot
-      .productTypes()
-      .get()
-      .execute()
-      .then((response) => {
-        response.body.results?.forEach((result) => {
-          if (!result.attributes) {
+    const initFilterValues = async () => {
+      const productTypes = await getProductTypes();
+
+      productTypes.results?.forEach((result) => {
+        if (!result.attributes) {
+          return;
+        }
+
+        result.attributes?.forEach((attribute) => {
+          if (!Object.prototype.hasOwnProperty.call(attribute.type, "values")) {
             return;
           }
 
-          result.attributes?.forEach((attribute) => {
-            if (!Object.prototype.hasOwnProperty.call(attribute.type, "values")) {
-              return;
-            }
+          if (!Object.prototype.hasOwnProperty.call(filterInitValues, attribute.name)) {
+            setFilterInitValues((prev) => ({
+              ...prev,
+              [attribute.name]: [],
+            }));
+          }
 
-            if (!Object.prototype.hasOwnProperty.call(filterInitValues, attribute.name)) {
-              setFilterInitValues((prev) => ({
+          const { type } = attribute;
+
+          if (type?.name !== "enum") {
+            return;
+          }
+
+          type.values.forEach((value: { key: string; label: string }) => {
+            setFilterInitValues((prev) => {
+              if (prev[attribute.name].includes(value.label)) {
+                return prev;
+              }
+
+              return {
                 ...prev,
-                [attribute.name]: [],
-              }));
-            }
-
-            const { type } = attribute;
-
-            if (type?.name !== "enum") {
-              return;
-            }
-
-            type.values.forEach((value: { key: string; label: string }) => {
-              setFilterInitValues((prev) => {
-                if (prev[attribute.name].includes(value.label)) {
-                  return prev;
-                }
-
-                return {
-                  ...prev,
-                  [attribute.name]: [...prev[attribute.name as keyof typeof prev], value.label],
-                };
-              });
+                [attribute.name]: [...prev[attribute.name as keyof typeof prev], value.label],
+              };
             });
           });
         });
       });
+    };
+
+    initFilterValues();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

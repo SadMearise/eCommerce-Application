@@ -6,7 +6,7 @@ import Header from "../../components/header/Header";
 import ProductSlider from "../../components/productSlider/ProductSlider";
 import styles from "./Product.module.scss";
 import locale from "../../settings";
-import { getProductByKey, getProductTypeById } from "../../services/productService";
+import { getProductByKey, getProductTypeById } from "../../services/product.service";
 import ProductAttributes from "../../components/productAttributes/ProductAttributes";
 import ProductSizes from "../../components/productSizes/ProductSizes";
 import ProductPrices from "../../components/productPrices/ProductPrices";
