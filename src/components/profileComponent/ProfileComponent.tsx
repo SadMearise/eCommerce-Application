@@ -117,7 +117,7 @@ export default function ProfileComponent() {
               shippingAddressData={shippingAddressesData}
               billingAddressData={billingAddressesData}
               defaultShippingAddressData={defaultShippingAddressesData}
-              defauultBillingAddressData={defaultBillingAddressesData}
+              defaultBillingAddressData={defaultBillingAddressesData}
               handleReadOnlyClick={handleReadOnlyClick}
             />
           </TabPanel>

@@ -16,14 +16,20 @@ export interface PersonalDataProps {
 
 export interface AddressDataProps extends Omit<PersonalDataProps, "userData"> {
   userId: string;
-  addressVersion: number;
+  version: number;
   shippingAddressData: BaseAddress[];
   billingAddressData: BaseAddress[];
   defaultShippingAddressData?: BaseAddress[];
-  defauultBillingAddressData?: BaseAddress[];
+  defaultBillingAddressData?: BaseAddress[];
 }
 
 export enum AddressType {
+  ShippingAddress = "shipping",
+  BillingAddress = "billing",
+  DefaultShippingAddress = "default shipping address",
+  DefaultBillingAddress = "default billing address",
+}
+export enum AddressTitle {
   ShippingAddress = "Shipping address:",
   BillingAddress = "Billing address:",
   DefaultShippingAddress = "Default shipping address:",
@@ -31,8 +37,37 @@ export enum AddressType {
 }
 export interface AddressFieldProps {
   userId: string;
-  addressVersion: number;
-  addressType: AddressType;
-  addressData: BaseAddress[];
+  dataVersion: number;
+  addressTitle: AddressTitle;
+  addressData: BaseAddress;
+  checkboxesState: { [key: string]: boolean };
   handleReadOnlyClick: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
+  handleChangeAddress: (
+    id: string,
+    versionNumber: number,
+    addressId: string,
+    values: BaseAddress,
+    selectedCheckboxes: { [key: string]: boolean }
+  ) => void;
+  handleDeleteAddress: (id: string, dataVersion: number, addressId: string) => void;
+  handleCheckboxChange: (name: string) => void;
+  resetCheckboxes: () => void;
+}
+
+export interface PasswrodDateProps {
+  userId: string;
+  version: number;
+}
+
+export interface TouchedFieldsPersonal {
+  firstName: boolean;
+  lastName: boolean;
+  email: boolean;
+}
+export interface TouchedFieldsAddress {
+  country: boolean;
+  city: boolean;
+  streetName: boolean;
+  streetNumber: boolean;
+  postalCode: boolean;
 }

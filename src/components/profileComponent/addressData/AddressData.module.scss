@@ -1,0 +1,16 @@
+.address-data-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 20px;
+
+  .half-width-field {
+    flex-basis: calc(50% - 5px);
+  }
+
+  .default-address {
+    background-color: rgb(238, 242, 253);
+    border-radius: 10px;
+    height: max-content;
+  }
+}

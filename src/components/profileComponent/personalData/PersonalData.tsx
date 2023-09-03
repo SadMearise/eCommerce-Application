@@ -6,10 +6,10 @@ import dayjs from "dayjs";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { useFormik } from "formik";
 import { DatePicker as MuiDatePicker } from "@mui/x-date-pickers/DatePicker";
-import styles from "../ProfileComponent.module.scss";
 import { PersonalDataProps, TouchedFieldsPersonal } from "../types";
-import profValidationSchema from "../../../utils/profileValidationSchema";
 import { updatePersonalDataCustomer } from "../../../services/customerService";
+import { personalDataValidationSchema } from "../../../utils/profileValidationSchema";
+import styles from "./PersonalData.module.scss";
 
 export default function PersonalData({ userData, handleReadOnlyClick }: PersonalDataProps) {
   const [isChangingInfo, setIsChangingInfo] = useState(false);
@@ -24,7 +24,7 @@ export default function PersonalData({ userData, handleReadOnlyClick }: Personal
       dateOfBirth: userData.dateOfBirth,
       email: userData.email,
     },
-    validationSchema: profValidationSchema,
+    validationSchema: personalDataValidationSchema,
     onSubmit: (values) => {
       updatePersonalDataCustomer(userData.id, userData.version, values);
       console.log(values);
@@ -69,7 +69,7 @@ export default function PersonalData({ userData, handleReadOnlyClick }: Personal
             {isChangingInfo ? "save details" : "change details"}
           </Button>
         </div>
-        <div className={styles["flex-container"]}>
+        <div className={styles["personal-data-container"]}>
           <TextField
             id="firstName-input"
             className={styles["half-width-field"]}

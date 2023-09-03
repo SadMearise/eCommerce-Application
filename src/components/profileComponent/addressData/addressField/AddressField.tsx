@@ -1,51 +1,88 @@
-import { Button, MenuItem, TextField } from "@mui/material";
-import { useState } from "react";
+import { Button, Checkbox, FormControlLabel, FormGroup, MenuItem, TextField } from "@mui/material";
+import { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import { BaseAddress } from "@commercetools/platform-sdk";
-import styles from "../../ProfileComponent.module.scss";
+import IconButton from "@mui/material/IconButton";
+import DeleteIcon from "@mui/icons-material/Delete";
+import styles from "./AddressField.module.scss";
 import getCountryNameByCode from "../../../../utils/getCountryNameFromCode";
-import { AddressFieldProps } from "../../types";
-import { extractAddressProperties } from "../../../../utils/extractAddresses";
+import { AddressFieldProps, AddressTitle, TouchedFieldsAddress } from "../../types";
 import countriesSet from "../../../../countries";
 import { addressValidationSchema } from "../../../../utils/registerValidationSchema";
-import { updateCustomerInfo } from "../../../../services/customerService";
-import AlertView from "../../../alertView/AlertView";
+// import AlertView from "../../../alertView/AlertView";
 
 export default function AddressField({
   userId,
-  addressVersion,
-  addressType,
+  dataVersion,
+  addressTitle,
   addressData,
+  checkboxesState,
   handleReadOnlyClick,
+  handleChangeAddress,
+  handleDeleteAddress,
+  handleCheckboxChange,
+  resetCheckboxes,
 }: AddressFieldProps) {
   const [isChangingInfo, setIsChangingInfo] = useState(false);
-  const [isChangingSuccessful, setIsChangingSuccessful] = useState(false);
+  // const [isChangingSuccessful, setIsChangingSuccessful] = useState(false);
+  const [fieldsChanged, setFieldsChanged] = useState(false);
+  const [firstInputDone, setFirstInputDone] = useState(false);
   const handleChangingInfoClick = () => setIsChangingInfo(!isChangingInfo);
-  const handleChangingSuccessfulStatus = () => {
-    setIsChangingSuccessful(true);
+  const [isDefaultBillingChecked, setIsDefaultBillingChecked] = useState(false);
+  const [isDefaultShippingChecked, setIsDefaultShippingChecked] = useState(false);
 
-    setTimeout(() => setIsChangingSuccessful(false), 2000);
+  const handleDefaultBillingChange = () => {
+    setIsDefaultBillingChecked(!isDefaultBillingChecked);
   };
-  const addressProperties = extractAddressProperties(addressData);
+
+  const handleDefaultShippingChange = () => {
+    setIsDefaultShippingChecked(!isDefaultShippingChecked);
+  };
+
+  const resetCheckboxesChildren = () => {
+    setIsDefaultBillingChecked(false);
+    setIsDefaultShippingChecked(false);
+  };
 
   const formik = useFormik<BaseAddress>({
     initialValues: {
-      country: getCountryNameByCode(addressProperties.country),
-      city: addressProperties.city,
-      streetName: addressProperties.streetName,
-      streetNumber: addressProperties.streetNumber,
-      postalCode: addressProperties.postalCode,
+      country: getCountryNameByCode(addressData.country),
+      city: addressData.city,
+      streetName: addressData.streetName,
+      streetNumber: addressData.streetNumber,
+      postalCode: addressData.postalCode,
     },
     validationSchema: addressValidationSchema,
-    onSubmit: (values) =>
-      updateCustomerInfo(userId, addressVersion, addressProperties.id as string, values).then(
-        () => handleChangingSuccessfulStatus()
-        // eslint-disable-next-line function-paren-newline
-      ),
+    onSubmit: (values) => {
+      handleChangeAddress(userId, dataVersion, addressData.id as string, values, checkboxesState);
+      resetCheckboxes();
+      resetCheckboxesChildren();
+    },
   });
+  useEffect(() => {
+    if (firstInputDone && !formik.isSubmitting) {
+      const touchedFields: TouchedFieldsAddress = {
+        country: true,
+        city: true,
+        streetName: true,
+        streetNumber: true,
+        postalCode: true,
+      };
+      formik.setTouched(touchedFields);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [firstInputDone, formik.isSubmitting]);
+
+  const handleFieldChange = (field: keyof TouchedFieldsAddress, value: string) => {
+    formik.setFieldValue(field, value);
+    if (!fieldsChanged) {
+      setFieldsChanged(true);
+      setFirstInputDone(true);
+    }
+  };
 
   return (
-    <div className={styles["personal-data"]}>
+    <div className={styles["address-field-data"]}>
       <form
         onSubmit={(e) => {
           e.preventDefault();
@@ -54,17 +91,41 @@ export default function AddressField({
           }
         }}
       >
-        <div className={styles["personal-data-title"]}>
-          <h2>{addressType}</h2>
-          <Button
-            onClick={handleChangingInfoClick}
-            type="submit"
-            disabled={Boolean(!formik.isValid)}
-          >
-            {isChangingInfo ? "save details" : "change details"}
-          </Button>
+        <div className={styles["address-field-title"]}>
+          <h2>{addressTitle}</h2>
+          <div>
+            <IconButton
+              aria-label="delete"
+              onClick={() => {
+                if (addressTitle === AddressTitle.BillingAddress) {
+                  handleDeleteAddress(userId, dataVersion, addressData.id as string);
+                }
+
+                if (addressTitle === AddressTitle.ShippingAddress) {
+                  handleDeleteAddress(userId, dataVersion, addressData.id as string);
+                }
+
+                if (addressTitle === AddressTitle.DefaultBillingAddress) {
+                  handleDeleteAddress(userId, dataVersion, addressData.id as string);
+                }
+
+                if (addressTitle === AddressTitle.DefaultShippingAddress) {
+                  handleDeleteAddress(userId, dataVersion, addressData.id as string);
+                }
+              }}
+            >
+              <DeleteIcon />
+            </IconButton>
+            <Button
+              onClick={handleChangingInfoClick}
+              type="submit"
+              disabled={Boolean(!formik.isValid)}
+            >
+              {isChangingInfo ? "save details" : "change details"}
+            </Button>
+          </div>
         </div>
-        <div className={styles["flex-container"]}>
+        <div className={styles["address-field-container"]}>
           <TextField
             id="shipping-country-input"
             className={styles["half-width-field"]}
@@ -72,7 +133,7 @@ export default function AddressField({
             select={isChangingInfo}
             label="Country:"
             value={formik.values.country}
-            onChange={formik.handleChange}
+            onChange={(e) => handleFieldChange("country", e.target.value)}
             variant={isChangingInfo ? "standard" : "outlined"}
             InputProps={{
               onMouseDown: !isChangingInfo ? handleReadOnlyClick : undefined,
@@ -91,10 +152,10 @@ export default function AddressField({
             id="shipping-city-input"
             className={styles["half-width-field"]}
             name="city"
+            variant={isChangingInfo ? "standard" : "outlined"}
             label="City:"
             value={formik.values.city}
-            onChange={formik.handleChange}
-            variant={isChangingInfo ? "standard" : "outlined"}
+            onChange={(e) => handleFieldChange("city", e.target.value)}
             onBlur={formik.handleBlur}
             error={formik.touched.city && Boolean(formik.errors.city)}
             helperText={
@@ -112,7 +173,7 @@ export default function AddressField({
             name="streetName"
             label="Street name:"
             value={formik.values.streetName}
-            onChange={formik.handleChange}
+            onChange={(e) => handleFieldChange("streetName", e.target.value)}
             variant={isChangingInfo ? "standard" : "outlined"}
             onBlur={formik.handleBlur}
             error={formik.touched.streetName && Boolean(formik.errors.streetName)}
@@ -131,7 +192,7 @@ export default function AddressField({
             name="streetNumber"
             label="Street number:"
             value={formik.values.streetNumber}
-            onChange={formik.handleChange}
+            onChange={(e) => handleFieldChange("streetNumber", e.target.value)}
             variant={isChangingInfo ? "standard" : "outlined"}
             onBlur={formik.handleBlur}
             error={formik.touched.streetNumber && Boolean(formik.errors.streetNumber)}
@@ -150,7 +211,7 @@ export default function AddressField({
             name="postalCode"
             label="Postal code:"
             value={formik.values.postalCode}
-            onChange={formik.handleChange}
+            onChange={(e) => handleFieldChange("postalCode", e.target.value)}
             variant={isChangingInfo ? "standard" : "outlined"}
             onBlur={formik.handleBlur}
             error={formik.touched.postalCode && Boolean(formik.errors.postalCode)}
@@ -163,14 +224,42 @@ export default function AddressField({
               onMouseDown: !isChangingInfo ? handleReadOnlyClick : undefined,
             }}
           />
+          <div>
+            <FormGroup>
+              {!(addressTitle === AddressTitle.DefaultBillingAddress) && (
+                <FormControlLabel
+                  disabled={!isChangingInfo}
+                  control={<Checkbox />}
+                  checked={isDefaultBillingChecked}
+                  label="Set as default Billing address"
+                  onChange={() => {
+                    handleDefaultBillingChange();
+                    handleCheckboxChange("defaultBilling");
+                  }}
+                />
+              )}
+              {!(addressTitle === AddressTitle.DefaultShippingAddress) && (
+                <FormControlLabel
+                  disabled={!isChangingInfo}
+                  control={<Checkbox />}
+                  checked={isDefaultShippingChecked}
+                  label="Set as default Shipping address"
+                  onChange={() => {
+                    handleDefaultShippingChange();
+                    handleCheckboxChange("defaultShipping");
+                  }}
+                />
+              )}
+            </FormGroup>
+          </div>
         </div>
       </form>
-      {isChangingSuccessful && (
+      {/* {isChangingSuccessful && (
         <AlertView
           variant="filled"
           textContent="Changes were successful"
         />
-      )}
+      )} */}
     </div>
   );
 }

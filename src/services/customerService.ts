@@ -2,14 +2,16 @@ import {
   BaseAddress,
   ClientResponse,
   Customer,
-  CustomerChangeAddressAction,
+  CustomerAddAddressAction,
   CustomerChangeEmailAction,
   CustomerChangePassword,
   CustomerDraft,
+  CustomerRemoveAddressAction,
   CustomerSetDateOfBirthAction,
   CustomerSetFirstNameAction,
   CustomerSetLastNameAction,
   CustomerSignInResult,
+  CustomerUpdateAction,
 } from "@commercetools/platform-sdk";
 import getApiRoot from "./BuildClient";
 import { ICustomer } from "../models/types";
@@ -26,7 +28,6 @@ const createCustomer = async (customerData: ICustomer): Promise<ClientResponse<C
     dateOfBirth,
     defaultShippingAddress,
     defaultBillingAddress,
-    billingIsShipping,
     shippingAddress,
     billingAddress,
   } = customerData;
@@ -40,7 +41,7 @@ const createCustomer = async (customerData: ICustomer): Promise<ClientResponse<C
   const defaultShippingAddressIndex = defaultShippingAddress ? DEFAULT_SHIPPING_INDEX : undefined;
   const defaultBillingAddressIndex = defaultBillingAddress ? DEFAULT_BILLING_INDEX : undefined;
   const shippingAddressIndex = 0;
-  const billingAddressIndex = billingIsShipping ? 0 : 1;
+  const billingAddressIndex = 1;
 
   const customerDraft: CustomerDraft = {
     email,
@@ -69,26 +70,62 @@ export const updateCustomerInfo = async (
   customerID: string,
   addressVersion: number,
   addressID: string,
-  address: BaseAddress
+  address: BaseAddress,
+  addressIdentifiers: ("shipping" | "billing" | "defaultShipping" | "defaultBilling")[]
 ) => {
   const addressDraft = createDraftFromAddress(address);
-  const actions: CustomerChangeAddressAction = {
-    action: "changeAddress",
-    addressId: addressID,
-    address: addressDraft,
-  };
+  const actions: CustomerUpdateAction[] = [
+    {
+      action: "changeAddress",
+      addressId: addressID,
+      address: addressDraft,
+    },
+  ];
 
-  return apiRoot
-    .customers()
-    .withId({ ID: customerID })
-    .post({
-      body: {
-        version: addressVersion,
-        actions: [actions],
-      },
-    })
-    .execute();
+  addressIdentifiers.forEach((addressIdentifier) => {
+    if (addressIdentifier === "shipping") {
+      actions.push({
+        action: "addShippingAddressId",
+        addressId: addressID,
+      });
+    }
+    if (addressIdentifier === "billing") {
+      actions.push({
+        action: "addBillingAddressId",
+        addressId: addressID,
+      });
+    }
+    if (addressIdentifier === "defaultShipping") {
+      actions.push({
+        action: "setDefaultShippingAddress",
+        addressId: addressID,
+      });
+    }
+    if (addressIdentifier === "defaultBilling") {
+      actions.push({
+        action: "setDefaultBillingAddress",
+        addressId: addressID,
+      });
+    }
+  });
+
+  try {
+    await apiRoot
+      .customers()
+      .withId({ ID: customerID })
+      .post({
+        body: {
+          version: addressVersion,
+          actions,
+        },
+      })
+      .execute();
+  } catch (error) {
+    console.error("Ошибка при обновлении информации о клиенте:", error);
+    throw error;
+  }
 };
+
 export const updatePersonalDataCustomer = async (customerID: string, version: number, value: CustomerDraft) => {
   const setFirstName: CustomerSetFirstNameAction = {
     action: "setFirstName",
@@ -132,3 +169,92 @@ export const changeCustomerPassword = ({ id, version, currentPassword, newPasswo
       },
     })
     .execute();
+
+export const addAddressToCustomer = (id: string, version: number, address: BaseAddress) => {
+  const addressDraft = createDraftFromAddress(address);
+  const addAddress: CustomerAddAddressAction = {
+    action: "addAddress",
+    address: addressDraft,
+  };
+
+  return apiRoot
+    .customers()
+    .withId({ ID: id })
+    .post({
+      body: {
+        version,
+        actions: [addAddress],
+      },
+    })
+    .execute();
+};
+export const addAddressIdentifier = (
+  userId: string,
+  version: number,
+  addressId: string,
+  addressIdentifiers: ("shipping" | "billing" | "defaultShipping" | "defaultBilling")[]
+) => {
+  const actions = addressIdentifiers
+    .map((addressIdentifier) => {
+      if (addressIdentifier === "shipping") {
+        return {
+          action: "addShippingAddressId",
+          addressId,
+        };
+      }
+      if (addressIdentifier === "billing") {
+        return {
+          action: "addBillingAddressId",
+          addressId,
+        };
+      }
+      if (addressIdentifier === "defaultShipping") {
+        return {
+          action: "setDefaultShippingAddress",
+          addressId,
+        };
+      }
+      if (addressIdentifier === "defaultBilling") {
+        return {
+          action: "setDefaultBillingAddress",
+          addressId,
+        };
+      }
+
+      return null;
+    })
+    .filter((action) => action !== null) as CustomerUpdateAction[];
+
+  return apiRoot
+    .customers()
+    .withId({ ID: userId })
+    .post({
+      body: {
+        version,
+        actions,
+      },
+    })
+    .execute();
+};
+export const getCustomerVersionByID = async (id: string) => {
+  const user = await apiRoot.customers().withId({ ID: id }).get().execute();
+  return user.body.version;
+};
+
+export const removeAddressByID = (id: string, version: number, addressId: string) => {
+  const deleteAddressAction: CustomerRemoveAddressAction = {
+    action: "removeAddress",
+    addressId,
+  };
+
+  return apiRoot
+    .customers()
+    .withId({ ID: id })
+    .post({
+      body: {
+        version,
+        actions: [deleteAddressAction],
+      },
+    })
+    .execute();
+};

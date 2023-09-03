@@ -1,31 +1,32 @@
-.password-data {
+.personal-data {
   display: flex;
   flex-direction: column;
   gap: 10px;
   border: 1px solid rgb(173, 173, 173);
   border-radius: 10px;
 
-  .password-data-title {
+  .personal-data-title {
     display: flex;
     align-items: center;
     min-height: 50px;
+    justify-content: space-between;
     padding: 5px 20px;
     margin: 0;
     border-bottom: 1px solid rgb(173, 173, 173);
   }
 
-  .password-container {
+  .personal-data-container {
     display: flex;
     flex-wrap: wrap;
-    flex-direction: column;
-    align-self: center;
-    min-width: 50%;
     gap: 10px;
     padding: 20px;
 
-    .password-button {
-      max-width: 300px;
-      align-self: center;
+    .full-width-field {
+      flex-basis: 100%;
+    }
+    
+    .half-width-field {
+      flex-basis: calc(50% - 5px);
     }
   }
 }

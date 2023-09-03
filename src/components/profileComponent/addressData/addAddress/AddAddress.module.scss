@@ -1,0 +1,14 @@
+.address-field-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 20px;
+
+  .full-width-field {
+    flex-basis: 100%;
+  }
+  
+  .half-width-field {
+    flex-basis: calc(50% - 5px);
+  }
+}
