@@ -8,6 +8,9 @@ import styles from "./CatalogProductCard.module.scss";
 import { IProductCardProps } from "./types";
 import { formatPrice } from "../../utils/getPrice";
 import locale from "../../settings";
+import { Attributes } from "../../utils/types";
+import sizeStringToNumber from "../../utils/sizeStringToNumber";
+import getAttributeLabel from "../../utils/getAttributeLabel";
 
 export default function ProductCard({ product, url }: IProductCardProps) {
   if (product) {
@@ -43,6 +46,31 @@ export default function ProductCard({ product, url }: IProductCardProps) {
             >
               {productDescription}
             </Typography>
+            <p className={styles.attributes}>
+              <b>Brand:</b>
+              {product.masterVariant.attributes?.map(
+                (attribute) => attribute.name === "brand" && <span>{attribute.value.label}</span>
+              )}
+            </p>
+            <p className={styles.attributes}>
+              <b>Color:</b>
+              {product.masterVariant.attributes?.map(
+                (attribute) => attribute.name === "color" && <span>{attribute.value.label}</span>
+              )}
+            </p>
+            <p className={styles.attributes}>
+              <b>Sizes: </b>
+              {product.variants
+                .concat([product.masterVariant])
+                .sort((a, b) => sizeStringToNumber(a) - sizeStringToNumber(b))
+                .map((variant) => (
+                  <span key={variant.id}>
+                    {getAttributeLabel(variant.attributes?.find((attr) => attr.name.endsWith(Attributes.Size)))}
+                    &nbsp;
+                  </span>
+                ))}
+            </p>
+
             {prices &&
               (Object.prototype.hasOwnProperty.call(prices, "discounted") && prices.discounted ? (
                 <Box className={styles["price-wrapper"]}>
