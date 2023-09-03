@@ -1,6 +1,6 @@
-import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import { useState, useEffect } from "react";
+import Button from "@mui/material/Button";
 import PriceSlider from "../priceSlider/PriceSlider";
 import styles from "./CatalogFilter.module.scss";
 import RadioButtonsGroup from "./radioGroup/RadioButtonsGroup";
@@ -14,6 +14,7 @@ export default function CatalogFilter({
   apiRoot,
 }: ICatalogFilterProps) {
   const [filterInitValues, setFilterInitValues] = useState<Record<string, string[]>>({});
+  const [priceSliderState, setPriceSliderState] = useState(false);
 
   useEffect(() => {
     apiRoot
@@ -63,22 +64,22 @@ export default function CatalogFilter({
   }, []);
 
   return (
-    <Paper
-      id="catalog-filter-form"
+    <form
       className={styles["filter-content"]}
-      elevation={0}
+      id="test"
     >
       <Typography variant="h6">Filter</Typography>
       <PriceSlider
         setPriceSliderValues={setPriceSliderValues}
         priceSliderDefaultValues={priceSliderDefaultValues}
         setCurrentPage={setCurrentPage}
+        priceSliderState={priceSliderState}
+        setPriceSliderState={setPriceSliderState}
       />
       <div className={styles["radio-buttons-group"]}>
-        {Object.keys(filterInitValues).map((key, id) => (
+        {Object.keys(filterInitValues).map((key) => (
           <RadioButtonsGroup
-            // eslint-disable-next-line react/no-array-index-key
-            key={id}
+            key={key}
             label={key}
             fields={filterInitValues[key]}
             setFilterValues={setFilterValues}
@@ -86,6 +87,21 @@ export default function CatalogFilter({
           />
         ))}
       </div>
-    </Paper>
+      <Button
+        variant="contained"
+        type="reset"
+        onClick={(event) => {
+          const target = event.target as HTMLInputElement;
+
+          (target.previousSibling as HTMLElement).querySelectorAll("input").forEach((input) => {
+            input.checked = false;
+          });
+          setFilterValues({});
+          setPriceSliderState(true);
+        }}
+      >
+        Reset filter
+      </Button>
+    </form>
   );
 }

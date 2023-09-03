@@ -15,6 +15,8 @@ export default function PriceSlider({
   setPriceSliderValues,
   priceSliderDefaultValues,
   setCurrentPage,
+  priceSliderState,
+  setPriceSliderState,
 }: IPriceSliderProps) {
   const [value, setValue] = useState<TPriceSliderDefaultValues>(priceSliderDefaultValues);
 
@@ -22,19 +24,29 @@ export default function PriceSlider({
     setPriceSliderValues(value);
   }, [value, setPriceSliderValues]);
 
-  const handleChange = (_event: Event, newValue: number | number[], activeThumb: number) => {
+  const handleChange = (newValue: number | number[], activeThumb: number) => {
     if (!Array.isArray(newValue)) {
       return;
     }
-
     if (activeThumb === 0) {
       setValue({ min: Math.min(newValue[0], value.max - minDistance), max: value.max });
-    } else {
+    } else if (activeThumb === 1) {
       setValue({ min: value.min, max: Math.max(newValue[1], value.min + minDistance) });
+    } else {
+      setValue({
+        min: Math.min(newValue[0], value.max - minDistance),
+        max: Math.max(newValue[1], value.min + minDistance),
+      });
     }
 
     setCurrentPage(1);
   };
+
+  useEffect(() => {
+    handleChange([0, 100], 2);
+    setPriceSliderState(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [priceSliderState]);
 
   return (
     <FormControl>
@@ -43,12 +55,14 @@ export default function PriceSlider({
         size="small"
         getAriaLabel={() => "Minimum distance"}
         value={[value.min, value.max]}
-        onChange={handleChange}
+        onChange={(_event, newValues, activeThumb) => {
+          handleChange(newValues, activeThumb);
+        }}
         valueLabelDisplay="auto"
         getAriaValueText={valuetext}
         disableSwap
-        min={priceSliderDefaultValues.min}
-        max={priceSliderDefaultValues.max}
+        min={0}
+        max={100}
         step={minDistance}
       />
     </FormControl>

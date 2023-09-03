@@ -1,7 +1,5 @@
 import React from "react";
 import FormGroup from "@mui/material/FormGroup";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
 import FormLabel from "@mui/material/FormLabel";
 import FormControl from "@mui/material/FormControl";
 import { IRadioButtonsGroupProps } from "./types";
@@ -52,12 +50,18 @@ export default function RadioButtonsGroup({ label, fields, setFilterValues, setC
       <FormLabel id={`demo-radio-buttons-group-${label}`}>{setUpperCaseFirstSymbol(label)}</FormLabel>
       <FormGroup onChange={(event) => handleFormGroup(event)}>
         {fields.map((field) => (
-          <FormControlLabel
-            key={field}
-            control={<Checkbox />}
-            label={field}
+          <label
+            className={styles["control-label"]}
             data-value={field}
-          />
+            htmlFor={field}
+            key={field}
+          >
+            <input
+              type="checkbox"
+              id={field}
+            />
+            {field}
+          </label>
         ))}
       </FormGroup>
     </FormControl>

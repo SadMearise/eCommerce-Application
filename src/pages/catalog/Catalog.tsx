@@ -127,7 +127,7 @@ export default function Catalog() {
           >
             <CatalogFilter
               setPriceSliderValues={setPriceSliderValues}
-              priceSliderDefaultValues={priceSliderDefaultValues}
+              priceSliderDefaultValues={priceSliderValues}
               setFilterValues={setFilterValues}
               setCurrentPage={setCurrentPage}
               apiRoot={apiRoot}
