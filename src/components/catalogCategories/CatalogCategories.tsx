@@ -51,6 +51,7 @@ export default function CatalogCategories({
 
   return (
     <Box
+      className={styles.wrapper}
       sx={{
         display: "flex",
         flexDirection: "column",

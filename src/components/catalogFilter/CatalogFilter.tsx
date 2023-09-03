@@ -68,7 +68,12 @@ export default function CatalogFilter({
       className={styles["filter-content"]}
       id="test"
     >
-      <Typography variant="h6">Filter</Typography>
+      <Typography
+        className={styles.title}
+        variant="h6"
+      >
+        Filter
+      </Typography>
       <PriceSlider
         setPriceSliderValues={setPriceSliderValues}
         priceSliderDefaultValues={priceSliderDefaultValues}

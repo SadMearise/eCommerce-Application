@@ -35,11 +35,13 @@ export default function ProductCard({ product, url }: IProductCardProps) {
           />
           <CardContent className={styles.content}>
             <Typography
+              className={styles["product-name"]}
               gutterBottom
-              variant="h5"
+              variant="h6"
               component="div"
-            />
-            {productName}
+            >
+              {productName}
+            </Typography>
             <Typography
               variant="body2"
               className={styles.description}
