@@ -39,6 +39,10 @@ export default function AddressData({
   defaultBillingAddressData,
   handleReadOnlyClick,
   handleChangeDataVersion,
+  updateShippingAddress,
+  updateBillingAddress,
+  updateDefaultShppingAddress,
+  updateDefaultBillingAddress,
 }: AddressDataProps) {
   const [open, setOpen] = useState(false);
   const [dataVersion, setDataVersion] = useState(version);
@@ -85,10 +89,6 @@ export default function AddressData({
   const handleOpenModal = () => {
     setOpen(true);
   };
-
-  // console.log("defaultShippingAddress", defaultShippingAddress);
-  // console.log("checkboxesState", checkboxesState);
-
   const handleShippingAddress = (newAddressData: BaseAddress) => {
     setShippingAddresses([newAddressData, ...shippingAddresses]);
   };
@@ -192,9 +192,7 @@ export default function AddressData({
     }
     await updateCustomerInfo(id, versionNumber, addressId, values, []);
     const customerData = await getCustomerInfo();
-    console.log("customerData", customerData);
     const ship = extractAddressesFromIds(customerData.body, customerData.body.shippingAddressIds as string[]);
-    console.log("ship", ship);
     const addressToUpdate = ship.find((item) => item.id === addressId);
 
     if (addressToUpdate) {
@@ -203,38 +201,36 @@ export default function AddressData({
           handleShippingAddress(addressToUpdate);
           if (item.id === defaultBillingAddress![0].id) {
             handleDefaultBillingAddress({ ...addressToUpdate });
+            updateDefaultBillingAddress({ ...addressToUpdate });
           }
           if (item.id === defaultShippingAddress![0].id) {
             handleDefaultShippingAddress({ ...addressToUpdate });
+            updateDefaultShppingAddress({ ...addressToUpdate });
+          }
+          return addressToUpdate;
+        }
+        return item;
+      });
+      const updatedBillingAddresses = billingAddresses.map((item) => {
+        if (item.id === addressToUpdate.id) {
+          handleBillingAddress(addressToUpdate);
+          if (item.id === defaultBillingAddress![0].id) {
+            handleDefaultBillingAddress({ ...addressToUpdate });
+            updateDefaultBillingAddress({ ...addressToUpdate });
+          }
+          if (item.id === defaultShippingAddress![0].id) {
+            handleDefaultShippingAddress({ ...addressToUpdate });
+            updateDefaultShppingAddress({ ...addressToUpdate });
           }
           return addressToUpdate;
         }
         return item;
       });
       setShippingAddresses(updatedShippingAddresses);
-      setBillingAddresses(updatedShippingAddresses);
+      updateShippingAddress(updatedShippingAddresses);
+      setBillingAddresses(updatedBillingAddresses);
+      updateBillingAddress(updatedBillingAddresses);
     }
-
-    // setShippingAddresses(updatedShippingAddresses);
-    // setShippingAddresses([...ship]);
-    // const updatedShippingAddresses = shippingAddresses.map((address) => {
-    //   if (address.id === addressId) {
-    //     return { ...createDraftFromAddress(values) };
-    //   }
-    //   return address;
-    // });
-
-    // const updatedBillingAddresses = billingAddresses.map((address) => {
-    //   if (address.id === addressId) {
-    //     return { ...createDraftFromAddress(values) };
-    //   }
-    //   return address;
-    // });
-    // console.log(12312313, values);
-    // setShippingAddresses(updatedShippingAddresses);
-    // setBillingAddresses(updatedBillingAddresses);
-    // handleDefaultBillingAddress({ ...createDraftFromAddress(values) });
-    // handleDefaultShippingAddress({ ...createDraftFromAddress(values) });
 
     const currentVersion = await getCustomerVersionByID(id);
     setDataVersion(currentVersion);
@@ -277,9 +273,6 @@ export default function AddressData({
       console.error("Ошибка при удалении адреса:", error);
     }
   };
-  console.log("defaultBillingAddress", defaultBillingAddress);
-  console.log("shippingAddress", shippingAddresses);
-  console.log("billingAddresses", billingAddresses);
   return (
     <>
       <div>

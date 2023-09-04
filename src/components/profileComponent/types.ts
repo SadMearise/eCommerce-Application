@@ -15,6 +15,7 @@ export interface PersonalDataProps {
   handleChangeDataVersion: (version: number) => void;
   handleUpdateUserData: () => void;
   handleReadOnlyClick: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
+  updatePersonalData: React.Dispatch<React.SetStateAction<Customer | null>>;
 }
 
 export interface AddressDataProps {
@@ -26,6 +27,10 @@ export interface AddressDataProps {
   defaultBillingAddressData?: BaseAddress[];
   handleReadOnlyClick: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
   handleChangeDataVersion: (version: number) => void;
+  updateShippingAddress: React.Dispatch<React.SetStateAction<BaseAddress[]>>;
+  updateBillingAddress: React.Dispatch<React.SetStateAction<BaseAddress[]>>;
+  updateDefaultShppingAddress: (newAddressData: BaseAddress) => void;
+  updateDefaultBillingAddress: (newAddressData: BaseAddress) => void;
 }
 
 export enum AddressType {

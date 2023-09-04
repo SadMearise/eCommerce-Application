@@ -21,13 +21,8 @@ export default function PersonalData({
   version,
   handleReadOnlyClick,
   handleChangeDataVersion,
+  updatePersonalData,
 }: PersonalDataProps) {
-  const [personalData, setPersonalData] = useState({
-    firstName: userData.firstName,
-    lastName: userData.lastName,
-    dateOfBirth: userData.dateOfBirth,
-    email: userData.email,
-  });
   const [isChangingInfo, setIsChangingInfo] = useState(false);
   const [fieldsChanged, setFieldsChanged] = useState(false);
   const [firstInputDone, setFirstInputDone] = useState(false);
@@ -49,36 +44,25 @@ export default function PersonalData({
 
   const handleChangingInfoClick = () => setIsChangingInfo(!isChangingInfo);
   const formik = useFormik({
-    initialValues: personalData,
-    // initialValues: {
-    //   firstName: userData.firstName,
-    //   lastName: userData.lastName,
-    //   dateOfBirth: userData.dateOfBirth,
-    //   email: userData.email,
-    // },
+    initialValues: {
+      firstName: userData.firstName,
+      lastName: userData.lastName,
+      dateOfBirth: userData.dateOfBirth,
+      email: userData.email,
+    },
     validationSchema: personalDataValidationSchema,
     onSubmit: (values) => {
       updatePersonalDataCustomer(userData.id, version, values)
         .then(async () => {
-          // handleChangeDataVersion(version + 1);
           handleSuccessAlert();
-          // eslint-disable-next-line no-undef
           const newData = await getCustomerInfo();
-          setPersonalData({
-            firstName: newData.body.firstName,
-            lastName: newData.body.lastName,
-            dateOfBirth: newData.body.dateOfBirth,
-            email: newData.body.email,
-          });
+          updatePersonalData(newData.body);
           const currentVersion = await getCustomerVersionByID(userData.id);
           handleChangeDataVersion(currentVersion);
-          // handleUpdateUserData();
-          console.log("personalData.firstName", personalData.firstName);
         })
         .catch((error) => {
           handleErrorAlert();
           setAlertError(error.message);
-          console.error(error.message);
         });
     },
   });

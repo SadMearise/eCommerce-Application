@@ -23,6 +23,13 @@ export default function ProfileComponent() {
   const [defaultShippingAddressesData, setDefaultShippingAddressesData] = useState<BaseAddress[]>([]);
   const [defaultBillingAddressesData, setDefaultBillingAddressesData] = useState<BaseAddress[]>([]);
 
+  const updateDefaultShippingAddress = (newAddressData: BaseAddress) => {
+    setDefaultShippingAddressesData([newAddressData]);
+  };
+  const updateDefaultBillingAddress = (newAddressData: BaseAddress) => {
+    setDefaultBillingAddressesData([newAddressData]);
+  };
+
   const [value, setValue] = useState("1");
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
@@ -32,7 +39,6 @@ export default function ProfileComponent() {
   const handleChangeDataVersion = (version: number) => {
     setDataVersion(version);
   };
-  console.log("dataVersion", dataVersion);
   useEffect(() => {
     const fetchUserData = async (): Promise<void> => {
       try {
@@ -86,7 +92,6 @@ export default function ProfileComponent() {
   if (userData === null) {
     return <p>Loading...</p>;
   }
-  console.log(userData);
   return (
     <div className={styles["profile-wrapper"]}>
       <Box sx={{ width: "100%", typography: "body1" }}>
@@ -123,6 +128,7 @@ export default function ProfileComponent() {
               handleReadOnlyClick={handleReadOnlyClick}
               handleChangeDataVersion={handleChangeDataVersion}
               handleUpdateUserData={handleUpdateUserData}
+              updatePersonalData={setUserData}
             />
           </TabPanel>
           <TabPanel value="2">
@@ -135,6 +141,10 @@ export default function ProfileComponent() {
               handleChangeDataVersion={handleChangeDataVersion}
               defaultShippingAddressData={defaultShippingAddressesData}
               defaultBillingAddressData={defaultBillingAddressesData}
+              updateShippingAddress={setShippingAddressesData}
+              updateBillingAddress={setBillingAddressesData}
+              updateDefaultShppingAddress={updateDefaultShippingAddress}
+              updateDefaultBillingAddress={updateDefaultBillingAddress}
             />
           </TabPanel>
           <TabPanel value="3">
