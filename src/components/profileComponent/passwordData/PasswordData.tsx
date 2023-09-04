@@ -9,6 +9,7 @@ import { changeCustomerPassword } from "../../../services/customerService";
 import { PasswrodDateProps } from "../types";
 import AlertView from "../../alertView/AlertView";
 import loginToApi from "../../../services/LoginToApi";
+import tokenCache from "../../../services/TokenCash";
 
 export default function PasswordData({ userId, version, email, handleChangeDataVersion }: PasswrodDateProps) {
   const [showCurrentPassword, setShowCurrentPassword] = useState(false);
@@ -43,6 +44,7 @@ export default function PasswordData({ userId, version, email, handleChangeDataV
     onSubmit: (values) => {
       changeCustomerPassword({ id: userId, version, ...values })
         .then(() => {
+          tokenCache.disposeToken();
           loginToApi(email, values.newPassword);
           handleSuccessAlert();
           handleChangeDataVersion(version + 1);
