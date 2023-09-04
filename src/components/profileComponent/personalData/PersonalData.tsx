@@ -7,10 +7,14 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { useFormik } from "formik";
 import { DatePicker as MuiDatePicker } from "@mui/x-date-pickers/DatePicker";
 import { PersonalDataProps, TouchedFieldsPersonal } from "../types";
-import { getCustomerInfo, getCustomerVersionByID, updatePersonalDataCustomer } from "../../../services/customerService";
 import { personalDataValidationSchema } from "../../../utils/profileValidationSchema";
 import styles from "./PersonalData.module.scss";
 import AlertView from "../../alertView/AlertView";
+import {
+  getCustomerInfo,
+  getCustomerVersionByID,
+  updatePersonalDataCustomer,
+} from "../../../services/customer.service";
 
 export default function PersonalData({
   userData,
@@ -49,6 +53,7 @@ export default function PersonalData({
       updatePersonalDataCustomer(userData.id, version, values).then(async () => {
         // handleChangeDataVersion(version + 1);
         handleSuccessAlert();
+        // eslint-disable-next-line no-undef
         const newData = await getCustomerInfo();
         setPersonalData({
           firstName: newData.body.firstName,

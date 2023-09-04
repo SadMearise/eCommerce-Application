@@ -8,12 +8,12 @@ import { BaseAddress, ClientResponse, Customer } from "@commercetools/platform-s
 import PersonPinIcon from "@mui/icons-material/PersonPin";
 import HomeIcon from "@mui/icons-material/Home";
 import HttpsIcon from "@mui/icons-material/Https";
-import { getCustomerInfo } from "../../services/customerService";
 import styles from "./ProfileComponent.module.scss";
 import PersonalData from "./personalData/PersonalData";
 import AddressData from "./addressData/AddressData";
 import { extractAddressesFromIds } from "../../utils/extractAddresses";
 import PasswordData from "./passwordData/PasswordData";
+import { getCustomerInfo } from "../../services/customer.service";
 
 export default function ProfileComponent() {
   const [userData, setUserData] = useState<Customer | null>(null);

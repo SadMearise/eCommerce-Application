@@ -5,11 +5,11 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import { passwordValidationSchema } from "../../../utils/profileValidationSchema";
 import styles from "./PasswordData.module.scss";
-import { changeCustomerPassword, getCustomerVersionByID } from "../../../services/customerService";
 import { PasswrodDateProps } from "../types";
 import AlertView from "../../alertView/AlertView";
 import loginToApi from "../../../services/LoginToApi";
 import tokenCache from "../../../services/TokenCash";
+import { changeCustomerPassword, getCustomerVersionByID } from "../../../services/customer.service";
 
 export default function PasswordData({ userId, version, email, handleChangeDataVersion }: PasswrodDateProps) {
   const [showCurrentPassword, setShowCurrentPassword] = useState(false);

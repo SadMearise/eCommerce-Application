@@ -5,6 +5,10 @@ import { AddressDataProps, AddressTitle } from "../types";
 import AddressField from "./addressField/AddressField";
 import styles from "./AddressData.module.scss";
 import AddAddress from "./addAddress/AddAddress";
+
+import createDraftFromAddress from "../../../utils/createDraftFromAddress";
+import { extractAddressesFromIds } from "../../../utils/extractAddresses";
+import AlertView from "../../alertView/AlertView";
 import {
   addAddressIdentifier,
   addAddressToCustomer,
@@ -12,10 +16,7 @@ import {
   getCustomerVersionByID,
   removeAddressByID,
   updateCustomerInfo,
-} from "../../../services/customerService";
-import createDraftFromAddress from "../../../utils/createDraftFromAddress";
-import { extractAddressesFromIds } from "../../../utils/extractAddresses";
-import AlertView from "../../alertView/AlertView";
+} from "../../../services/customer.service";
 
 const style = {
   position: "absolute" as const,
