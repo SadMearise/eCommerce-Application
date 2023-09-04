@@ -201,14 +201,18 @@ export default function AddressData({
       const updatedShippingAddresses = shippingAddresses.map((item) => {
         if (item.id === addressToUpdate.id) {
           handleShippingAddress(addressToUpdate);
+          if (item.id === defaultBillingAddress![0].id) {
+            handleDefaultBillingAddress({ ...addressToUpdate });
+          }
+          if (item.id === defaultShippingAddress![0].id) {
+            handleDefaultShippingAddress({ ...addressToUpdate });
+          }
           return addressToUpdate;
         }
         return item;
       });
       setShippingAddresses(updatedShippingAddresses);
       setBillingAddresses(updatedShippingAddresses);
-      // handleDefaultBillingAddress(updatedShippingAddresses);
-      // handleDefaultShippingAddress(updatedShippingAddresses);
     }
 
     // setShippingAddresses(updatedShippingAddresses);

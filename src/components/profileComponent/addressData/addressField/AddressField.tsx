@@ -60,6 +60,14 @@ export default function AddressField({
     },
   });
   useEffect(() => {
+    formik.setFieldValue("city", addressData.city);
+    formik.setFieldValue("country", getCountryNameByCode(addressData.country));
+    formik.setFieldValue("streetName", addressData.streetName);
+    formik.setFieldValue("streetNumber", addressData.streetNumber);
+    formik.setFieldValue("postalCode", addressData.postalCode);
+  }, [addressData]);
+
+  useEffect(() => {
     if (firstInputDone && !formik.isSubmitting) {
       const touchedFields: TouchedFieldsAddress = {
         country: true,

@@ -32,11 +32,19 @@ export default function PersonalData({
   const [fieldsChanged, setFieldsChanged] = useState(false);
   const [firstInputDone, setFirstInputDone] = useState(false);
   const [isChangingSuccessful, setIsChangingSuccessful] = useState(false);
+  const [isChangingError, setIsChangingError] = useState(false);
+  const [alertError, setAlertError] = useState("");
 
   const handleSuccessAlert = () => {
     setIsChangingSuccessful(true);
 
     setTimeout(() => setIsChangingSuccessful(false), 2000);
+  };
+
+  const handleErrorAlert = () => {
+    setIsChangingError(true);
+
+    setTimeout(() => setIsChangingError(false), 2000);
   };
 
   const handleChangingInfoClick = () => setIsChangingInfo(!isChangingInfo);
@@ -50,22 +58,28 @@ export default function PersonalData({
     // },
     validationSchema: personalDataValidationSchema,
     onSubmit: (values) => {
-      updatePersonalDataCustomer(userData.id, version, values).then(async () => {
-        // handleChangeDataVersion(version + 1);
-        handleSuccessAlert();
-        // eslint-disable-next-line no-undef
-        const newData = await getCustomerInfo();
-        setPersonalData({
-          firstName: newData.body.firstName,
-          lastName: newData.body.lastName,
-          dateOfBirth: newData.body.dateOfBirth,
-          email: newData.body.email,
+      updatePersonalDataCustomer(userData.id, version, values)
+        .then(async () => {
+          // handleChangeDataVersion(version + 1);
+          handleSuccessAlert();
+          // eslint-disable-next-line no-undef
+          const newData = await getCustomerInfo();
+          setPersonalData({
+            firstName: newData.body.firstName,
+            lastName: newData.body.lastName,
+            dateOfBirth: newData.body.dateOfBirth,
+            email: newData.body.email,
+          });
+          const currentVersion = await getCustomerVersionByID(userData.id);
+          handleChangeDataVersion(currentVersion);
+          // handleUpdateUserData();
+          console.log("personalData.firstName", personalData.firstName);
+        })
+        .catch((error) => {
+          handleErrorAlert();
+          setAlertError(error.message);
+          console.error(error.message);
         });
-        const currentVersion = await getCustomerVersionByID(userData.id);
-        handleChangeDataVersion(currentVersion);
-        // handleUpdateUserData();
-        console.log("personalData.firstName", personalData.firstName);
-      });
     },
   });
   useEffect(() => {
@@ -204,6 +218,14 @@ export default function PersonalData({
           />
         </div>
       </form>
+      {isChangingError && (
+        <AlertView
+          alertTitle="Error"
+          severity="error"
+          variant="filled"
+          textContent={alertError}
+        />
+      )}
       {isChangingSuccessful && (
         <AlertView
           alertTitle="Success"

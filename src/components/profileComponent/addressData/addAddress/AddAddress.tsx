@@ -5,7 +5,6 @@ import { useState } from "react";
 import countriesSet from "../../../../countries";
 import styles from "./AddAddress.module.scss";
 import { addressValidationSchema } from "../../../../utils/registerValidationSchema";
-// import AlertView from "../../../alertView/AlertView";
 
 export default function AddAddress({
   id,
@@ -26,26 +25,20 @@ export default function AddAddress({
   checkboxesState: { [key: string]: boolean };
 }) {
   const [isCountrySelected, setIsCountrySelected] = useState(false);
-  // const [isChangingSuccessful, setIsChangingSuccessful] = useState(false);
-
-  // const handleChangingSuccessfulStatus = () => {
-  //   setIsChangingSuccessful(true);
-
-  //   setTimeout(() => setIsChangingSuccessful(false), 2000);
-  // };
   const formik = useFormik<BaseAddress>({
     initialValues: {
       country: "",
-      city: "f",
-      streetName: "f",
-      streetNumber: "1",
-      postalCode: "440039",
+      city: "",
+      streetName: "",
+      streetNumber: "",
+      postalCode: "",
     },
     validationSchema: addressValidationSchema,
     onSubmit: async (values) => {
       handleAddAddress(id, dataVersion, values, checkboxesState);
     },
   });
+  const areAllCheckboxesFalse = Object.values(checkboxesState).every((value) => value === false);
 
   return (
     <form onSubmit={formik.handleSubmit}>
@@ -136,16 +129,10 @@ export default function AddAddress({
           }
           disabled={!isCountrySelected}
         />
-        {/* {isChangingSuccessful && (
-          <AlertView
-            variant="filled"
-            textContent="Changes were successful"
-          />
-        )} */}
         <Button
           variant="contained"
           type="submit"
-          disabled={!formik.dirty || !formik.isValid}
+          disabled={!formik.dirty || !formik.isValid || areAllCheckboxesFalse}
         >
           add address
         </Button>
