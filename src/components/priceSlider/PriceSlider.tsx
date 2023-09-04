@@ -28,17 +28,15 @@ export default function PriceSlider({
     if (!Array.isArray(newValue)) {
       return;
     }
-    if (activeThumb === 0) {
-      setValue({ min: Math.min(newValue[0], value.max - minDistance), max: value.max });
-    } else if (activeThumb === 1) {
-      setValue({ min: value.min, max: Math.max(newValue[1], value.min + minDistance) });
-    } else {
-      setValue({
-        min: Math.min(newValue[0], value.max - minDistance),
-        max: Math.max(newValue[1], value.min + minDistance),
-      });
-    }
 
+    const { min, max }: { min: number; max: number } = value;
+
+    const newMinMax = {
+      min: activeThumb === 0 || activeThumb === 2 ? Math.min(newValue[0], max - minDistance) : min,
+      max: activeThumb === 1 || activeThumb === 2 ? Math.max(newValue[1], min + minDistance) : max,
+    };
+
+    setValue(newMinMax);
     setCurrentPage(1);
   };
 
