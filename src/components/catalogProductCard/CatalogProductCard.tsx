@@ -31,7 +31,7 @@ export default function ProductCard({ product, url }: IProductCardProps) {
             className={styles.image}
             component="img"
             image={productUrl}
-            alt="Paella dish"
+            alt={productName}
           />
           <CardContent className={styles.content}>
             <Typography

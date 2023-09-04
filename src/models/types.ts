@@ -47,3 +47,10 @@ export enum StatusCodes {
 }
 
 export type AdditionalAddressType = AddressType.Shipping | AddressType.Billing;
+
+export type TCatalogFilterValues = Record<string, string[]>;
+
+export enum SortingMethods {
+  asc = "asc",
+  desc = "desc",
+}

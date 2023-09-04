@@ -5,13 +5,14 @@ import ListItemText from "@mui/material/ListItemText";
 import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
 import { ICatalogSortingDopdownMenuProps, TSortingOptions } from "./types";
+import { SortingMethods } from "../../models/types";
 
 const options: TSortingOptions[] = [
-  { label: "Default", method: "asc", key: "default" },
-  { label: "Price-low to high", method: "asc", key: "price" },
-  { label: "Price-high to low", method: "desc", key: "price" },
-  { label: "Name-A to Z", method: "asc", key: "name" },
-  { label: "Name-Z to A", method: "desc", key: "name" },
+  { label: "Default", method: SortingMethods.asc, key: "default" },
+  { label: "Price-low to high", method: SortingMethods.asc, key: "price" },
+  { label: "Price-high to low", method: SortingMethods.desc, key: "price" },
+  { label: "Name-A to Z", method: SortingMethods.asc, key: "name" },
+  { label: "Name-Z to A", method: SortingMethods.desc, key: "name" },
 ];
 
 export default function CatalogSortingDopdownMenu({ setSortValues }: ICatalogSortingDopdownMenuProps) {

@@ -40,7 +40,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-export default function CatalogSearch({ setInputValue, setCurrentPage }: ICatalogSearchProps) {
+export default function CatalogSearch({ setSearchInputValue, setCurrentPage }: ICatalogSearchProps) {
   return (
     <Search className={styles.search}>
       <SearchIconWrapper>
@@ -48,7 +48,7 @@ export default function CatalogSearch({ setInputValue, setCurrentPage }: ICatalo
       </SearchIconWrapper>
       <StyledInputBase
         onChange={(event) => {
-          setInputValue(event.target.value);
+          setSearchInputValue(event.target.value);
           setCurrentPage(1);
         }}
         className={styles["search-body"]}

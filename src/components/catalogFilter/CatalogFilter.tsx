@@ -6,6 +6,7 @@ import styles from "./CatalogFilter.module.scss";
 import RadioButtonsGroup from "./radioGroup/RadioButtonsGroup";
 import { ICatalogFilterProps } from "./types";
 import { getProductTypes } from "../../services/product.service";
+import { TCatalogFilterValues } from "../../models/types";
 
 export default function CatalogFilter({
   setPriceSliderValues,
@@ -13,7 +14,7 @@ export default function CatalogFilter({
   setFilterValues,
   setCurrentPage,
 }: ICatalogFilterProps) {
-  const [filterInitValues, setFilterInitValues] = useState<Record<string, string[]>>({});
+  const [filterInitValues, setFilterInitValues] = useState<TCatalogFilterValues>({});
   const [priceSliderState, setPriceSliderState] = useState(false);
 
   useEffect(() => {

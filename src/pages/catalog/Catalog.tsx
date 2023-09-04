@@ -18,6 +18,7 @@ import CatalogBreadcrumbs from "../../components/catalogBreadcrumbs/CatalogBread
 import RouterPaths from "../../router/routes";
 import { getAttributePath, getSortingPath } from "../../utils/getPaths";
 import { getSearchProductProjections } from "../../services/product.service";
+import { TCatalogFilterValues } from "../../models/types";
 
 export default function Catalog() {
   const location = useLocation();
@@ -28,10 +29,10 @@ export default function Catalog() {
 
   const [products, setProducts] = useState<ProductProjection[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [inputValue, setInputValue] = useState("");
+  const [searchInputValue, setSearchInputValue] = useState("");
   const [priceSliderValues, setPriceSliderValues] = useState<TPriceSliderDefaultValues>(priceSliderDefaultValues);
   const [countPages, setCountPages] = useState(1);
-  const [filterValues, setFilterValues] = useState<Record<string, string[]>>({});
+  const [filterValues, setFilterValues] = useState<TCatalogFilterValues>({});
   const [sortValues, setSortValues] = useState<TSortValues>({ key: "", method: "" });
   const [categoriesBreadcrumbs, setCategoriesBreadcrumbs] = useState<TCategories[]>([]);
   const [categories, setCategories] = useState<TCategories[]>([]);
@@ -61,7 +62,7 @@ export default function Catalog() {
     });
 
     let queryArgs: TQueryArgs = {
-      "text.en-US": `${inputValue}`,
+      "text.en-US": `${searchInputValue}`,
       fuzzy: true,
       filter: filterRules,
       limit: PAGE_LIMIT,
@@ -93,7 +94,7 @@ export default function Catalog() {
   useEffect(() => {
     updateProducts();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filterValues, priceSliderValues, currentPage, inputValue, sortValues, categoriesBreadcrumbs]);
+  }, [filterValues, priceSliderValues, currentPage, searchInputValue, sortValues, categoriesBreadcrumbs]);
 
   const catalogCards = () => {
     if (!loading) {
@@ -171,7 +172,7 @@ export default function Catalog() {
             className={styles["content-right"]}
           >
             <CatalogSearch
-              setInputValue={setInputValue}
+              setSearchInputValue={setSearchInputValue}
               setCurrentPage={setCurrentPage}
             />
             <CatalogSortingDopdownMenu setSortValues={setSortValues} />
