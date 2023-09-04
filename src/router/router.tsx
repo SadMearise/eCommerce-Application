@@ -39,6 +39,12 @@ const router = createBrowserRouter([
   {
     path: RouterPaths.Profile,
     element: <Profile />,
+    loader: async () => {
+      if (!tokenCache.hasValidToken()) {
+        return redirect(RouterPaths.Home);
+      }
+      return null;
+    },
   },
   {
     path: RouterPaths.Registration,
