@@ -1,0 +1,23 @@
+.slider {
+  max-width: 500px;
+  width: 500px;
+  flex-basis: 50%;
+
+  @media (max-width: 960px) {
+    width: 500px;
+    order: 2;
+  }
+
+  @media (max-width: 480px) {
+    width: 250px;
+  }
+
+  img {
+    display: block;
+    cursor: pointer;
+  }
+}
+
+.close {
+  z-index: 50;
+}

@@ -1,0 +1,9 @@
+.form-control {
+  display: block !important;
+  margin-top: 15px !important;
+
+  @media (max-width: 468px) {
+    display: inline-block !important;
+    width: 50%;
+  }
+}

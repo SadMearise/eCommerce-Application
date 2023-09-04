@@ -81,6 +81,15 @@ export default function Header() {
                 <Typography
                   textAlign="center"
                   component={Link}
+                  to={RouterPaths.Home}
+                >
+                  Home
+                </Typography>
+              </MenuItem>
+              <MenuItem onClick={handleCloseNavMenu}>
+                <Typography
+                  textAlign="center"
+                  component={Link}
                   to={RouterPaths.About}
                 >
                   About

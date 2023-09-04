@@ -17,7 +17,7 @@ import { ICustomer } from "../../models/types";
 import RouterPaths from "../../router/routes";
 import loginToApi from "../../services/LoginToApi";
 import { setRegistrationSuccess } from "../../store/features/registration/registrationSlice";
-import createCustomer from "../../services/customerService";
+import createCustomer from "../../services/customer.service";
 import { login } from "../../store/features/user/userSlice";
 
 export default function RegistrationForm() {

@@ -1,0 +1,32 @@
+.content-container {
+  margin-top: 20px !important;
+  @media (max-width: 900px) {
+    flex-direction: column !important;
+  }
+}
+
+.catalog-container {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  margin: -15px;
+}
+
+.content-left {
+  @media (max-width: 900px) {
+    max-width: none !important;
+  }
+}
+
+.content-right {
+  @media (max-width: 900px) {
+    max-width: none !important;
+  }
+}
+
+.pagination {
+  margin: 40px 0;
+
+  & ul {
+    justify-content: center;
+  }
+}

@@ -26,6 +26,7 @@ module.exports = {
   },
   plugins: ["react-refresh", "@typescript-eslint", "react", "prettier", "react-hooks"],
   rules: {
+    "@typescript-eslint/ban-ts-comment": "error",
     indent: "off",
     "max-len": [
       "error",
@@ -78,8 +79,7 @@ module.exports = {
     "no-param-reassign": [
       "error",
       {
-        props: true,
-        ignorePropertyModificationsFor: ["state"],
+        props: false,
       },
     ],
     "object-curly-newline": [

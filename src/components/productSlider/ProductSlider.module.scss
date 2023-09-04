@@ -1,0 +1,19 @@
+.slider {
+  max-width: 400px;
+  flex-basis: 50%;
+  overflow: inherit !important;
+
+  @media (max-width: 960px) {
+    width: 400px;
+    order: 2;
+  }
+
+  @media (max-width: 480px) {
+    width: 250px;
+  }
+
+  img {
+    display: block;
+    cursor: pointer;
+  }
+}
