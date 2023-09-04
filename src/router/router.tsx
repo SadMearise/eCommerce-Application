@@ -41,7 +41,7 @@ const router = createBrowserRouter([
     element: <Profile />,
     loader: async () => {
       if (!tokenCache.hasValidToken()) {
-        return redirect(RouterPaths.Home);
+        return redirect(RouterPaths.Login);
       }
       return null;
     },
