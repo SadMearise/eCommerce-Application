@@ -5,7 +5,7 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import { passwordValidationSchema } from "../../../utils/profileValidationSchema";
 import styles from "./PasswordData.module.scss";
-import { changeCustomerPassword } from "../../../services/customerService";
+import { changeCustomerPassword, getCustomerVersionByID } from "../../../services/customerService";
 import { PasswrodDateProps } from "../types";
 import AlertView from "../../alertView/AlertView";
 import loginToApi from "../../../services/LoginToApi";
@@ -43,11 +43,12 @@ export default function PasswordData({ userId, version, email, handleChangeDataV
     validationSchema: passwordValidationSchema,
     onSubmit: (values) => {
       changeCustomerPassword({ id: userId, version, ...values })
-        .then(() => {
+        .then(async () => {
           tokenCache.disposeToken();
           loginToApi(email, values.newPassword);
           handleSuccessAlert();
-          handleChangeDataVersion(version + 1);
+          const currentVersion = await getCustomerVersionByID(userId);
+          handleChangeDataVersion(currentVersion);
         })
         .catch((error) => {
           console.error(error);
