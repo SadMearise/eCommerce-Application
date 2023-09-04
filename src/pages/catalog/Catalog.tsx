@@ -36,6 +36,7 @@ export default function Catalog() {
   const [categoriesBreadcrumbs, setCategoriesBreadcrumbs] = useState<TCategories[]>([]);
   const [categories, setCategories] = useState<TCategories[]>([]);
   const [currentId, setCurrentId] = useState("");
+  const [loading, setLoading] = useState(true);
 
   const updateProducts = async () => {
     const filterRules: string[] = [];
@@ -76,6 +77,7 @@ export default function Catalog() {
 
     const searchedProduct = await getSearchProductProjections(queryArgs);
 
+    setLoading(false);
     if (searchedProduct.total) {
       setCountPages(Math.ceil(searchedProduct.total / PAGE_LIMIT));
     }
@@ -92,6 +94,41 @@ export default function Catalog() {
     updateProducts();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filterValues, priceSliderValues, currentPage, inputValue, sortValues, categoriesBreadcrumbs]);
+
+  const catalogCards = () => {
+    if (!loading) {
+      if (products.length) {
+        return (
+          <>
+            <Box className={styles["catalog-container"]}>
+              {products.map((product) => (
+                <ProductCard
+                  product={product}
+                  key={product.id}
+                  url={`/product/${product.key}`}
+                />
+              ))}
+            </Box>
+            {countPages > 1 && (
+              <Pagination
+                className={styles.pagination}
+                count={countPages}
+                page={currentPage}
+                color="primary"
+                onChange={(_, num) => {
+                  setCurrentPage(num);
+                }}
+              />
+            )}
+          </>
+        );
+      }
+
+      return <div>Sorry! We have run out of products with the specified filters :&#40;</div>;
+    }
+
+    return <div>Loading...</div>;
+  };
 
   return (
     <>
@@ -138,7 +175,9 @@ export default function Catalog() {
               setCurrentPage={setCurrentPage}
             />
             <CatalogSortingDopdownMenu setSortValues={setSortValues} />
-            {products.length ? (
+            {catalogCards()}
+            {/* {!loading ? products.length ? <div>content</div> : <div>content bot found</div> : <div>loading</div>} */}
+            {/* {products.length ? (
               <>
                 <Box className={styles["catalog-container"]}>
                   {products.map((product) => (
@@ -163,7 +202,7 @@ export default function Catalog() {
               </>
             ) : (
               <div>Content not found</div>
-            )}
+            )} */}
           </Grid>
         </Grid>
       </Container>
