@@ -42,6 +42,7 @@
   display: flex;
   gap: 20px;
   align-items: center;
+  flex-wrap: wrap;
 }
 
 .submit-button-wrapper {
@@ -51,5 +52,12 @@
 
   .error-message {
     color: red;
+  }
+}
+
+.shipping-title-wrapper {
+  @media(max-width: 1080px) {
+    padding-bottom: 63px;
+
   }
 }
