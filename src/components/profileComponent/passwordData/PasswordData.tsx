@@ -8,7 +8,6 @@ import styles from "./PasswordData.module.scss";
 import { PasswrodDateProps } from "../types";
 import AlertView from "../../alertView/AlertView";
 import loginToApi from "../../../services/LoginToApi";
-import tokenCache from "../../../services/TokenCash";
 import { changeCustomerPassword, getCustomerVersionByID } from "../../../services/customer.service";
 
 export default function PasswordData({ userId, version, email, handleChangeDataVersion }: PasswrodDateProps) {
@@ -44,7 +43,7 @@ export default function PasswordData({ userId, version, email, handleChangeDataV
     onSubmit: (values) => {
       changeCustomerPassword({ id: userId, version, ...values })
         .then(async () => {
-          tokenCache.disposeToken();
+          // tokenCache.disposeToken();
           loginToApi(email, values.newPassword);
           handleSuccessAlert();
           const currentVersion = await getCustomerVersionByID(userId);
