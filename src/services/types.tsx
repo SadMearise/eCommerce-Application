@@ -11,3 +11,10 @@ export interface IAppTokenCache extends TokenCache {
   hasValidToken(): boolean;
   disposeToken(): void;
 }
+
+export interface changePassword {
+  id: string;
+  version: number;
+  currentPassword: string;
+  newPassword: string;
+}

@@ -15,6 +15,8 @@ export default function Home() {
       </Container>
       {isSuccessSelector && (
         <AlertView
+          alertTitle="Success"
+          severity="success"
           variant="outlined"
           textContent="Registration successful! You're now logged in!"
         />

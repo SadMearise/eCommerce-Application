@@ -15,6 +15,7 @@ import {
 } from "../../../services/customerService";
 import createDraftFromAddress from "../../../utils/createDraftFromAddress";
 import { extractAddressesFromIds } from "../../../utils/extractAddresses";
+import AlertView from "../../alertView/AlertView";
 
 const style = {
   position: "absolute" as const,
@@ -36,6 +37,7 @@ export default function AddressData({
   defaultShippingAddressData,
   defaultBillingAddressData,
   handleReadOnlyClick,
+  handleChangeDataVersion,
 }: AddressDataProps) {
   const [open, setOpen] = useState(false);
   const [dataVersion, setDataVersion] = useState(version);
@@ -43,6 +45,13 @@ export default function AddressData({
   const [billingAddresses, setBillingAddresses] = useState(billingAddressData);
   const [defaultShippingAddress, setDefaultShippingAddress] = useState(defaultShippingAddressData);
   const [defaultBillingAddress, setDefaultBillingAddress] = useState(defaultBillingAddressData);
+  const [isChangingSuccessful, setIsChangingSuccessful] = useState(false);
+
+  const handleSuccessAlert = () => {
+    setIsChangingSuccessful(true);
+
+    setTimeout(() => setIsChangingSuccessful(false), 2000);
+  };
 
   const [checkboxesState, setCheckboxesState] = useState<{
     [key: string]: boolean;
@@ -143,7 +152,9 @@ export default function AddressData({
 
       const currentVersion = await getCustomerVersionByID(id);
       setDataVersion(currentVersion);
+      handleChangeDataVersion(currentVersion);
       handleCloseModal();
+      handleSuccessAlert();
     } catch (error) {
       throw new Error(`${error}`);
     }
@@ -199,7 +210,6 @@ export default function AddressData({
       // handleDefaultShippingAddress(updatedShippingAddresses);
     }
 
-    // Обновляем состояние shippingAddresses новой копией массива
     // setShippingAddresses(updatedShippingAddresses);
     // setShippingAddresses([...ship]);
     // const updatedShippingAddresses = shippingAddresses.map((address) => {
@@ -223,7 +233,9 @@ export default function AddressData({
 
     const currentVersion = await getCustomerVersionByID(id);
     setDataVersion(currentVersion);
+    handleChangeDataVersion(currentVersion);
     resetCheckboxes();
+    handleSuccessAlert();
   };
 
   const handleDeleteAddress = async (id: string, versionNumber: number, addressId: string) => {
@@ -254,6 +266,8 @@ export default function AddressData({
       }
       const currentVersion = await getCustomerVersionByID(id);
       setDataVersion(currentVersion);
+      handleChangeDataVersion(currentVersion);
+      handleSuccessAlert();
     } catch (error) {
       console.error("Ошибка при удалении адреса:", error);
     }
@@ -379,6 +393,14 @@ export default function AddressData({
           </div>
         )}
       </div>
+      {isChangingSuccessful && (
+        <AlertView
+          alertTitle="Success"
+          severity="success"
+          variant="filled"
+          textContent="Changes were successful"
+        />
+      )}
     </>
   );
 }

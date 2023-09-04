@@ -11,16 +11,21 @@ export interface shippingAddress {
 
 export interface PersonalDataProps {
   userData: Customer;
+  version: number;
+  handleChangeDataVersion: (version: number) => void;
+  handleUpdateUserData: () => void;
   handleReadOnlyClick: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
 }
 
-export interface AddressDataProps extends Omit<PersonalDataProps, "userData"> {
+export interface AddressDataProps {
   userId: string;
   version: number;
   shippingAddressData: BaseAddress[];
   billingAddressData: BaseAddress[];
   defaultShippingAddressData?: BaseAddress[];
   defaultBillingAddressData?: BaseAddress[];
+  handleReadOnlyClick: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
+  handleChangeDataVersion: (version: number) => void;
 }
 
 export enum AddressType {
@@ -56,7 +61,9 @@ export interface AddressFieldProps {
 
 export interface PasswrodDateProps {
   userId: string;
+  email: string;
   version: number;
+  handleChangeDataVersion: (version: number) => void;
 }
 
 export interface TouchedFieldsPersonal {

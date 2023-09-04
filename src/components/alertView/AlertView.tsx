@@ -8,9 +8,11 @@ import styles from "./AlertView.module.scss";
 interface AlertViewProps {
   textContent: string;
   variant: "filled" | "outlined" | "standard";
+  severity: "success" | "error";
+  alertTitle: "Success" | "Error";
 }
 
-export default function AlertView({ textContent, variant }: AlertViewProps) {
+export default function AlertView({ textContent, variant, severity, alertTitle }: AlertViewProps) {
   const dispatch = useDispatch();
   const [open, setOpen] = useState(true);
 
@@ -35,6 +37,7 @@ export default function AlertView({ textContent, variant }: AlertViewProps) {
         <Alert
           variant={variant}
           className={styles.alert}
+          severity={severity}
           action={
             <IconButton
               aria-label="close"
@@ -48,7 +51,7 @@ export default function AlertView({ textContent, variant }: AlertViewProps) {
             </IconButton>
           }
         >
-          <AlertTitle>Success</AlertTitle>
+          <AlertTitle>{alertTitle}</AlertTitle>
           {textContent}
         </Alert>
       )}

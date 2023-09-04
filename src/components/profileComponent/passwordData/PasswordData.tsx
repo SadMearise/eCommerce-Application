@@ -7,9 +7,10 @@ import { passwordValidationSchema } from "../../../utils/profileValidationSchema
 import styles from "./PasswordData.module.scss";
 import { changeCustomerPassword } from "../../../services/customerService";
 import { PasswrodDateProps } from "../types";
-// import AlertView from "../../alertView/AlertView";
+import AlertView from "../../alertView/AlertView";
+import loginToApi from "../../../services/LoginToApi";
 
-export default function PasswordData({ userId, version }: PasswrodDateProps) {
+export default function PasswordData({ userId, version, email, handleChangeDataVersion }: PasswrodDateProps) {
   const [showCurrentPassword, setShowCurrentPassword] = useState(false);
   const toggleCurrentPasswordVisibility = (): void => {
     setShowCurrentPassword((prevShowPassword) => !prevShowPassword);
@@ -18,20 +19,21 @@ export default function PasswordData({ userId, version }: PasswrodDateProps) {
   const toggleNewPasswordVisibility = (): void => {
     setShowNewPassword((prevShowPassword) => !prevShowPassword);
   };
-  // const [error, setError] = useState("");
-  // const [isChangingSuccessful, setIsChangingSuccessful] = useState(false);
-  // const [isChangingError, setIsChangingError] = useState(false);
+  const [isChangingSuccessful, setIsChangingSuccessful] = useState(false);
+  const [isChangingError, setIsChangingError] = useState(false);
 
-  // const handleAlertView = () => {
-  //   console.log(111, error);
-  //   if (error === "") {
-  //     setIsChangingError(true);
-  //     setTimeout(() => setIsChangingError(false), 2000);
-  //   } else {
-  //     setIsChangingSuccessful(true);
-  //     setTimeout(() => setIsChangingSuccessful(false), 2000);
-  //   }
-  // };
+  const handleSuccessAlert = () => {
+    setIsChangingSuccessful(true);
+
+    setTimeout(() => setIsChangingSuccessful(false), 2000);
+  };
+
+  const handleErrorAlert = () => {
+    setIsChangingError(true);
+
+    setTimeout(() => setIsChangingError(false), 2000);
+  };
+
   const formik = useFormik<{ currentPassword: string; newPassword: string }>({
     initialValues: {
       currentPassword: "",
@@ -39,8 +41,16 @@ export default function PasswordData({ userId, version }: PasswrodDateProps) {
     },
     validationSchema: passwordValidationSchema,
     onSubmit: (values) => {
-      console.log(values);
-      changeCustomerPassword({ id: userId, version, ...values });
+      changeCustomerPassword({ id: userId, version, ...values })
+        .then(() => {
+          loginToApi(email, values.newPassword);
+          handleSuccessAlert();
+          handleChangeDataVersion(version + 1);
+        })
+        .catch((error) => {
+          console.error(error);
+          handleErrorAlert();
+        });
     },
   });
   return (
@@ -109,18 +119,22 @@ export default function PasswordData({ userId, version }: PasswrodDateProps) {
             Change password
           </Button>
         </div>
-        {/* {isChangingError && (
+        {isChangingError && (
           <AlertView
+            alertTitle="Error"
+            severity="error"
             variant="filled"
-            textContent={error}
+            textContent="Current password is wrong"
           />
         )}
         {isChangingSuccessful && (
           <AlertView
+            alertTitle="Success"
+            severity="success"
             variant="filled"
             textContent="Changes were successful"
           />
-        )} */}
+        )}
       </div>
     </form>
   );

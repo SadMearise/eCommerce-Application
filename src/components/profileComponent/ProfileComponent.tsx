@@ -17,6 +17,7 @@ import PasswordData from "./passwordData/PasswordData";
 
 export default function ProfileComponent() {
   const [userData, setUserData] = useState<Customer | null>(null);
+  const [dataVersion, setDataVersion] = useState(0);
   const [shippingAddressesData, setShippingAddressesData] = useState<BaseAddress[]>([]);
   const [billingAddressesData, setBillingAddressesData] = useState<BaseAddress[]>([]);
   const [defaultShippingAddressesData, setDefaultShippingAddressesData] = useState<BaseAddress[]>([]);
@@ -28,11 +29,16 @@ export default function ProfileComponent() {
     setValue(newValue);
   };
 
+  const handleChangeDataVersion = (version: number) => {
+    setDataVersion(version);
+  };
+  console.log("dataVersion", dataVersion);
   useEffect(() => {
     const fetchUserData = async (): Promise<void> => {
       try {
         const userResponse: ClientResponse<Customer> = await getCustomerInfo();
         setUserData(userResponse.body);
+        setDataVersion(userResponse.body.version);
 
         if (userResponse.body) {
           if (userResponse.body.shippingAddressIds) {
@@ -65,6 +71,12 @@ export default function ProfileComponent() {
     };
     fetchUserData();
   }, []);
+  const email: string | undefined = userData?.email;
+
+  const handleUpdateUserData = async () => {
+    const userResponse: ClientResponse<Customer> = await getCustomerInfo();
+    setUserData(userResponse.body);
+  };
 
   const handleReadOnlyClick = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     event.preventDefault();
@@ -107,24 +119,30 @@ export default function ProfileComponent() {
           <TabPanel value="1">
             <PersonalData
               userData={userData}
+              version={dataVersion}
               handleReadOnlyClick={handleReadOnlyClick}
+              handleChangeDataVersion={handleChangeDataVersion}
+              handleUpdateUserData={handleUpdateUserData}
             />
           </TabPanel>
           <TabPanel value="2">
             <AddressData
               userId={userData.id}
-              version={userData.version}
+              version={dataVersion}
               shippingAddressData={shippingAddressesData}
               billingAddressData={billingAddressesData}
+              handleReadOnlyClick={handleReadOnlyClick}
+              handleChangeDataVersion={handleChangeDataVersion}
               defaultShippingAddressData={defaultShippingAddressesData}
               defaultBillingAddressData={defaultBillingAddressesData}
-              handleReadOnlyClick={handleReadOnlyClick}
             />
           </TabPanel>
           <TabPanel value="3">
             <PasswordData
               userId={userData.id}
-              version={userData.version}
+              email={email as string}
+              version={dataVersion}
+              handleChangeDataVersion={handleChangeDataVersion}
             />
           </TabPanel>
         </TabContext>

@@ -7,30 +7,60 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { useFormik } from "formik";
 import { DatePicker as MuiDatePicker } from "@mui/x-date-pickers/DatePicker";
 import { PersonalDataProps, TouchedFieldsPersonal } from "../types";
-import { updatePersonalDataCustomer } from "../../../services/customerService";
+import { getCustomerInfo, updatePersonalDataCustomer } from "../../../services/customerService";
 import { personalDataValidationSchema } from "../../../utils/profileValidationSchema";
 import styles from "./PersonalData.module.scss";
+import AlertView from "../../alertView/AlertView";
 
-export default function PersonalData({ userData, handleReadOnlyClick }: PersonalDataProps) {
+export default function PersonalData({
+  userData,
+  version,
+  handleReadOnlyClick,
+  handleChangeDataVersion,
+}: PersonalDataProps) {
+  const [personalData, setPersonalData] = useState({
+    firstName: userData.firstName,
+    lastName: userData.lastName,
+    dateOfBirth: userData.dateOfBirth,
+    email: userData.email,
+  });
   const [isChangingInfo, setIsChangingInfo] = useState(false);
   const [fieldsChanged, setFieldsChanged] = useState(false);
   const [firstInputDone, setFirstInputDone] = useState(false);
+  const [isChangingSuccessful, setIsChangingSuccessful] = useState(false);
+
+  const handleSuccessAlert = () => {
+    setIsChangingSuccessful(true);
+
+    setTimeout(() => setIsChangingSuccessful(false), 2000);
+  };
 
   const handleChangingInfoClick = () => setIsChangingInfo(!isChangingInfo);
   const formik = useFormik({
-    initialValues: {
-      firstName: userData.firstName,
-      lastName: userData.lastName,
-      dateOfBirth: userData.dateOfBirth,
-      email: userData.email,
-    },
+    initialValues: personalData,
+    // initialValues: {
+    //   firstName: userData.firstName,
+    //   lastName: userData.lastName,
+    //   dateOfBirth: userData.dateOfBirth,
+    //   email: userData.email,
+    // },
     validationSchema: personalDataValidationSchema,
     onSubmit: (values) => {
-      updatePersonalDataCustomer(userData.id, userData.version, values);
-      console.log(values);
+      updatePersonalDataCustomer(userData.id, version, values).then(async () => {
+        handleChangeDataVersion(version + 1);
+        handleSuccessAlert();
+        const newData = await getCustomerInfo();
+        setPersonalData({
+          firstName: newData.body.firstName,
+          lastName: newData.body.lastName,
+          dateOfBirth: newData.body.dateOfBirth,
+          email: newData.body.email,
+        });
+        // handleUpdateUserData();
+        console.log("personalData.firstName", personalData.firstName);
+      });
     },
   });
-
   useEffect(() => {
     if (firstInputDone && !formik.isSubmitting) {
       const touchedFields: TouchedFieldsPersonal = {
@@ -50,6 +80,10 @@ export default function PersonalData({ userData, handleReadOnlyClick }: Personal
       setFirstInputDone(true);
     }
   };
+
+  // useEffect(() => {
+  //   formik.setValues(personalData); // Установить новые значения в форму
+  // }, [personalData]);
   return (
     <div className={styles["personal-data"]}>
       <form
@@ -65,6 +99,7 @@ export default function PersonalData({ userData, handleReadOnlyClick }: Personal
           <Button
             onClick={handleChangingInfoClick}
             type="submit"
+            disabled={Boolean(!formik.isValid)}
           >
             {isChangingInfo ? "save details" : "change details"}
           </Button>
@@ -162,6 +197,14 @@ export default function PersonalData({ userData, handleReadOnlyClick }: Personal
           />
         </div>
       </form>
+      {isChangingSuccessful && (
+        <AlertView
+          alertTitle="Success"
+          severity="success"
+          variant="filled"
+          textContent="Changes were successful"
+        />
+      )}
     </div>
   );
 }
