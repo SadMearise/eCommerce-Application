@@ -35,6 +35,13 @@
     width: 100%;
     gap: 5px;
     max-width: calc(100% - 50%);
+    @media (max-width: 1080px) {
+      max-width: 100%;
+    }
+  }
+  @media (max-width: 1080px) {
+    max-width: 100%;
+    flex-wrap: wrap;
   }
 }
 
@@ -52,12 +59,5 @@
 
   .error-message {
     color: red;
-  }
-}
-
-.shipping-title-wrapper {
-  @media(max-width: 1080px) {
-    padding-bottom: 63px;
-
   }
 }

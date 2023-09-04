@@ -188,9 +188,7 @@ export default function RegistrationForm() {
         </div>
         <div className={styles["data-wrapper"]}>
           <div className={styles["data-info"]}>
-            <div className={styles["shipping-title-wrapper"]}>
-              <h2>Shipping Address: </h2>
-            </div>
+            <h2>Shipping Address: </h2>
             <TextField
               id="outlined-shipping-country-select"
               variant="outlined"
