@@ -19,18 +19,19 @@ import {
 import useCheckboxesState from "../../../hooks/useCheckboxesState";
 import getCountryCode from "../../../utils/getCountryCode";
 
+const myWidth = window.innerWidth - 50;
+
 const style = {
   position: "absolute" as const,
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: 400,
+  width: Number(myWidth),
   bgcolor: "background.paper",
   border: "2px solid #000",
   boxShadow: 24,
   p: 4,
 };
-
 export default function AddressData({
   userId,
   version,
