@@ -26,6 +26,7 @@ const createCustomer = async (customerData: ICustomer): Promise<ClientResponse<C
     firstName,
     lastName,
     dateOfBirth,
+    billingIsShipping,
     defaultShippingAddress,
     defaultBillingAddress,
     shippingAddress,
@@ -36,13 +37,12 @@ const createCustomer = async (customerData: ICustomer): Promise<ClientResponse<C
   const billingAddressDraft = createDraftFromAddress(billingAddress);
 
   const DEFAULT_SHIPPING_INDEX = 0;
-  const DEFAULT_BILLING_INDEX = 1;
-  const addressesDrafts = [shippingAddressDraft, billingAddressDraft];
+  const DEFAULT_BILLING_INDEX = billingIsShipping ? 0 : 1;
+  const addressesDrafts = billingIsShipping ? [shippingAddressDraft] : [shippingAddressDraft, billingAddressDraft];
   const defaultShippingAddressIndex = defaultShippingAddress ? DEFAULT_SHIPPING_INDEX : undefined;
   const defaultBillingAddressIndex = defaultBillingAddress ? DEFAULT_BILLING_INDEX : undefined;
   const shippingAddressIndex = 0;
-  const billingAddressIndex = 1;
-
+  const billingAddressIndex = billingIsShipping ? 0 : 1;
   const customerDraft: CustomerDraft = {
     email,
     password,

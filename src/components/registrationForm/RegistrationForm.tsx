@@ -278,7 +278,9 @@ export default function RegistrationForm() {
               helperText={
                 formik.touched.shippingAddress?.postalCode &&
                 Boolean(formik.errors.shippingAddress?.postalCode) &&
-                "Must follow the format for the country (e.g., 220022 for the Russia)"
+                (formik.values.shippingAddress.country === "Russia"
+                  ? "Must follow the format for the country (e.g., 220022 for the Russia or Belarus)"
+                  : "Must follow the format for the country (e.g., 2200 for the Georgia)")
               }
               disabled={!isShippingCountrySelected}
               fullWidth
@@ -400,7 +402,9 @@ export default function RegistrationForm() {
                   helperText={
                     formik.touched.billingAddress?.postalCode &&
                     Boolean(formik.errors.billingAddress?.postalCode) &&
-                    "Must follow the format for the country (e.g., 220022 for the Russia)"
+                    (formik.values.billingAddress.country === "Russia"
+                      ? "Must follow the format for the country (e.g., 220022 for the Russia or Belarus)"
+                      : "Must follow the format for the country (e.g., 2200 for the Georgia)")
                   }
                   disabled={!isBillingCountrySelected || formik.values.billingIsShipping}
                   fullWidth

@@ -18,10 +18,10 @@ export default function AddAddress({
   const formik = useFormik<BaseAddress>({
     initialValues: {
       country: "",
-      city: "s",
-      streetName: "s",
-      streetNumber: "1",
-      postalCode: "440044",
+      city: "",
+      streetName: "",
+      streetNumber: "",
+      postalCode: "",
     },
     validationSchema: addressValidationSchema,
     onSubmit: async (values) => {
