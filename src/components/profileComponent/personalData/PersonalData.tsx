@@ -52,6 +52,14 @@ export default function PersonalData({
     },
     validationSchema: personalDataValidationSchema,
     onSubmit: (values) => {
+      if (
+        userData.firstName === values.firstName &&
+        userData.lastName === values.lastName &&
+        userData.dateOfBirth === values.dateOfBirth &&
+        userData.email === values.email
+      ) {
+        return;
+      }
       updatePersonalDataCustomer(userData.id, version, values)
         .then(async () => {
           handleSuccessAlert();

@@ -21,6 +21,7 @@ export interface PersonalDataProps {
 export interface AddressDataProps {
   userId: string;
   version: number;
+  addresses: BaseAddress[];
   shippingAddressData: BaseAddress[];
   billingAddressData: BaseAddress[];
   defaultShippingAddressData?: BaseAddress[];
@@ -29,8 +30,9 @@ export interface AddressDataProps {
   handleChangeDataVersion: (version: number) => void;
   updateShippingAddress: React.Dispatch<React.SetStateAction<BaseAddress[]>>;
   updateBillingAddress: React.Dispatch<React.SetStateAction<BaseAddress[]>>;
-  updateDefaultShppingAddress: (newAddressData: BaseAddress) => void;
+  updateDefaultShippingAddress: (newAddressData: BaseAddress) => void;
   updateDefaultBillingAddress: (newAddressData: BaseAddress) => void;
+  setAddressess: React.Dispatch<React.SetStateAction<BaseAddress[]>>;
 }
 
 export interface AddAddressProps {
@@ -75,6 +77,8 @@ export interface AddressFieldProps {
   handleDeleteAddress: (id: string, dataVersion: number, addressId: string) => void;
   handleCheckboxChange: (name: string) => void;
   resetCheckboxes: () => void;
+  isDefaultBillingAddress?: number | undefined;
+  isDefaultShippingAddress?: number | undefined;
 }
 
 export interface PasswrodDateProps {

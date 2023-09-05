@@ -22,13 +22,7 @@ export default function ProfileComponent() {
   const [billingAddressesData, setBillingAddressesData] = useState<BaseAddress[]>([]);
   const [defaultShippingAddressesData, setDefaultShippingAddressesData] = useState<BaseAddress[]>([]);
   const [defaultBillingAddressesData, setDefaultBillingAddressesData] = useState<BaseAddress[]>([]);
-
-  // const updateShippingAddress = (newAddressData: BaseAddress) => {
-  //   setShippingAddressesData([newAddressData, ...shippingAddressesData]);
-  // };
-  // const updateBillingAddress = (newAddressData: BaseAddress) => {
-  //   setBillingAddressesData([newAddressData, ...billingAddressesData]);
-  // };
+  const [addresses, setAddressess] = useState<BaseAddress[]>([]);
 
   const updateDefaultShippingAddress = (newAddressData: BaseAddress) => {
     setDefaultShippingAddressesData([newAddressData]);
@@ -54,6 +48,8 @@ export default function ProfileComponent() {
         setDataVersion(userResponse.body.version);
 
         if (userResponse.body) {
+          setAddressess(userResponse.body.addresses);
+
           if (userResponse.body.shippingAddressIds) {
             const shippingAddresses = extractAddressesFromIds(userResponse.body, userResponse.body.shippingAddressIds);
             setShippingAddressesData(shippingAddresses);
@@ -158,10 +154,10 @@ export default function ProfileComponent() {
               defaultBillingAddressData={defaultBillingAddressesData}
               updateShippingAddress={setShippingAddressesData}
               updateBillingAddress={setBillingAddressesData}
-              updateDefaultShppingAddress={updateDefaultShippingAddress}
+              updateDefaultShippingAddress={updateDefaultShippingAddress}
               updateDefaultBillingAddress={updateDefaultBillingAddress}
-              // updateShippingAddress={updateShippingAddress}
-              // updateBillingAddress={updateBillingAddress}
+              addresses={addresses}
+              setAddressess={setAddressess}
             />
           </TabPanel>
           <TabPanel

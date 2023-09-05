@@ -258,3 +258,21 @@ export const removeAddressByID = (id: string, version: number, addressId: string
     })
     .execute();
 };
+
+export const removeDefaultAddress = (id: string, version: number, addressId: string) => {
+  const deleteAddressAction: CustomerRemoveAddressAction = {
+    action: "removeAddress",
+    addressId,
+  };
+
+  return apiRoot
+    .customers()
+    .withId({ ID: id })
+    .post({
+      body: {
+        version,
+        actions: [deleteAddressAction],
+      },
+    })
+    .execute();
+};

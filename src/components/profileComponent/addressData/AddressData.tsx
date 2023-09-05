@@ -1,5 +1,5 @@
-import { Box, Button, Modal, Typography } from "@mui/material";
-import { useState } from "react";
+import { Box, Button, Chip, Modal, Stack, Typography } from "@mui/material";
+import { useEffect, useState } from "react";
 import { BaseAddress } from "@commercetools/platform-sdk";
 import { AddressDataProps, AddressTitle } from "../types";
 import AddressField from "./addressField/AddressField";
@@ -7,7 +7,6 @@ import styles from "./AddressData.module.scss";
 import AddAddress from "./addAddress/AddAddress";
 
 import createDraftFromAddress from "../../../utils/createDraftFromAddress";
-import { extractAddressesFromIds } from "../../../utils/extractAddresses";
 import AlertView from "../../alertView/AlertView";
 import {
   addAddressIdentifier,
@@ -18,6 +17,7 @@ import {
   updateCustomerInfo,
 } from "../../../services/customer.service";
 import useCheckboxesState from "../../../hooks/useCheckboxesState";
+import getCountryCode from "../../../utils/getCountryCode";
 
 const style = {
   position: "absolute" as const,
@@ -42,19 +42,22 @@ export default function AddressData({
   handleChangeDataVersion,
   updateShippingAddress,
   updateBillingAddress,
-  updateDefaultShppingAddress,
+  updateDefaultShippingAddress,
   updateDefaultBillingAddress,
+  addresses,
+  setAddressess,
 }: AddressDataProps) {
   const [open, setOpen] = useState(false);
   const [dataVersion, setDataVersion] = useState(version);
-  const [shippingAddresses, setShippingAddresses] = useState(shippingAddressData);
-  const [billingAddresses, setBillingAddresses] = useState(billingAddressData);
-  const [defaultShippingAddress, setDefaultShippingAddress] = useState(defaultShippingAddressData);
-  const [defaultBillingAddress, setDefaultBillingAddress] = useState(defaultBillingAddressData);
   const [isChangingSuccessful, setIsChangingSuccessful] = useState(false);
-
   const [checkboxesState, { handleCheckboxChange, resetCheckboxes }] = useCheckboxesState();
+  const [isDefaultBillingAddress, setIsDefaultBillingAddress] = useState(defaultBillingAddressData?.length);
+  const [isDefaultShippingAddress, setIsDefaultShippingAddress] = useState(defaultShippingAddressData?.length);
 
+  useEffect(() => {
+    setIsDefaultBillingAddress(defaultBillingAddressData?.length);
+    setIsDefaultShippingAddress(defaultShippingAddressData?.length);
+  }, [defaultBillingAddressData, defaultShippingAddressData]);
   const handleSuccessAlert = () => {
     setIsChangingSuccessful(true);
 
@@ -66,18 +69,6 @@ export default function AddressData({
   };
   const handleOpenModal = () => {
     setOpen(true);
-  };
-  const handleShippingAddress = (newAddressData: BaseAddress) => {
-    setShippingAddresses([newAddressData, ...shippingAddresses]);
-  };
-  const handleBillingAddress = (newAddressData: BaseAddress) => {
-    setBillingAddresses([newAddressData, ...billingAddresses]);
-  };
-  const handleDefaultShippingAddress = (newAddressData: BaseAddress) => {
-    setDefaultShippingAddress([newAddressData]);
-  };
-  const handleDefaultBillingAddress = (newAddressData: BaseAddress) => {
-    setDefaultBillingAddress([newAddressData]);
   };
 
   const handleAddAddress = async (
@@ -110,9 +101,8 @@ export default function AddressData({
       }
 
       await addAddressIdentifier(id, versionNumber + 1, addressID, actions);
-
       if (selectedCheckboxes.defaultShipping) {
-        updateDefaultShppingAddress(address);
+        updateDefaultShippingAddress(address);
       }
 
       if (selectedCheckboxes.defaultBilling) {
@@ -126,6 +116,8 @@ export default function AddressData({
       if (selectedCheckboxes.billing) {
         updateBillingAddress([address, ...billingAddressData]);
       }
+
+      setAddressess([...addresses, address]);
 
       resetCheckboxes();
 
@@ -161,60 +153,35 @@ export default function AddressData({
       const address = createDraftFromAddress(values);
 
       if (selectedCheckboxes.defaultBilling) {
-        handleDefaultBillingAddress({ id: addressId, ...address });
+        updateDefaultBillingAddress({ id: addressId, ...address });
       }
 
       if (selectedCheckboxes.defaultShipping) {
-        handleDefaultShippingAddress({ id: addressId, ...address });
+        updateDefaultShippingAddress({ id: addressId, ...address });
       }
+      const newCurrentVersion = await getCustomerVersionByID(id);
+      setDataVersion(newCurrentVersion);
+      handleChangeDataVersion(newCurrentVersion);
     }
-    await updateCustomerInfo(id, versionNumber, addressId, values, []);
-    const customerData = await getCustomerInfo();
-    const ship = extractAddressesFromIds(customerData.body, customerData.body.shippingAddressIds as string[]);
-    const billing = extractAddressesFromIds(customerData.body, customerData.body.billingAddressIds as string[]);
-    const addressToUpdate = ship.find((item) => item.id === addressId);
-    const billingToUpdate = billing.find((item) => item.id === addressId);
 
-    if (addressToUpdate) {
-      const updatedShippingAddresses = shippingAddresses.map((item) => {
-        if (item.id === addressToUpdate.id) {
-          handleShippingAddress(addressToUpdate);
-          if (item.id === defaultBillingAddress![0].id) {
-            // handleDefaultBillingAddress({ ...addressToUpdate });
-            updateDefaultBillingAddress({ ...addressToUpdate });
-          }
-          if (item.id === defaultShippingAddress![0].id) {
-            // handleDefaultShippingAddress({ ...addressToUpdate });
-            updateDefaultShppingAddress({ ...addressToUpdate });
-          }
-          return addressToUpdate;
-        }
-        return item;
-      });
-      updateShippingAddress(updatedShippingAddresses);
-    }
-    if (billingToUpdate) {
-      const updatedBillingAddresses = billingAddresses.map((item) => {
-        if (item.id === billingToUpdate.id) {
-          handleBillingAddress(billingToUpdate);
-          if (item.id === defaultBillingAddress![0].id) {
-            handleDefaultBillingAddress({ ...billingToUpdate });
-            updateDefaultBillingAddress({ ...billingToUpdate });
-          }
-          if (item.id === defaultShippingAddress![0].id) {
-            handleDefaultShippingAddress({ ...billingToUpdate });
-            updateDefaultShppingAddress({ ...billingToUpdate });
-          }
-          return billingToUpdate;
-        }
-        return item;
-      });
-      updateBillingAddress(updatedBillingAddresses);
+    const findCity = addresses.find((address) => address.city === values.city);
+    const findCountry = addresses.find((address) => address.country === getCountryCode(values.country));
+    const findStreetName = addresses.find((address) => address.streetName === values.streetName);
+    const findStreetNumber = addresses.find((address) => address.streetNumber === values.streetNumber);
+    const findPostalCode = addresses.find((address) => address.postalCode === values.postalCode);
+
+    if (findCity && findCountry && findPostalCode && findStreetName && findStreetNumber) {
+      return;
     }
 
     const currentVersion = await getCustomerVersionByID(id);
-    setDataVersion(currentVersion);
-    handleChangeDataVersion(currentVersion);
+    await updateCustomerInfo(id, currentVersion, addressId, values, []);
+    const customerData = await getCustomerInfo();
+    setAddressess(customerData.body.addresses);
+
+    const newCurrentVersion = await getCustomerVersionByID(id);
+    setDataVersion(newCurrentVersion);
+    handleChangeDataVersion(newCurrentVersion);
     resetCheckboxes();
     handleSuccessAlert();
   };
@@ -222,29 +189,9 @@ export default function AddressData({
   const handleDeleteAddress = async (id: string, versionNumber: number, addressId: string) => {
     try {
       await removeAddressByID(id, versionNumber, addressId);
+      const customerData = await getCustomerInfo();
+      setAddressess(customerData.body.addresses);
 
-      const updatedAddressesBilling = billingAddressData.filter((address) => address.id !== addressId);
-      updateBillingAddress(updatedAddressesBilling);
-
-      const updatedAddressesShipping = shippingAddressData.filter((address) => address.id !== addressId);
-      updateShippingAddress(updatedAddressesShipping);
-      if (
-        defaultBillingAddress &&
-        addressId &&
-        defaultBillingAddress.length > 0 &&
-        addressId === defaultBillingAddress[0].id
-      ) {
-        setDefaultBillingAddress([]);
-      }
-
-      if (
-        defaultShippingAddress &&
-        addressId &&
-        defaultShippingAddress.length > 0 &&
-        addressId === defaultShippingAddress[0].id
-      ) {
-        setDefaultShippingAddress([]);
-      }
       const currentVersion = await getCustomerVersionByID(id);
       setDataVersion(currentVersion);
       handleChangeDataVersion(currentVersion);
@@ -253,6 +200,7 @@ export default function AddressData({
       console.error("Ошибка при удалении адреса:", error);
     }
   };
+
   return (
     <>
       <div>
@@ -288,88 +236,62 @@ export default function AddressData({
         </Modal>
       </div>
       <div className={styles["address-data-container"]}>
-        {defaultShippingAddressData && (
-          <div className={`${styles["half-width-field"]} ${styles["default-address"]}`}>
-            {defaultShippingAddressData.map((item) => (
-              <div key={item.id}>
-                <AddressField
-                  userId={userId}
-                  dataVersion={dataVersion}
-                  addressTitle={AddressTitle.DefaultShippingAddress}
-                  addressData={item}
-                  checkboxesState={checkboxesState}
-                  handleReadOnlyClick={handleReadOnlyClick}
-                  handleChangeAddress={handleChangeAddress}
-                  handleDeleteAddress={handleDeleteAddress}
-                  handleCheckboxChange={handleCheckboxChange}
-                  resetCheckboxes={resetCheckboxes}
-                />
-              </div>
-            ))}
-          </div>
-        )}
-        {defaultBillingAddressData && (
-          <div className={`${styles["half-width-field"]} ${styles["default-address"]}`}>
-            {defaultBillingAddressData.map((item) => (
-              <div key={item.id}>
-                <AddressField
-                  userId={userId}
-                  dataVersion={dataVersion}
-                  addressTitle={AddressTitle.DefaultBillingAddress}
-                  addressData={item}
-                  checkboxesState={checkboxesState}
-                  handleReadOnlyClick={handleReadOnlyClick}
-                  handleChangeAddress={handleChangeAddress}
-                  handleDeleteAddress={handleDeleteAddress}
-                  handleCheckboxChange={handleCheckboxChange}
-                  resetCheckboxes={resetCheckboxes}
-                />
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
-      <div className={styles["address-data-container"]}>
-        {shippingAddressData.length > 0 && (
-          <div className={styles["half-width-field"]}>
-            {shippingAddressData.map((item) => (
-              <div key={item.id}>
-                <AddressField
-                  userId={userId}
-                  dataVersion={dataVersion}
-                  addressTitle={AddressTitle.ShippingAddress}
-                  addressData={item}
-                  checkboxesState={checkboxesState}
-                  handleReadOnlyClick={handleReadOnlyClick}
-                  handleChangeAddress={handleChangeAddress}
-                  handleDeleteAddress={handleDeleteAddress}
-                  handleCheckboxChange={handleCheckboxChange}
-                  resetCheckboxes={resetCheckboxes}
-                />
-              </div>
-            ))}
-          </div>
-        )}
-        {billingAddressData.length > 0 && (
-          <div className={styles["half-width-field"]}>
-            {billingAddressData.map((item) => (
-              <div key={item.id}>
-                <AddressField
-                  userId={userId}
-                  dataVersion={dataVersion}
-                  addressTitle={AddressTitle.BillingAddress}
-                  addressData={item}
-                  checkboxesState={checkboxesState}
-                  handleReadOnlyClick={handleReadOnlyClick}
-                  handleChangeAddress={handleChangeAddress}
-                  handleDeleteAddress={handleDeleteAddress}
-                  handleCheckboxChange={handleCheckboxChange}
-                  resetCheckboxes={resetCheckboxes}
-                />
-              </div>
-            ))}
-          </div>
-        )}
+        {addresses.map((item) => {
+          const isShipping = shippingAddressData.some((shippingAddress) => shippingAddress.id === item.id);
+          const isBilling = billingAddressData.some((billingAddress) => billingAddress.id === item.id);
+          const isDefaultShipping = defaultShippingAddressData!.some((billingAddress) => billingAddress.id === item.id);
+          const isDefaultBilling = defaultBillingAddressData!.some((billingAddress) => billingAddress.id === item.id);
+          return (
+            <div
+              key={item.id}
+              className={styles["half-width-field"]}
+            >
+              <AddressField
+                userId={userId}
+                dataVersion={dataVersion}
+                addressTitle={AddressTitle.ShippingAddress}
+                addressData={item}
+                checkboxesState={checkboxesState}
+                handleReadOnlyClick={handleReadOnlyClick}
+                handleChangeAddress={handleChangeAddress}
+                handleDeleteAddress={handleDeleteAddress}
+                handleCheckboxChange={handleCheckboxChange}
+                resetCheckboxes={resetCheckboxes}
+                {...(isDefaultShipping ? { isDefaultBillingAddress } : {})}
+                {...(isDefaultBilling ? { isDefaultShippingAddress } : {})}
+              />
+              <Stack
+                direction="row"
+                spacing={1}
+                sx={{ padding: "0 5px", flexWrap: "wrap" }}
+              >
+                {isShipping && <Chip label="Shipping Address" />}
+                {isBilling && <Chip label="Billing Address" />}
+              </Stack>
+              <Stack
+                direction="row"
+                sx={{
+                  padding: "0 5px",
+                  flexWrap: "wrap",
+                  gap: "5px",
+                }}
+              >
+                {isDefaultShipping && (
+                  <Chip
+                    color="primary"
+                    label="Default Shipping Address"
+                  />
+                )}
+                {isDefaultBilling && (
+                  <Chip
+                    color="primary"
+                    label="Default Billing Address"
+                  />
+                )}
+              </Stack>
+            </div>
+          );
+        })}
       </div>
       {isChangingSuccessful && (
         <AlertView

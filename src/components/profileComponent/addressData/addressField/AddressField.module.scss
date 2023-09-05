@@ -27,6 +27,7 @@
     gap: 10px;
     padding: 20px;
 
+    
     @media (max-width: 550px) {
       flex-direction: column;
     }
@@ -34,9 +35,11 @@
     .full-width-field {
       flex-basis: 100%;
     }
-
+    
     .half-width-field {
       flex-basis: calc(50% - 5px);
+
+      
     }
   }
 }

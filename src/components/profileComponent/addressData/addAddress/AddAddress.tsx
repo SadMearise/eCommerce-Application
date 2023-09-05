@@ -18,10 +18,10 @@ export default function AddAddress({
   const formik = useFormik<BaseAddress>({
     initialValues: {
       country: "",
-      city: "",
-      streetName: "",
-      streetNumber: "",
-      postalCode: "",
+      city: "s",
+      streetName: "s",
+      streetNumber: "1",
+      postalCode: "440044",
     },
     validationSchema: addressValidationSchema,
     onSubmit: async (values) => {
@@ -140,11 +140,13 @@ export default function AddAddress({
         />
         <FormControlLabel
           control={<Checkbox />}
+          disabled={!checkboxesState.billing}
           label="Set as default Billing address"
           onChange={() => handleCheckboxChange("defaultBilling")}
         />
         <FormControlLabel
           control={<Checkbox />}
+          disabled={!checkboxesState.shipping}
           label="Set as default Shipping address"
           onChange={() => handleCheckboxChange("defaultShipping")}
         />

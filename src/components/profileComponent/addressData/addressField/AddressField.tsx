@@ -16,6 +16,8 @@ export default function AddressField({
   addressTitle,
   addressData,
   checkboxesState,
+  isDefaultBillingAddress,
+  isDefaultShippingAddress,
   handleReadOnlyClick,
   handleChangeAddress,
   handleDeleteAddress,
@@ -27,7 +29,6 @@ export default function AddressField({
   const [firstInputDone, setFirstInputDone] = useState(false);
   const [isDefaultBillingChecked, setIsDefaultBillingChecked] = useState(false);
   const [isDefaultShippingChecked, setIsDefaultShippingChecked] = useState(false);
-
   const handleChangingInfoClick = () => setIsChangingInfo(!isChangingInfo);
 
   const handleDefaultBillingChecking = () => {
@@ -100,7 +101,7 @@ export default function AddressField({
         }}
       >
         <div className={styles["address-field-title"]}>
-          <h2>{addressTitle}</h2>
+          <h2>Address:</h2>
           <div>
             <IconButton
               aria-label="delete"
@@ -226,7 +227,9 @@ export default function AddressField({
             helperText={
               formik.touched.postalCode &&
               Boolean(formik.errors.postalCode) &&
-              "Must follow the format for the country (e.g., 220022 for the Russia)"
+              (formik.values.country === "Russia"
+                ? "Must follow the format for the country (e.g., 220022 for the Russia or Belarus)"
+                : "Must follow the format for the country (e.g., 2200 for the Georgia)")
             }
             InputProps={{
               onMouseDown: !isChangingInfo ? handleReadOnlyClick : undefined,
@@ -234,7 +237,7 @@ export default function AddressField({
           />
           <div>
             <FormGroup>
-              {!(addressTitle === AddressTitle.DefaultBillingAddress) && (
+              {!isDefaultShippingAddress && (
                 <FormControlLabel
                   disabled={!isChangingInfo}
                   control={<Checkbox />}
@@ -246,7 +249,7 @@ export default function AddressField({
                   }}
                 />
               )}
-              {!(addressTitle === AddressTitle.DefaultShippingAddress) && (
+              {!isDefaultBillingAddress && (
                 <FormControlLabel
                   disabled={!isChangingInfo}
                   control={<Checkbox />}
