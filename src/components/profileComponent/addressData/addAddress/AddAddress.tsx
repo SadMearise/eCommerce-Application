@@ -5,6 +5,7 @@ import { useState } from "react";
 import countriesSet from "../../../../countries";
 import styles from "./AddAddress.module.scss";
 import { addressValidationSchema } from "../../../../utils/registerValidationSchema";
+import { AddAddressProps } from "../../types";
 
 export default function AddAddress({
   id,
@@ -12,18 +13,7 @@ export default function AddAddress({
   handleAddAddress,
   handleCheckboxChange,
   checkboxesState,
-}: {
-  id: string;
-  dataVersion: number;
-  handleAddAddress: (
-    id: string,
-    dataVersion: number,
-    values: BaseAddress,
-    selectedCheckboxes: { [key: string]: boolean }
-  ) => void;
-  handleCheckboxChange: (name: string) => void;
-  checkboxesState: { [key: string]: boolean };
-}) {
+}: AddAddressProps) {
   const [isCountrySelected, setIsCountrySelected] = useState(false);
   const formik = useFormik<BaseAddress>({
     initialValues: {

@@ -9,7 +9,6 @@ import getCountryNameByCode from "../../../../utils/getCountryNameFromCode";
 import { AddressFieldProps, AddressTitle, TouchedFieldsAddress } from "../../types";
 import countriesSet from "../../../../countries";
 import { addressValidationSchema } from "../../../../utils/registerValidationSchema";
-// import AlertView from "../../../alertView/AlertView";
 
 export default function AddressField({
   userId,
@@ -24,18 +23,18 @@ export default function AddressField({
   resetCheckboxes,
 }: AddressFieldProps) {
   const [isChangingInfo, setIsChangingInfo] = useState(false);
-  // const [isChangingSuccessful, setIsChangingSuccessful] = useState(false);
   const [fieldsChanged, setFieldsChanged] = useState(false);
   const [firstInputDone, setFirstInputDone] = useState(false);
-  const handleChangingInfoClick = () => setIsChangingInfo(!isChangingInfo);
   const [isDefaultBillingChecked, setIsDefaultBillingChecked] = useState(false);
   const [isDefaultShippingChecked, setIsDefaultShippingChecked] = useState(false);
 
-  const handleDefaultBillingChange = () => {
+  const handleChangingInfoClick = () => setIsChangingInfo(!isChangingInfo);
+
+  const handleDefaultBillingChecking = () => {
     setIsDefaultBillingChecked(!isDefaultBillingChecked);
   };
 
-  const handleDefaultShippingChange = () => {
+  const handleDefaultShippingChecking = () => {
     setIsDefaultShippingChecked(!isDefaultShippingChecked);
   };
 
@@ -65,6 +64,7 @@ export default function AddressField({
     formik.setFieldValue("streetName", addressData.streetName);
     formik.setFieldValue("streetNumber", addressData.streetNumber);
     formik.setFieldValue("postalCode", addressData.postalCode);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [addressData]);
 
   useEffect(() => {
@@ -241,7 +241,7 @@ export default function AddressField({
                   checked={isDefaultBillingChecked}
                   label="Set as default Billing address"
                   onChange={() => {
-                    handleDefaultBillingChange();
+                    handleDefaultBillingChecking();
                     handleCheckboxChange("defaultBilling");
                   }}
                 />
@@ -253,7 +253,7 @@ export default function AddressField({
                   checked={isDefaultShippingChecked}
                   label="Set as default Shipping address"
                   onChange={() => {
-                    handleDefaultShippingChange();
+                    handleDefaultShippingChecking();
                     handleCheckboxChange("defaultShipping");
                   }}
                 />
@@ -262,12 +262,6 @@ export default function AddressField({
           </div>
         </div>
       </form>
-      {/* {isChangingSuccessful && (
-        <AlertView
-          variant="filled"
-          textContent="Changes were successful"
-        />
-      )} */}
     </div>
   );
 }

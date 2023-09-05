@@ -33,6 +33,19 @@ export interface AddressDataProps {
   updateDefaultBillingAddress: (newAddressData: BaseAddress) => void;
 }
 
+export interface AddAddressProps {
+  id: string;
+  dataVersion: number;
+  handleAddAddress: (
+    id: string,
+    dataVersion: number,
+    values: BaseAddress,
+    selectedCheckboxes: { [key: string]: boolean }
+  ) => void;
+  handleCheckboxChange: (name: string) => void;
+  checkboxesState: { [key: string]: boolean };
+}
+
 export enum AddressType {
   ShippingAddress = "shipping",
   BillingAddress = "billing",

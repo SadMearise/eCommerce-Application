@@ -23,6 +23,13 @@ export default function ProfileComponent() {
   const [defaultShippingAddressesData, setDefaultShippingAddressesData] = useState<BaseAddress[]>([]);
   const [defaultBillingAddressesData, setDefaultBillingAddressesData] = useState<BaseAddress[]>([]);
 
+  // const updateShippingAddress = (newAddressData: BaseAddress) => {
+  //   setShippingAddressesData([newAddressData, ...shippingAddressesData]);
+  // };
+  // const updateBillingAddress = (newAddressData: BaseAddress) => {
+  //   setBillingAddressesData([newAddressData, ...billingAddressesData]);
+  // };
+
   const updateDefaultShippingAddress = (newAddressData: BaseAddress) => {
     setDefaultShippingAddressesData([newAddressData]);
   };
@@ -153,6 +160,8 @@ export default function ProfileComponent() {
               updateBillingAddress={setBillingAddressesData}
               updateDefaultShppingAddress={updateDefaultShippingAddress}
               updateDefaultBillingAddress={updateDefaultBillingAddress}
+              // updateShippingAddress={updateShippingAddress}
+              // updateBillingAddress={updateBillingAddress}
             />
           </TabPanel>
           <TabPanel
