@@ -100,7 +100,8 @@ export default function ProfileComponent() {
             <TabList
               onChange={handleChange}
               aria-label="lab API tabs example"
-              variant="fullWidth"
+              variant="scrollable"
+              scrollButtons
             >
               <Tab
                 label="Personal info"
