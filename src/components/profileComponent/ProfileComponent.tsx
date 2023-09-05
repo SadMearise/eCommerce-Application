@@ -123,7 +123,10 @@ export default function ProfileComponent() {
               />
             </TabList>
           </Box>
-          <TabPanel value="1">
+          <TabPanel
+            value="1"
+            sx={{ padding: "24px 0" }}
+          >
             <PersonalData
               userData={userData}
               version={dataVersion}
@@ -133,7 +136,10 @@ export default function ProfileComponent() {
               updatePersonalData={setUserData}
             />
           </TabPanel>
-          <TabPanel value="2">
+          <TabPanel
+            value="2"
+            sx={{ padding: "24px 0" }}
+          >
             <AddressData
               userId={userData.id}
               version={dataVersion}
@@ -149,7 +155,10 @@ export default function ProfileComponent() {
               updateDefaultBillingAddress={updateDefaultBillingAddress}
             />
           </TabPanel>
-          <TabPanel value="3">
+          <TabPanel
+            value="3"
+            sx={{ padding: "24px 0" }}
+          >
             <PasswordData
               userId={userData.id}
               email={email as string}
