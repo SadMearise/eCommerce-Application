@@ -15,6 +15,7 @@ import {
   getCustomerVersionByID,
   updatePersonalDataCustomer,
 } from "../../../services/customer.service";
+import { MIN_AGE } from "../../../utils/constants";
 
 export default function PersonalData({
   userData,
@@ -94,9 +95,6 @@ export default function PersonalData({
     }
   };
 
-  // useEffect(() => {
-  //   formik.setValues(personalData); // Установить новые значения в форму
-  // }, [personalData]);
   return (
     <div className={styles["personal-data"]}>
       <form
@@ -171,7 +169,6 @@ export default function PersonalData({
                   formik.setFieldValue("dateOfBirth", dayjs(date).format("YYYY-MM-DD"));
                 }}
                 shouldDisableDate={(date) => {
-                  const MIN_AGE = 13;
                   const birthDate = dayjs(date);
                   const age = dayjs().diff(birthDate, "years");
                   return age < MIN_AGE;

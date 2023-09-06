@@ -13,7 +13,7 @@ import PersonalData from "./personalData/PersonalData";
 import AddressData from "./addressData/AddressData";
 import { extractAddressesFromIds } from "../../utils/extractAddresses";
 import PasswordData from "./passwordData/PasswordData";
-import { getCustomerInfo } from "../../services/customer.service";
+import { getCustomerInfo, getCustomerVersionByID } from "../../services/customer.service";
 
 export default function ProfileComponent() {
   const [userData, setUserData] = useState<Customer | null>(null);
@@ -24,21 +24,29 @@ export default function ProfileComponent() {
   const [defaultBillingAddressesData, setDefaultBillingAddressesData] = useState<BaseAddress[]>([]);
   const [addresses, setAddressess] = useState<BaseAddress[]>([]);
 
-  const updateDefaultShippingAddress = (newAddressData: BaseAddress) => {
+  const handleChangeDefaultShippingAddress = (newAddressData: BaseAddress) => {
     setDefaultShippingAddressesData([newAddressData]);
   };
-  const updateDefaultBillingAddress = (newAddressData: BaseAddress) => {
+  const handleChangeDefaultBillingAddress = (newAddressData: BaseAddress) => {
     setDefaultBillingAddressesData([newAddressData]);
   };
 
+  const handleChangeShippingAddress = (newAddressData: BaseAddress) => {
+    setShippingAddressesData([...shippingAddressesData, newAddressData]);
+  };
+
+  const handleChangeBillingAddress = (newAddressData: BaseAddress) => {
+    setBillingAddressesData([...billingAddressesData, newAddressData]);
+  };
   const [value, setValue] = useState("1");
 
   const handleChange = (_event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
   };
 
-  const handleChangeDataVersion = (version: number) => {
-    setDataVersion(version);
+  const handleChangeDataVersion = async () => {
+    const currentVersion = await getCustomerVersionByID(userData?.id as string);
+    setDataVersion(currentVersion);
   };
   useEffect(() => {
     const fetchUserData = async (): Promise<void> => {
@@ -80,7 +88,6 @@ export default function ProfileComponent() {
     };
     fetchUserData();
   }, []);
-  const email: string | undefined = userData?.email;
 
   const handleUpdateUserData = async () => {
     const userResponse: ClientResponse<Customer> = await getCustomerInfo();
@@ -152,10 +159,10 @@ export default function ProfileComponent() {
               handleChangeDataVersion={handleChangeDataVersion}
               defaultShippingAddressData={defaultShippingAddressesData}
               defaultBillingAddressData={defaultBillingAddressesData}
-              updateShippingAddress={setShippingAddressesData}
-              updateBillingAddress={setBillingAddressesData}
-              updateDefaultShippingAddress={updateDefaultShippingAddress}
-              updateDefaultBillingAddress={updateDefaultBillingAddress}
+              handleChangeShippingAddress={handleChangeShippingAddress}
+              handleChangeBillingAddress={handleChangeBillingAddress}
+              handleChangeDefaultShippingAddress={handleChangeDefaultShippingAddress}
+              handleChangeDefaultBillingAddress={handleChangeDefaultBillingAddress}
               addresses={addresses}
               setAddressess={setAddressess}
             />
@@ -166,7 +173,7 @@ export default function ProfileComponent() {
           >
             <PasswordData
               userId={userData.id}
-              email={email as string}
+              email={userData.email}
               version={dataVersion}
               handleChangeDataVersion={handleChangeDataVersion}
             />

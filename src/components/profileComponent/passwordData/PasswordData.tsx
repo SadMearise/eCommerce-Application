@@ -43,7 +43,6 @@ export default function PasswordData({ userId, version, email, handleChangeDataV
     onSubmit: (values) => {
       changeCustomerPassword({ id: userId, version, ...values })
         .then(async () => {
-          // tokenCache.disposeToken();
           loginToApi(email, values.newPassword);
           handleSuccessAlert();
           const currentVersion = await getCustomerVersionByID(userId);

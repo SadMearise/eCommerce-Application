@@ -26,18 +26,18 @@ export interface AddressDataProps {
   billingAddressData: BaseAddress[];
   defaultShippingAddressData?: BaseAddress[];
   defaultBillingAddressData?: BaseAddress[];
-  handleReadOnlyClick: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
-  handleChangeDataVersion: (version: number) => void;
-  updateShippingAddress: React.Dispatch<React.SetStateAction<BaseAddress[]>>;
-  updateBillingAddress: React.Dispatch<React.SetStateAction<BaseAddress[]>>;
-  updateDefaultShippingAddress: (newAddressData: BaseAddress) => void;
-  updateDefaultBillingAddress: (newAddressData: BaseAddress) => void;
+  handleChangeDataVersion: () => void;
+  handleChangeShippingAddress: (newAddressData: BaseAddress) => void;
+  handleChangeBillingAddress: (newAddressData: BaseAddress) => void;
+  handleChangeDefaultShippingAddress: (newAddressData: BaseAddress) => void;
+  handleChangeDefaultBillingAddress: (newAddressData: BaseAddress) => void;
   setAddressess: React.Dispatch<React.SetStateAction<BaseAddress[]>>;
+  handleReadOnlyClick: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
 }
 
 export interface AddAddressProps {
   id: string;
-  dataVersion: number;
+  version: number;
   handleAddAddress: (
     id: string,
     dataVersion: number,
@@ -62,14 +62,12 @@ export enum AddressTitle {
 }
 export interface AddressFieldProps {
   userId: string;
-  dataVersion: number;
-  addressTitle: AddressTitle;
+  version: number;
   addressData: BaseAddress;
   checkboxesState: { [key: string]: boolean };
   handleReadOnlyClick: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
   handleChangeAddress: (
     id: string,
-    versionNumber: number,
     addressId: string,
     values: BaseAddress,
     selectedCheckboxes: { [key: string]: boolean }

@@ -6,14 +6,13 @@ import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import styles from "./AddressField.module.scss";
 import getCountryNameByCode from "../../../../utils/getCountryNameFromCode";
-import { AddressFieldProps, AddressTitle, TouchedFieldsAddress } from "../../types";
+import { AddressFieldProps, TouchedFieldsAddress } from "../../types";
 import countriesSet from "../../../../countries";
 import { addressValidationSchema } from "../../../../utils/registerValidationSchema";
 
 export default function AddressField({
   userId,
-  dataVersion,
-  addressTitle,
+  version,
   addressData,
   checkboxesState,
   isDefaultBillingAddress,
@@ -54,7 +53,7 @@ export default function AddressField({
     },
     validationSchema: addressValidationSchema,
     onSubmit: (values) => {
-      handleChangeAddress(userId, dataVersion, addressData.id as string, values, checkboxesState);
+      handleChangeAddress(userId, addressData.id as string, values, checkboxesState);
       resetCheckboxes();
       resetCheckboxesChildren();
     },
@@ -106,21 +105,7 @@ export default function AddressField({
             <IconButton
               aria-label="delete"
               onClick={() => {
-                if (addressTitle === AddressTitle.BillingAddress) {
-                  handleDeleteAddress(userId, dataVersion, addressData.id as string);
-                }
-
-                if (addressTitle === AddressTitle.ShippingAddress) {
-                  handleDeleteAddress(userId, dataVersion, addressData.id as string);
-                }
-
-                if (addressTitle === AddressTitle.DefaultBillingAddress) {
-                  handleDeleteAddress(userId, dataVersion, addressData.id as string);
-                }
-
-                if (addressTitle === AddressTitle.DefaultShippingAddress) {
-                  handleDeleteAddress(userId, dataVersion, addressData.id as string);
-                }
+                handleDeleteAddress(userId, version, addressData.id as string);
               }}
             >
               <DeleteIcon />

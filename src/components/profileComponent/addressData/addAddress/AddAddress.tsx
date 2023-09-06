@@ -9,7 +9,7 @@ import { AddAddressProps } from "../../types";
 
 export default function AddAddress({
   id,
-  dataVersion,
+  version,
   handleAddAddress,
   handleCheckboxChange,
   checkboxesState,
@@ -25,7 +25,7 @@ export default function AddAddress({
     },
     validationSchema: addressValidationSchema,
     onSubmit: async (values) => {
-      handleAddAddress(id, dataVersion, values, checkboxesState);
+      handleAddAddress(id, version, values, checkboxesState);
     },
   });
   const areAllCheckboxesFalse = Object.values(checkboxesState).every((value) => value === false);

@@ -2,6 +2,10 @@ import { useState } from "react";
 
 type CheckboxState = {
   [key: string]: boolean;
+  shipping: boolean;
+  billing: boolean;
+  defaultShipping: boolean;
+  defaultBilling: boolean;
 };
 
 type CheckboxActions = {

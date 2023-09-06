@@ -1,7 +1,7 @@
 import { Box, Button, Chip, Modal, Stack, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { BaseAddress } from "@commercetools/platform-sdk";
-import { AddressDataProps, AddressTitle } from "../types";
+import { AddressDataProps } from "../types";
 import AddressField from "./addressField/AddressField";
 import styles from "./AddressData.module.scss";
 import AddAddress from "./addAddress/AddAddress";
@@ -19,14 +19,12 @@ import {
 import useCheckboxesState from "../../../hooks/useCheckboxesState";
 import getCountryCode from "../../../utils/getCountryCode";
 
-const myWidth = window.innerWidth - 50;
-
 const style = {
   position: "absolute" as const,
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: Number(myWidth),
+  width: "90%",
   bgcolor: "background.paper",
   border: "2px solid #000",
   boxShadow: 24,
@@ -35,21 +33,20 @@ const style = {
 export default function AddressData({
   userId,
   version,
+  addresses,
   shippingAddressData,
   billingAddressData,
   defaultShippingAddressData,
   defaultBillingAddressData,
-  handleReadOnlyClick,
-  handleChangeDataVersion,
-  updateShippingAddress,
-  updateBillingAddress,
-  updateDefaultShippingAddress,
-  updateDefaultBillingAddress,
-  addresses,
   setAddressess,
+  handleChangeDataVersion,
+  handleChangeShippingAddress,
+  handleChangeBillingAddress,
+  handleChangeDefaultShippingAddress,
+  handleChangeDefaultBillingAddress,
+  handleReadOnlyClick,
 }: AddressDataProps) {
   const [open, setOpen] = useState(false);
-  const [dataVersion, setDataVersion] = useState(version);
   const [isChangingSuccessful, setIsChangingSuccessful] = useState(false);
   const [checkboxesState, { handleCheckboxChange, resetCheckboxes }] = useCheckboxesState();
   const [isDefaultBillingAddress, setIsDefaultBillingAddress] = useState(defaultBillingAddressData?.length);
@@ -87,44 +84,30 @@ export default function AddressData({
 
       if (selectedCheckboxes.defaultShipping) {
         actions.push("defaultShipping");
+        handleChangeDefaultShippingAddress(address);
       }
 
       if (selectedCheckboxes.defaultBilling) {
         actions.push("defaultBilling");
+        handleChangeDefaultBillingAddress(address);
       }
 
       if (selectedCheckboxes.shipping) {
         actions.push("shipping");
+        handleChangeShippingAddress(address);
       }
 
       if (selectedCheckboxes.billing) {
         actions.push("billing");
+        handleChangeBillingAddress(address);
       }
 
       await addAddressIdentifier(id, versionNumber + 1, addressID, actions);
-      if (selectedCheckboxes.defaultShipping) {
-        updateDefaultShippingAddress(address);
-      }
-
-      if (selectedCheckboxes.defaultBilling) {
-        updateDefaultBillingAddress(address);
-      }
-
-      if (selectedCheckboxes.shipping) {
-        updateShippingAddress([address, ...shippingAddressData]);
-      }
-
-      if (selectedCheckboxes.billing) {
-        updateBillingAddress([address, ...billingAddressData]);
-      }
 
       setAddressess([...addresses, address]);
 
       resetCheckboxes();
-
-      const currentVersion = await getCustomerVersionByID(id);
-      setDataVersion(currentVersion);
-      handleChangeDataVersion(currentVersion);
+      handleChangeDataVersion();
       handleCloseModal();
       handleSuccessAlert();
     } catch (error) {
@@ -134,57 +117,51 @@ export default function AddressData({
 
   const handleChangeAddress = async (
     id: string,
-    versionNumber: number,
     addressId: string,
     values: BaseAddress,
     selectedCheckboxes: { [key: string]: boolean }
   ) => {
-    const actions: ("defaultShipping" | "defaultBilling")[] = [];
-
-    if (selectedCheckboxes.defaultBilling) {
-      actions.push("defaultBilling");
-    }
-
-    if (selectedCheckboxes.defaultShipping) {
-      actions.push("defaultShipping");
-    }
-
-    if (actions.length > 0) {
-      await updateCustomerInfo(id, versionNumber, addressId, values, actions);
-      const address = createDraftFromAddress(values);
-
-      if (selectedCheckboxes.defaultBilling) {
-        updateDefaultBillingAddress({ id: addressId, ...address });
-      }
-
-      if (selectedCheckboxes.defaultShipping) {
-        updateDefaultShippingAddress({ id: addressId, ...address });
-      }
-      const newCurrentVersion = await getCustomerVersionByID(id);
-      setDataVersion(newCurrentVersion);
-      handleChangeDataVersion(newCurrentVersion);
-    }
-
     const findCity = addresses.find((address) => address.city === values.city);
     const findCountry = addresses.find((address) => address.country === getCountryCode(values.country));
     const findStreetName = addresses.find((address) => address.streetName === values.streetName);
     const findStreetNumber = addresses.find((address) => address.streetNumber === values.streetNumber);
     const findPostalCode = addresses.find((address) => address.postalCode === values.postalCode);
 
-    if (findCity && findCountry && findPostalCode && findStreetName && findStreetNumber) {
+    if (
+      findCity &&
+      findCountry &&
+      findPostalCode &&
+      findStreetName &&
+      findStreetNumber &&
+      !checkboxesState.defaultBilling &&
+      !checkboxesState.defaultShipping
+    ) {
       return;
     }
+    const actions: ("defaultShipping" | "defaultBilling")[] = [];
+    const address = createDraftFromAddress(values);
 
-    const currentVersion = await getCustomerVersionByID(id);
-    await updateCustomerInfo(id, currentVersion, addressId, values, []);
-    const customerData = await getCustomerInfo();
-    setAddressess(customerData.body.addresses);
+    if (selectedCheckboxes.defaultBilling) {
+      actions.push("defaultBilling");
+      handleChangeDefaultBillingAddress({ id: addressId, ...address });
+    }
 
-    const newCurrentVersion = await getCustomerVersionByID(id);
-    setDataVersion(newCurrentVersion);
-    handleChangeDataVersion(newCurrentVersion);
-    resetCheckboxes();
-    handleSuccessAlert();
+    if (selectedCheckboxes.defaultShipping) {
+      actions.push("defaultShipping");
+      handleChangeDefaultShippingAddress({ id: addressId, ...address });
+    }
+    try {
+      const currentVersion = await getCustomerVersionByID(id);
+      await updateCustomerInfo(id, currentVersion, addressId, values, actions);
+      const customerData = await getCustomerInfo();
+      setAddressess(customerData.body.addresses);
+
+      handleChangeDataVersion();
+      resetCheckboxes();
+      handleSuccessAlert();
+    } catch (error) {
+      throw Error(`Ошибка при удалении адреса:, ${error}`);
+    }
   };
 
   const handleDeleteAddress = async (id: string, versionNumber: number, addressId: string) => {
@@ -193,12 +170,10 @@ export default function AddressData({
       const customerData = await getCustomerInfo();
       setAddressess(customerData.body.addresses);
 
-      const currentVersion = await getCustomerVersionByID(id);
-      setDataVersion(currentVersion);
-      handleChangeDataVersion(currentVersion);
+      handleChangeDataVersion();
       handleSuccessAlert();
     } catch (error) {
-      console.error("Ошибка при удалении адреса:", error);
+      throw Error(`Ошибка при удалении адреса:, ${error}`);
     }
   };
 
@@ -229,7 +204,7 @@ export default function AddressData({
             <AddAddress
               id={userId}
               handleAddAddress={handleAddAddress}
-              dataVersion={dataVersion}
+              version={version}
               handleCheckboxChange={handleCheckboxChange}
               checkboxesState={checkboxesState}
             />
@@ -249,8 +224,7 @@ export default function AddressData({
             >
               <AddressField
                 userId={userId}
-                dataVersion={dataVersion}
-                addressTitle={AddressTitle.ShippingAddress}
+                version={version}
                 addressData={item}
                 checkboxesState={checkboxesState}
                 handleReadOnlyClick={handleReadOnlyClick}
