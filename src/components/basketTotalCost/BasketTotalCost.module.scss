@@ -1,0 +1,27 @@
+.total-cost {
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+  border: 1px solid rgb(173, 173, 173);
+  border-radius: 10px;
+
+  h2 {
+    padding-bottom: 15px;
+    font-weight: bold;
+  }
+
+  .regular-price-wrapper,
+  .discounted-price-wrapper {
+    display: flex;
+    justify-content: space-between;
+  }
+}
+
+.regular-price,
+.discounted-price {
+  font-weight: bold;
+}
+
+.discounted-price {
+  color: #f91155;
+}

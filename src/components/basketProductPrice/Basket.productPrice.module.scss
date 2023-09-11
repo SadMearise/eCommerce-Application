@@ -6,23 +6,23 @@
   font-size: 16px;
   line-height: 20px;
 
-    .with-sale-price {
-      background-color: rgba(16, 196, 76, 1);
-      color: rgba(255, 255, 255, 1);
-      height: max-content;
-      padding: 5px 8px;
-      border-radius: 5px;
-    }
+  .with-sale-price {
+    background-color: rgba(16, 196, 76, 1);
+    color: rgba(255, 255, 255, 1);
+    height: max-content;
+    padding: 5px 8px;
+    border-radius: 5px;
+  }
 
-    .without-sale-price {
-      text-decoration: line-through;
-      text-decoration-color: rgb(248, 92, 92, 0.7);
-      text-decoration-thickness: 2px;
-      color: #808d9a;
-      font-size: 14px;
-    }
+  .without-sale-price {
+    text-decoration: line-through;
+    text-decoration-color: rgb(248, 92, 92, 0.7);
+    text-decoration-thickness: 2px;
+    color: #808d9a;
+    font-size: 14px;
+  }
 
-    .original-price {
-      padding: 5px 8px;
-    }
+  .original-price {
+    padding: 5px 8px;
+  }
 }
