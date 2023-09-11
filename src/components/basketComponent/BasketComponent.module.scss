@@ -1,0 +1,47 @@
+.basket-wrapper {
+  padding: 40px 0;
+  display: flex;
+  gap: 24px;
+
+  .left-side {
+    flex-basis: calc(66.6666% - 24px);
+    max-width: calc(66.6666% - 24px);
+
+    .basket-items-wrapper {
+      display: flex;
+      flex-direction: column;
+      border: 1px solid rgb(173, 173, 173);
+      border-radius: 10px;
+  
+      .basket-header {
+        border-bottom: 1px solid rgb(173, 173, 173);
+      }
+    }
+  }
+
+  .right-side {
+    flex-basis: calc(33.3333% - 24px);
+    max-width: calc(33.3333% - 24px);
+
+    .sticky-container {
+      position: sticky;
+      top: 24px
+    }
+  }
+}
+
+.basket-item-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  border-bottom: 1px solid rgba(204,214,228,.6);
+}
+
+.total-cost {
+  display: flex;
+  gap: 20px;
+  padding: 16px;
+  border: 1px solid rgb(173, 173, 173);
+  border-radius: 10px;
+}
