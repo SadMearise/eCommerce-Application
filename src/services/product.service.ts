@@ -1,5 +1,7 @@
 import {
+  ClientResponse,
   ProductProjection,
+  ProductProjectionPagedQueryResponse,
   ProductProjectionPagedSearchResponse,
   ProductType,
   ProductTypePagedQueryResponse,
@@ -41,4 +43,9 @@ export async function getSearchProductProjections(
   const products = productsResp.body;
 
   return products;
+}
+
+export async function getProducts(): Promise<ClientResponse<ProductProjectionPagedQueryResponse>> {
+  const product = await getApiRoot().productProjections().get().execute();
+  return product;
 }
