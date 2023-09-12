@@ -4,11 +4,11 @@ import styles from "./TeamList.module.scss";
 
 function TeamList() {
   const teamMembers = team.map((member) => (
-    <li key={member.toString()}>
+    <div key={member.toString()}>
       <TeamMember member={member} />
-    </li>
+    </div>
   ));
-  return <ul className={styles["team-list"]}>{teamMembers}</ul>;
+  return <div className={styles["team-list"]}>{teamMembers}</div>;
 }
 
 export default TeamList;
