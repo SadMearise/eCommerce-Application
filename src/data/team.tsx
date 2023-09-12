@@ -16,6 +16,25 @@ const team = [
     skills:
       "JavaScript, HTML5, CSS3, Sass(SCSS), BEM methodology, Gulp, Webpack, Git, Github, npm, yarn, React. Have basic expirience with PHP and WordPress. Previously worked with Python and MySQL",
     language: "English: Pre-Intermediate(A2)",
+    contributions: [
+      {
+        name: "step 1",
+        descriptions: ["Repository Setup", "Task Board Setup", "CommerceTools Project and API Client Setup"],
+      },
+      {
+        name: "step 2",
+        descriptions: ["Main Page Enhancements", "Routing Implementation", "Evaluation Criteria for Header"],
+      },
+      { name: "step 3", descriptions: ["Catalog Page Implementation"] },
+      {
+        name: "step 4",
+        descriptions: [
+          "Catalog Page Enhancements",
+          "Detailed Product Page: Add or Remove Product from Cart",
+          "Routing Implementation",
+        ],
+      },
+    ],
   },
   {
     id: "2",
@@ -31,6 +50,12 @@ const team = [
     ],
     skills: "HTML, CSS3, JavaScript / TypeScript, Git, Webpack, Node.js / npm, methodology BEM, React",
     language: "Engilish: Upper Intermediate(B2)",
+    contributions: [
+      { name: "step 1", descriptions: ["Comprehensive README"] },
+      { name: "step 2", descriptions: ["Registration Page Implementation", "Unit Test Coverage"] },
+      { name: "step 3", descriptions: ["User Profile Page Implementation"] },
+      { name: "step 4", descriptions: ["Basket Page Implementation"] },
+    ],
   },
   {
     id: "3",
@@ -38,11 +63,20 @@ const team = [
     role: "Front-end developer",
     github: "https://github.com/zena86",
     photo: "zena.jpg",
-    bio: "She has 1 year of experience commercial developing websites using HTML, CSS, and JavaScript",
+    bio: "1 year of experience commercial developing websites using HTML, CSS, and JavaScript",
     education: ["Belarusian State Technological University", "The Rolling Scopes School(JavaScript/Front-end)"],
     skills:
       "HTML / Pug, CSS / SCSS, JavaScript / TypeScript, React, Redux, jQuery, Webpack, Gulp, WordPress, 1С-Битрикс, Node.js / npm, Git / GitHub / GitLab, methodology BEM",
     language: "English: Pre-Intermediate(A2)",
+    contributions: [
+      { name: "step 1", descriptions: ["Development Environment Configuration", "Development Scripts"] },
+      { name: "step 2", descriptions: ["Login Page Implementation", "Unit Test Coverage"] },
+      {
+        name: "step 3",
+        descriptions: ["Detailed Product Page Implementation", "Unit Test Coverage", "Content management"],
+      },
+      { name: "step 4", descriptions: ["About Us Page Implementation", "Evaluation Criteria for Header"] },
+    ],
   },
 ];
 

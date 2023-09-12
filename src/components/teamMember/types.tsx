@@ -1,3 +1,8 @@
+export interface IContribution {
+  name: string;
+  descriptions: string[];
+}
+
 export interface ITeamMember {
   id: string;
   name: string;
@@ -8,6 +13,7 @@ export interface ITeamMember {
   education: string[];
   skills: string;
   language: string;
+  contributions: IContribution[];
 }
 
 export interface ITeamMembersProps {
