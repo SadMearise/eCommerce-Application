@@ -38,6 +38,7 @@ async function loginToApi(username: string, password: string): Promise<TLoginRes
     tokenCache.disposeToken();
     const root = createApiBuilderFromCtpClient(ctpClient).withProjectKey({ projectKey });
     const userInfo = await root.me().get().execute();
+    tokenCache.set({ ...tokenCache.get(), isLogin: true });
     return { isLoggined: true, customer: userInfo.body };
   } catch (error) {
     return { isLoggined: false, error: `${error}` };

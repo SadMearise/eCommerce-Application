@@ -18,6 +18,7 @@ import { useAppDispatch } from "../../store/hooks";
 import RouterPaths from "../../router/routes";
 import tokenCache from "../../services/TokenCash";
 import { logout } from "../../store/features/user/userSlice";
+import isLogin from "../../utils/isLogin";
 
 export default function Header() {
   const dispatch = useAppDispatch();
@@ -25,7 +26,7 @@ export default function Header() {
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
 
   const handleLogout = () => {
-    tokenCache.set({ token: "", expirationTime: 0 });
+    tokenCache.set({ token: "", expirationTime: 0, isLogin: false });
     dispatch(logout());
   };
 
@@ -205,7 +206,7 @@ export default function Header() {
                 open={Boolean(anchorElUser)}
                 onClose={handleCloseUserMenu}
               >
-                {tokenCache.hasValidToken() && (
+                {isLogin() && (
                   <MenuItem
                     className={styles["menu-item"]}
                     onClick={handleCloseUserMenu}
@@ -220,7 +221,7 @@ export default function Header() {
                     </Typography>
                   </MenuItem>
                 )}
-                {!tokenCache.hasValidToken() ? (
+                {!isLogin() ? (
                   <MenuItem
                     className={styles["menu-item"]}
                     onClick={handleCloseUserMenu}
@@ -252,7 +253,7 @@ export default function Header() {
                     </Typography>
                   </MenuItem>
                 )}
-                {!tokenCache.hasValidToken() && (
+                {!isLogin() && (
                   <MenuItem
                     className={styles["menu-item"]}
                     onClick={handleCloseUserMenu}

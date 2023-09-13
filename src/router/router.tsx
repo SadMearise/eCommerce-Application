@@ -8,8 +8,8 @@ import Basket from "../pages/Basket";
 import Catalog from "../pages/catalog/Catalog";
 import Product from "../pages/product/Product";
 import Profile from "../pages/Profile";
-import tokenCache from "../services/TokenCash";
 import RouterPaths from "./routes";
+import isLogin from "../utils/isLogin";
 
 const router = createBrowserRouter([
   {
@@ -40,7 +40,7 @@ const router = createBrowserRouter([
     path: RouterPaths.Profile,
     element: <Profile />,
     loader: async () => {
-      if (!tokenCache.hasValidToken()) {
+      if (!isLogin()) {
         return redirect(RouterPaths.Login);
       }
       return null;
@@ -54,7 +54,7 @@ const router = createBrowserRouter([
     path: RouterPaths.Login,
     element: <Login />,
     loader: async () => {
-      if (tokenCache.hasValidToken()) {
+      if (isLogin()) {
         return redirect(RouterPaths.Home);
       }
       return null;
