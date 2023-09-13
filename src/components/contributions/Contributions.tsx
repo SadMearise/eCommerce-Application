@@ -4,29 +4,7 @@ import styles from "./Contributions.module.scss";
 import team from "../../data/team";
 import SprintTasks from "../sprintTasks/SprintTasks";
 import { ITeamMember } from "../teamMember/types";
-
-const steps = [
-  {
-    id: "0",
-    label:
-      "Sprint 1: Repository Setup, Project Management, CommerceTools Integration, and Development Environment Configuration",
-    description: `For each ad campaign that you create, you can control how much
-              you're willing to spend on clicks and conversions, which networks
-              and geographical locations you want your ads to show on, and more.`,
-  },
-  {
-    id: "1",
-    label: "Sprint 2: Login, Registration, and Main Pages Implementation",
-  },
-  {
-    id: "2",
-    label: "Sprint 3: Catalog Product Page, Detailed Product Page & User Profile Page Implementation",
-  },
-  {
-    id: "3",
-    label: "Sprint 4: Basket Page, Catalog Page Enhancements, and About Us Page Implementation",
-  },
-];
+import steps from "../../data/steps";
 
 export default function Contributions() {
   const [activeStep, setActiveStep] = useState(0);
