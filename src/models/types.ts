@@ -47,6 +47,7 @@ export enum AddressType {
 
 export enum StatusCodes {
   Ok = 200,
+  Code404 = 404,
 }
 
 export type AdditionalAddressType = AddressType.Shipping | AddressType.Billing;
