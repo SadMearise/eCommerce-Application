@@ -1,9 +1,11 @@
+import { useEffect, useState } from "react";
 import Card from "@mui/material/Card";
 import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import { Link } from "react-router-dom";
+import Button from "@mui/material/Button";
 import styles from "./CatalogProductCard.module.scss";
 import { IProductCardProps } from "./types";
 import { formatPrice } from "../../utils/getPrice";
@@ -11,8 +13,23 @@ import locale from "../../settings";
 import { Attributes } from "../../utils/types";
 import sizeStringToNumber from "../../utils/sizeStringToNumber";
 import getAttributeLabel from "../../utils/getAttributeLabel";
+import { addProductToCart, createCart, getActiveCart } from "../../services/cart.service";
 
-export default function ProductCard({ product, url }: IProductCardProps) {
+export default function ProductCard({ product, url, cart }: IProductCardProps) {
+  const [isDisabled, setIsDisabled] = useState(false);
+
+  useEffect(() => {
+    if (cart) {
+      for (let i = 0; i < cart.lineItems.length; i += 1) {
+        if (cart.lineItems[i].productId === product.id) {
+          setIsDisabled(true);
+          break;
+        }
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   if (product) {
     const productDescription = product.description ? product.description[locale] : "";
     const productName = product.name ? product.name[locale] : "";
@@ -20,6 +37,17 @@ export default function ProductCard({ product, url }: IProductCardProps) {
     const productUrl = productImages.length ? productImages[0].url : "no-image.png";
     const productPrices = product.masterVariant.prices ? product.masterVariant.prices : [];
     const prices = productPrices.length ? productPrices[0] : null;
+
+    const handleButtonClick = async () => {
+      setIsDisabled(true);
+      let activeCart = await getActiveCart();
+
+      if (!activeCart) {
+        activeCart = await createCart();
+      }
+
+      await addProductToCart(activeCart.id, activeCart.version, product.id);
+    };
 
     return (
       <div className={styles["card-wrapper"]}>
@@ -94,11 +122,19 @@ export default function ProductCard({ product, url }: IProductCardProps) {
                   <Typography className={styles.price}>{formatPrice(prices.value)}</Typography>
                 </Box>
               ))}
+            <Button
+              className={styles["button-add-to-cart"]}
+              variant="outlined"
+              disabled={isDisabled}
+              onClick={handleButtonClick}
+            >
+              Add to cart
+            </Button>
+            <Link
+              to={url}
+              className={styles.link}
+            />
           </CardContent>
-          <Link
-            to={url}
-            className={styles.link}
-          />
         </Card>
       </div>
     );
