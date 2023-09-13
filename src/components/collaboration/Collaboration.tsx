@@ -1,5 +1,6 @@
 import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
+import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import collaboration from "../../data/collaboration";
 import styles from "./Collaboration.module.scss";
@@ -18,14 +19,15 @@ export default function Collaboration() {
       sx={{ width: 1 }}
       className={styles.collaborations}
     >
-      <Box
-        display="grid"
-        gridTemplateColumns="repeat(12, 1fr)"
-        gap={2}
+      <Grid
+        container
+        spacing={2}
       >
         {collaboration.map((item) => (
-          <Box
-            gridColumn="span 6"
+          <Grid
+            item
+            xs={12}
+            sm={6}
             key={item.text}
           >
             <Item className={styles["collaborations-item"]}>
@@ -36,9 +38,9 @@ export default function Collaboration() {
               />
               <span>{item.text}</span>
             </Item>
-          </Box>
+          </Grid>
         ))}
-      </Box>
+      </Grid>
     </Box>
   );
 }

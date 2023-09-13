@@ -1,14 +1,29 @@
+import { Grid } from "@mui/material";
 import TeamMember from "../teamMember/TeamMember";
 import team from "../../data/team";
 import styles from "./TeamList.module.scss";
 
 function TeamList() {
   const teamMembers = team.map((member) => (
-    <div key={member.name}>
+    <Grid
+      item
+      xs="auto"
+      className={styles["team-item"]}
+      key={member.name}
+    >
       <TeamMember member={member} />
-    </div>
+    </Grid>
   ));
-  return <div className={styles["team-list"]}>{teamMembers}</div>;
+
+  return (
+    <Grid
+      container
+      spacing={3}
+      className={styles["team-list"]}
+    >
+      {teamMembers}
+    </Grid>
+  );
 }
 
 export default TeamList;
