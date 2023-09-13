@@ -60,6 +60,7 @@ export default function Contributions() {
                 <SprintTasks
                   member={member}
                   sprintId={sprintId}
+                  key={member.id}
                 />
               ))}
               <Box sx={{ mb: 2 }}>

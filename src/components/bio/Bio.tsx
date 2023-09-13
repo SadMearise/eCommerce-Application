@@ -13,7 +13,7 @@ function Bio() {
 
   const teamMembers = team.map((member) => (
     <Accordion
-      key={member.toString()}
+      key={member.id}
       expanded={expanded === `panel${member.id}`}
       onChange={handleChange(`panel${member.id}`)}
     >
@@ -31,14 +31,14 @@ function Bio() {
         <Typography sx={{ color: "text.secondary" }}>{member.name}</Typography>
       </AccordionSummary>
       <AccordionDetails>
-        <Typography>
+        <div>
           <h3 className={styles.title}>Education</h3>
-          {member.education?.map((item) => <li>{item}</li>)}
+          {member.education?.map((item) => <li key={item}>{item}</li>)}
           <h3 className={styles.title}>Skills</h3>
           <p>{member.skills}</p>
           <h3 className={styles.title}>Foreign language</h3>
           <p>{member.language}</p>
-        </Typography>
+        </div>
       </AccordionDetails>
     </Accordion>
   ));

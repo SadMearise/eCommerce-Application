@@ -4,7 +4,7 @@ import styles from "./TeamList.module.scss";
 
 function TeamList() {
   const teamMembers = team.map((member) => (
-    <div key={member.toString()}>
+    <div key={member.name}>
       <TeamMember member={member} />
     </div>
   ));

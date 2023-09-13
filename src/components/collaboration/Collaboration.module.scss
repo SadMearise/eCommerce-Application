@@ -1,0 +1,14 @@
+.collaborations {
+  max-width: 900px;
+  margin: 0 auto 80px;
+
+  & span {
+    font-size: 16px;
+    margin-left: 10px;
+  }
+}
+
+.collaborations-item {
+  display: flex;
+  align-items: center;
+}

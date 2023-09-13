@@ -4,6 +4,7 @@ import TeamList from "../../components/teamList/TeamList";
 import styles from "./About.module.scss";
 import Bio from "../../components/bio/Bio";
 import Contributions from "../../components/contributions/Contributions";
+import Collaboration from "../../components/collaboration/Collaboration";
 
 export default function About() {
   return (
@@ -16,6 +17,8 @@ export default function About() {
         <Bio />
         <h2 className={styles["team-title"]}>Contributions to the project</h2>
         <Contributions />
+        <h2 className={styles["team-title"]}>Collaboration</h2>
+        <Collaboration />
       </Container>
     </>
   );
