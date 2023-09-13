@@ -8,6 +8,7 @@ import BasketProductCard from "../basketProductCard/BasketProductCard";
 import BasketProductQuantity from "../basketProductQuantity/BasketProductQuantity";
 import BasketProductPrice from "../basketProductPrice/BasketProductPrice";
 import BasketTotalCost from "../basketTotalCost/BasketTotalCost";
+import BasketPromoCodeField from "../basketPromoCodeField/BasketPromoCodeField";
 
 export default function BasketComponent() {
   const [productInBasket] = useState<ProductProjection[]>([]);
@@ -66,7 +67,10 @@ export default function BasketComponent() {
       </div>
       <div className={styles["right-side"]}>
         <div className={styles["sticky-container"]}>
-          <BasketTotalCost products={productInBasket} />
+          <div className={styles["subtotal-promo-code"]}>
+            <BasketTotalCost products={productInBasket} />
+            <BasketPromoCodeField />
+          </div>
         </div>
       </div>
     </div>

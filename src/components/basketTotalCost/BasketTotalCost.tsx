@@ -36,7 +36,7 @@ export default function BasketTotalCost({ products }: { products: ProductProject
     <div className={styles["total-cost"]}>
       <h2>Your Bracket:</h2>
       <div className={styles["regular-price-wrapper"]}>
-        <span>{`Subtotal (${products.length > 1 ? `${products.length} items` : "1 item"}): `}</span>
+        <span>{`Subtotal (${products.length > 1 ? `${products.length} items` : "0"}): `}</span>
         <span className={styles["regular-price"]}>{`€${totalDiscountedPrice}`}</span>
       </div>
       <div className={styles["discounted-price-wrapper"]}>
