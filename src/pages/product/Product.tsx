@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { ProductProjection, ProductType } from "@commercetools/platform-sdk/";
 import Button from "@mui/material/Button";
+import IconButton from "@mui/material/IconButton";
+import DeleteIcon from "@mui/icons-material/Delete";
 import Header from "../../components/header/Header";
 import ProductSlider from "../../components/productSlider/ProductSlider";
 import styles from "./Product.module.scss";
@@ -12,7 +14,7 @@ import ProductAttributes from "../../components/productAttributes/ProductAttribu
 import ProductSizes from "../../components/productSizes/ProductSizes";
 import ProductPrices from "../../components/productPrices/ProductPrices";
 import Footer from "../../components/footer/Footer";
-import { getActiveCart } from "../../services/cart.service";
+import { addProductToCart, cartDeleteItem, createCart, getActiveCart } from "../../services/cart.service";
 
 function Product() {
   const params = useParams();
@@ -21,6 +23,39 @@ function Product() {
   const [isLoading, setIsLoading] = useState(true);
   const [productType, setProductType] = useState<ProductType>();
   const [isDisabled, setIsDisabled] = useState(false);
+  const [isBtnLoading, setBtnLoading] = useState(false);
+
+  const handleRemoveFromCart = async () => {
+    const activeCart = await getActiveCart();
+
+    let productId = "";
+    if (activeCart && product) {
+      for (let i = 0; i < activeCart.lineItems.length; i += 1) {
+        if (activeCart.lineItems[i].productId === product.id) {
+          productId = activeCart.lineItems[i].id;
+          break;
+        }
+      }
+
+      await cartDeleteItem(activeCart.id, activeCart.version, productId);
+    }
+
+    setIsDisabled(false);
+  };
+
+  const handleAddToCart = async () => {
+    setBtnLoading(true);
+    let activeCart = await getActiveCart();
+
+    if (!activeCart) {
+      activeCart = await createCart();
+    }
+    if (product) {
+      await addProductToCart(activeCart.id, activeCart.version, product.id);
+    }
+    setBtnLoading(false);
+    setIsDisabled(true);
+  };
 
   useEffect(() => {
     const loadProductAndType = async () => {
@@ -45,13 +80,16 @@ function Product() {
     const checkCart = async () => {
       const cart = await getActiveCart();
 
-      if (cart && product) {
-        for (let i = 0; i < cart.lineItems.length; i += 1) {
-          if (cart.lineItems[i].productId === product.id) {
-            setIsDisabled(true);
-            break;
+      if (product) {
+        if (cart) {
+          for (let i = 0; i < cart.lineItems.length; i += 1) {
+            if (cart.lineItems[i].productId === product.id) {
+              setIsDisabled(true);
+              break;
+            }
           }
         }
+
         setIsLoading(false);
       }
     };
@@ -109,9 +147,18 @@ function Product() {
             <Button
               disabled={isDisabled}
               variant="outlined"
+              onClick={handleAddToCart}
             >
-              Add to cart
+              {isBtnLoading ? <CircularProgress className={styles["circular-progress"]} /> : "Add to cart"}
             </Button>
+            {isDisabled && (
+              <IconButton
+                aria-label="delete"
+                onClick={handleRemoveFromCart}
+              >
+                <DeleteIcon />
+              </IconButton>
+            )}
           </div>
         </div>
       </Container>

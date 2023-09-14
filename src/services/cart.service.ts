@@ -1,4 +1,4 @@
-import { Cart } from "@commercetools/platform-sdk";
+import { Cart, CartRemoveLineItemAction } from "@commercetools/platform-sdk";
 import { CountryCode, StatusCodes } from "../models/types";
 import getAnonymousApiRoot from "./AnonymousClient";
 
@@ -44,7 +44,7 @@ export async function createCart() {
   return cart;
 }
 
-export async function addProductToCart(cartId: string, cartVersion: number, productId: string) {
+export async function addProductToCart(cartId: string, version: number, productId: string) {
   const rootApi = getAnonymousApiRoot();
 
   await rootApi
@@ -53,7 +53,7 @@ export async function addProductToCart(cartId: string, cartVersion: number, prod
     .withId({ ID: cartId })
     .post({
       body: {
-        version: cartVersion,
+        version,
         actions: [
           {
             action: "addLineItem",
@@ -61,6 +61,28 @@ export async function addProductToCart(cartId: string, cartVersion: number, prod
             quantity: 1,
           },
         ],
+      },
+    })
+    .execute();
+}
+
+export async function cartDeleteItem(cartId: string, version: number, productId: string) {
+  const rootApi = getAnonymousApiRoot();
+
+  const CartRemoveItemAction: CartRemoveLineItemAction = {
+    action: "removeLineItem",
+    lineItemId: productId,
+    quantity: 1,
+  };
+
+  await rootApi
+    .me()
+    .carts()
+    .withId({ ID: cartId })
+    .post({
+      body: {
+        version,
+        actions: [CartRemoveItemAction],
       },
     })
     .execute();
