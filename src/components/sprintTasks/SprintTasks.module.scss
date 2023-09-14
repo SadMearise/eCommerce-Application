@@ -1,0 +1,22 @@
+.head {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+
+  & .avatar {
+    margin-right: 10px;
+  }
+}
+
+.contribution {
+  color: #575153;
+}
+
+.tasks {
+  margin-bottom: 30px;
+}
+
+.name {
+  font-weight: 700;
+  color: #575153;
+}

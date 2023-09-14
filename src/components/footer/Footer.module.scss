@@ -1,0 +1,24 @@
+.footer {
+  background-color: #eceff1;
+  padding: 15px 0;
+}
+
+.body {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  width: 100px;
+
+  & img {
+    display: block;
+  }
+}
+
+.date {
+  font-size: 20px;
+  font-weight: 900;
+  color: #575153;
+}

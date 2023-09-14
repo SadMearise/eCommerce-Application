@@ -11,6 +11,7 @@ import { getProductByKey, getProductTypeById } from "../../services/product.serv
 import ProductAttributes from "../../components/productAttributes/ProductAttributes";
 import ProductSizes from "../../components/productSizes/ProductSizes";
 import ProductPrices from "../../components/productPrices/ProductPrices";
+import Footer from "../../components/footer/Footer";
 import { getActiveCart } from "../../services/cart.service";
 
 function Product() {
@@ -71,6 +72,7 @@ function Product() {
             {error}
           </Alert>
         </Container>
+        <Footer />
       </>
     );
   }
@@ -84,6 +86,7 @@ function Product() {
             <CircularProgress />
           </div>
         </Container>
+        <Footer />
       </>
     );
   }
@@ -112,6 +115,7 @@ function Product() {
           </div>
         </div>
       </Container>
+      <Footer />
     </>
   );
 }

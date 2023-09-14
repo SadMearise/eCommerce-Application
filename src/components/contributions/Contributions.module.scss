@@ -1,0 +1,14 @@
+.contributions {
+  max-width: 900px !important;
+  margin: 0 auto;
+}
+
+.label span {
+  font-size: 18px !important;
+  font-weight: 700 !important;
+  color: #575153 !important;
+
+  @media (max-width: 768px) {
+    font-size: 16px !important;
+  }
+}

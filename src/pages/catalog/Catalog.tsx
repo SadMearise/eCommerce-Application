@@ -19,6 +19,7 @@ import RouterPaths from "../../router/routes";
 import { getAttributePath, getSortingPath } from "../../utils/getPaths";
 import { getSearchProductProjections } from "../../services/product.service";
 import { TCatalogFilterValues } from "../../models/types";
+import Footer from "../../components/footer/Footer";
 import { getActiveCart } from "../../services/cart.service";
 
 export default function Catalog() {
@@ -219,6 +220,7 @@ export default function Catalog() {
           </Grid>
         </Grid>
       </Container>
+      <Footer />
     </>
   );
 }

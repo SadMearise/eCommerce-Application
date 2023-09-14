@@ -3,6 +3,7 @@ import { Container } from "@mui/material";
 import AlertView from "../components/alertView/AlertView";
 import Header from "../components/header/Header";
 import isSuccess from "../store/features/registration/registrationSelector";
+import Footer from "../components/footer/Footer";
 
 export default function Home() {
   const isSuccessSelector = useSelector(isSuccess);
@@ -21,6 +22,7 @@ export default function Home() {
           textContent="Registration successful! You're now logged in!"
         />
       )}
+      <Footer />
     </>
   );
 }
