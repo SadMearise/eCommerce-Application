@@ -48,7 +48,6 @@ export default function ProductCard({ product, url, cart }: IProductCardProps) {
       if (!activeCart) {
         activeCart = await createCart();
       }
-
       await addProductToCart(activeCart.id, activeCart.version, product.id);
       setLoading(false);
     };

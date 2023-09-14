@@ -43,6 +43,7 @@ export default function Catalog() {
 
   const updateCart = async () => {
     setCart(await getActiveCart());
+    console.log("ACTIVE CART", await getActiveCart());
   };
 
   const updateProducts = async () => {

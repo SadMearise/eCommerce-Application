@@ -1,9 +1,9 @@
 import { Cart } from "@commercetools/platform-sdk";
 import { CountryCode, StatusCodes } from "../models/types";
-import getApiRoot from "./BuildClient";
+import getAnonymousApiRoot from "./AnonymousClient";
 
 export async function getActiveCart(): Promise<false | Cart> {
-  const rootApi = getApiRoot();
+  const rootApi = getAnonymousApiRoot();
 
   try {
     const activeCartResp = await rootApi.me().activeCart().get().execute();
@@ -23,7 +23,7 @@ export async function getActiveCart(): Promise<false | Cart> {
 }
 
 export async function createCart() {
-  const rootApi = getApiRoot();
+  const rootApi = getAnonymousApiRoot();
 
   const cartResp = await rootApi
     .me()
@@ -45,7 +45,7 @@ export async function createCart() {
 }
 
 export async function addProductToCart(cartId: string, cartVersion: number, productId: string) {
-  const rootApi = getApiRoot();
+  const rootApi = getAnonymousApiRoot();
 
   await rootApi
     .me()
