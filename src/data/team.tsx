@@ -12,9 +12,10 @@ const team = [
       "Codecademy: Learn JavaScript ,Learn CSS, Learn HTML",
       "Stepik: Python Programming",
       "PHP - first meeting",
+      "The Rolling Scopes School(JavaScript/Front-end)",
     ],
     skills:
-      "JavaScript, HTML5, CSS3, Sass(SCSS), BEM methodology, Gulp, Webpack, Git, Github, npm, yarn, React. Have basic expirience with PHP and WordPress. Previously worked with Python and MySQL",
+      "JavaScript, TypeScript, Node.js, HTML5, CSS3, Sass(SCSS), BEM methodology, Gulp, Webpack, Git, Github, npm, yarn. Have basic expirience with PHP, WordPress, Vite, React, Redux Toolkit and React Router. Previously worked with Python and MySQL",
     language: "English: Pre-Intermediate(A2)",
     contributions: [
       {
@@ -23,7 +24,7 @@ const team = [
       },
       {
         name: "step 2",
-        descriptions: ["Main Page Enhancements", "Routing Implementation", "Evaluation Criteria for Header"],
+        descriptions: ["Main Page Enhancements", "Routing Implementation", "Header"],
       },
       { name: "step 3", descriptions: ["Catalog Page Implementation"] },
       {
@@ -44,11 +45,11 @@ const team = [
     photo: "ivan.jpg",
     bio: "Despite the lack of education in the field of information technology, he aspires to become a “frontend developer”.",
     education: [
-      "HTML and CSS on code-basics",
-      "JavaScript on code-basics and learn.javascript",
-      "RS Schools Course «JavaScript/Front-end» (in progress)",
+      "Penza State University of Architecture and Construction",
+      "The Rolling Scopes School(JavaScript/Front-end)",
     ],
-    skills: "HTML, CSS3, JavaScript / TypeScript, Git, Webpack, Node.js / npm, methodology BEM, React",
+    skills:
+      "HTML, CSS / SCSS, JavaScript / TypeScript, React, Redux (Redux toolkit), material UI, unit tests (JEST), Node.js / npm, REST API, Webpack, Vite, Git / GitHub, BEM",
     language: "Engilish: Upper Intermediate(B2)",
     contributions: [
       { name: "step 1", descriptions: ["Comprehensive README"] },
@@ -66,7 +67,7 @@ const team = [
     bio: "1 year of experience commercial developing websites using HTML, CSS, and JavaScript",
     education: ["Belarusian State Technological University", "The Rolling Scopes School(JavaScript/Front-end)"],
     skills:
-      "HTML / Pug, CSS / SCSS, JavaScript / TypeScript, React, Redux, jQuery, Webpack, Gulp, WordPress, 1С-Битрикс, Node.js / npm, Git / GitHub / GitLab, methodology BEM",
+      "HTML / Pug, CSS / SCSS, JavaScript / TypeScript, jQuery, React, Redux, Webpack, Gulp, Vite, material UI, unit tests (JEST), WordPress, 1С-Битрикс, Node.js / npm, Git / GitHub / GitLab, BEM methodology",
     language: "English: Pre-Intermediate(A2)",
     contributions: [
       { name: "step 1", descriptions: ["Development Environment Configuration", "Development Scripts"] },
@@ -75,7 +76,7 @@ const team = [
         name: "step 3",
         descriptions: ["Detailed Product Page Implementation", "Unit Test Coverage", "Content management"],
       },
-      { name: "step 4", descriptions: ["About Us Page Implementation", "Evaluation Criteria for Header"] },
+      { name: "step 4", descriptions: ["About Us Page Implementation", "Header Enhancements"] },
     ],
   },
 ];
