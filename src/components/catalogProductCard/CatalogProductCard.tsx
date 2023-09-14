@@ -6,6 +6,7 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import { Link } from "react-router-dom";
 import Button from "@mui/material/Button";
+import CircularProgress from "@mui/material/CircularProgress";
 import styles from "./CatalogProductCard.module.scss";
 import { IProductCardProps } from "./types";
 import { formatPrice } from "../../utils/getPrice";
@@ -17,6 +18,7 @@ import { addProductToCart, createCart, getActiveCart } from "../../services/cart
 
 export default function ProductCard({ product, url, cart }: IProductCardProps) {
   const [isDisabled, setIsDisabled] = useState(false);
+  const [isLoading, setLoading] = useState(false);
 
   useEffect(() => {
     if (cart) {
@@ -39,6 +41,7 @@ export default function ProductCard({ product, url, cart }: IProductCardProps) {
     const prices = productPrices.length ? productPrices[0] : null;
 
     const handleButtonClick = async () => {
+      setLoading(true);
       setIsDisabled(true);
       let activeCart = await getActiveCart();
 
@@ -47,6 +50,7 @@ export default function ProductCard({ product, url, cart }: IProductCardProps) {
       }
 
       await addProductToCart(activeCart.id, activeCart.version, product.id);
+      setLoading(false);
     };
 
     return (
@@ -128,7 +132,7 @@ export default function ProductCard({ product, url, cart }: IProductCardProps) {
               disabled={isDisabled}
               onClick={handleButtonClick}
             >
-              Add to cart
+              {isLoading ? <CircularProgress className={styles["circular-progress"]} /> : "Add to cart"}
             </Button>
             <Link
               to={url}
