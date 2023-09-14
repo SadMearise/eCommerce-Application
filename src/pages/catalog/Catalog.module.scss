@@ -1,5 +1,6 @@
 .content-container {
   margin-top: 20px !important;
+  padding-bottom: 60px;
   @media (max-width: 900px) {
     flex-direction: column !important;
   }
@@ -24,7 +25,7 @@
 }
 
 .pagination {
-  margin: 40px 0;
+  margin: 40px 0 0;
 
   & ul {
     justify-content: center;

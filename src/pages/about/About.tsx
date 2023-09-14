@@ -6,6 +6,7 @@ import Bio from "../../components/bio/Bio";
 import Contributions from "../../components/contributions/Contributions";
 import Collaboration from "../../components/collaboration/Collaboration";
 import School from "../../components/school/School";
+import Footer from "../../components/footer/Footer";
 
 export default function About() {
   return (
@@ -23,6 +24,7 @@ export default function About() {
         <h2 className={styles["team-title"]}>Our school</h2>
         <School />
       </Container>
+      <Footer />
     </>
   );
 }

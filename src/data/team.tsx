@@ -76,7 +76,7 @@ const team = [
         name: "step 3",
         descriptions: ["Detailed Product Page Implementation", "Unit Test Coverage", "Content management"],
       },
-      { name: "step 4", descriptions: ["About Us Page Implementation", "Header Enhancements"] },
+      { name: "step 4", descriptions: ["About Us Page Implementation", "Header Enhancements", "Footer"] },
     ],
   },
 ];
