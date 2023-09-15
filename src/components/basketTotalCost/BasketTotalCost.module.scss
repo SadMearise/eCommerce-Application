@@ -12,17 +12,17 @@
   }
 
   .regular-price-wrapper,
-  .discounted-price-wrapper {
+  .promo-code-wrapper {
     display: flex;
     justify-content: space-between;
   }
 }
 
 .regular-price,
-.discounted-price {
+.promo-code-price {
   font-weight: bold;
 }
 
-.discounted-price {
-  color: #f91155;
+.promo-code-price {
+  color: rgb(16, 196, 76);
 }

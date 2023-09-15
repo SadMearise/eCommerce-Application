@@ -1,47 +1,45 @@
-import { ProductProjection } from "@commercetools/platform-sdk";
+import { CentPrecisionMoney, DiscountCodeInfo, LineItem } from "@commercetools/platform-sdk";
 import styles from "./BasketTotalCost.module.scss";
-import CENT, { FIRST_ELEMENT } from "../../utils/constants";
+import CENT from "../../utils/constants";
 
-export default function BasketTotalCost({ products }: { products: ProductProjection[] }) {
-  console.log("products", products);
-  const regularPrices: number[] = [];
-  const discountedPrices: number[] = [];
+export default function BasketTotalCost({
+  totalPrice,
+  basketItems,
+  discountCodes,
+}: {
+  totalPrice: CentPrecisionMoney;
+  basketItems: LineItem[];
+  discountCodes: DiscountCodeInfo[];
+}) {
+  const { centAmount } = totalPrice;
+  const formattedTotalPrice = (centAmount * CENT).toFixed(2);
+  const productsQuantity = basketItems.reduce((accum, item) => accum + item.quantity, 0);
 
-  products.forEach((product) => {
-    const {
-      masterVariant: { prices },
-    } = product;
+  const totalPriceWithoutPromo = basketItems.reduce((accum, item) => {
+    let itemPrice;
 
-    const regularPrice = prices && prices[FIRST_ELEMENT].value.centAmount;
-    const discountedPrice =
-      prices && prices[FIRST_ELEMENT].discounted && prices[FIRST_ELEMENT].discounted.value.centAmount;
-
-    const regularPriceInCents = regularPrice ? regularPrice * CENT : 0;
-    const discountedPriceInCents = discountedPrice ? discountedPrice * CENT : 0;
-
-    if (regularPriceInCents) {
-      regularPrices.push(Number(regularPriceInCents.toFixed(2)));
+    if (item.price.discounted?.value.centAmount) {
+      itemPrice = item.price.discounted.value.centAmount * item.quantity;
+    } else {
+      itemPrice = item.price.value.centAmount * item.quantity;
     }
 
-    if (discountedPriceInCents) {
-      discountedPrices.push(Number(discountedPriceInCents.toFixed(2)));
-    }
-  });
-
-  const totalRegularPrice = regularPrices.reduce((acc, price) => acc + price, 0);
-  const totalDiscountedPrice = discountedPrices.reduce((acc, price) => acc + price, 0);
-  const totalSale = totalRegularPrice - totalDiscountedPrice;
+    return accum + itemPrice;
+  }, 0);
+  const formattedTotalPriceWithoutPromo = (totalPriceWithoutPromo * CENT).toFixed(2);
 
   return (
     <div className={styles["total-cost"]}>
       <h2>Your Bracket:</h2>
       <div className={styles["regular-price-wrapper"]}>
-        <span>{`Subtotal (${products.length > 1 ? `${products.length} items` : "0"}): `}</span>
-        <span className={styles["regular-price"]}>{`€${totalDiscountedPrice}`}</span>
+        <span>{`Subtotal (${productsQuantity > 1 ? `${productsQuantity} items` : "1 item"}): `}</span>
+        <span className={styles["regular-price"]}>{`€${formattedTotalPriceWithoutPromo}`}</span>
       </div>
-      <div className={styles["discounted-price-wrapper"]}>
-        <span>Total Discount:</span>
-        <span className={styles["discounted-price"]}>{`- €${totalSale.toFixed(2)}`}</span>
+      <div className={styles["promo-code-wrapper"]}>
+        <span>Price with Promo Code:</span>
+        <span className={discountCodes.length >= 1 ? styles["promo-code-price"] : ""}>
+          {discountCodes.length >= 1 ? `€${formattedTotalPrice}` : "-"}
+        </span>
       </div>
     </div>
   );
