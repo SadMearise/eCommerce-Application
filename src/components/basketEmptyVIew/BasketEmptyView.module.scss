@@ -1,0 +1,28 @@
+.empty-cart-wrapper {
+  padding-top: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 40px;
+
+  .empty-cart-title {
+    font-size: 3rem;
+  }
+
+  .empty-cart-img {
+    width: 20%;
+  }
+
+  .empty-cart-description {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    p {
+      margin: 0;
+      color: rgb(156, 149, 149);
+    }
+  }
+}
