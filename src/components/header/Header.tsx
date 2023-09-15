@@ -22,6 +22,8 @@ import tokenCache from "../../services/TokenCash";
 import { logout } from "../../store/features/user/userSlice";
 import isLogin from "../../utils/isLogin";
 import cartCount from "../../store/features/cartCount/cartCountSelector";
+import getProductCountFromCart from "../../utils/getProductCountFromCart";
+import { setCount } from "../../store/features/cartCount/cartCountSlice";
 
 export default function Header() {
   const dispatch = useAppDispatch();
@@ -29,8 +31,10 @@ export default function Header() {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     tokenCache.set({ token: "", expirationTime: 0, isLogin: false });
+
+    dispatch(setCount(await getProductCountFromCart()));
     dispatch(logout());
   };
 
