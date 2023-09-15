@@ -13,15 +13,19 @@ import MenuItem from "@mui/material/MenuItem";
 import { Link } from "react-router-dom";
 import PermIdentityOutlinedIcon from "@mui/icons-material/PermIdentityOutlined";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
+import Badge from "@mui/material/Badge";
+import { useSelector } from "react-redux";
 import styles from "./Header.module.scss";
 import { useAppDispatch } from "../../store/hooks";
 import RouterPaths from "../../router/routes";
 import tokenCache from "../../services/TokenCash";
 import { logout } from "../../store/features/user/userSlice";
 import isLogin from "../../utils/isLogin";
+import cartCount from "../../store/features/cartCount/cartCountSelector";
 
 export default function Header() {
   const dispatch = useAppDispatch();
+  const cartCountSelector = useSelector(cartCount);
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
 
@@ -179,7 +183,12 @@ export default function Header() {
                 to={RouterPaths.Basket}
                 sx={{ p: 0 }}
               >
-                <ShoppingCartOutlinedIcon className={styles.icon} />
+                <Badge
+                  badgeContent={cartCountSelector}
+                  color="error"
+                >
+                  <ShoppingCartOutlinedIcon className={styles.icon} />
+                </Badge>
               </IconButton>
 
               <Tooltip title="Open settings">

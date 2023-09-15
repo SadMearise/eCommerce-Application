@@ -5,6 +5,7 @@ import { ProductProjection, ProductType } from "@commercetools/platform-sdk/";
 import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { useDispatch } from "react-redux";
 import Header from "../../components/header/Header";
 import ProductSlider from "../../components/productSlider/ProductSlider";
 import styles from "./Product.module.scss";
@@ -15,6 +16,8 @@ import ProductSizes from "../../components/productSizes/ProductSizes";
 import ProductPrices from "../../components/productPrices/ProductPrices";
 import Footer from "../../components/footer/Footer";
 import { addProductToCart, cartDeleteItem, createCart, getActiveCart } from "../../services/cart.service";
+import { setCount } from "../../store/features/cartCount/cartCountSlice";
+import getProductCountFromCart from "../../utils/getProductCountFromCart";
 
 function Product() {
   const params = useParams();
@@ -24,6 +27,7 @@ function Product() {
   const [productType, setProductType] = useState<ProductType>();
   const [isDisabled, setIsDisabled] = useState(false);
   const [isBtnLoading, setBtnLoading] = useState(false);
+  const dispatch = useDispatch();
 
   const handleRemoveFromCart = async () => {
     const activeCart = await getActiveCart();
@@ -38,6 +42,7 @@ function Product() {
       }
 
       await cartDeleteItem(activeCart.id, activeCart.version, productId);
+      dispatch(setCount(await getProductCountFromCart()));
     }
 
     setIsDisabled(false);
@@ -52,6 +57,8 @@ function Product() {
     }
     if (product) {
       await addProductToCart(activeCart.id, activeCart.version, product.id);
+
+      dispatch(setCount(await getProductCountFromCart()));
     }
     setBtnLoading(false);
     setIsDisabled(true);
