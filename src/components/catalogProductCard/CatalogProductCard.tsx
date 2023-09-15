@@ -7,7 +7,6 @@ import Box from "@mui/material/Box";
 import { Link } from "react-router-dom";
 import Button from "@mui/material/Button";
 import CircularProgress from "@mui/material/CircularProgress";
-import { useDispatch } from "react-redux";
 import styles from "./CatalogProductCard.module.scss";
 import { IProductCardProps } from "./types";
 import { formatPrice } from "../../utils/getPrice";
@@ -18,11 +17,12 @@ import getAttributeLabel from "../../utils/getAttributeLabel";
 import { addProductToCart, createCart, getActiveCart } from "../../services/cart.service";
 import getProductCountFromCart from "../../utils/getProductCountFromCart";
 import { setCount } from "../../store/features/cartCount/cartCountSlice";
+import { useAppDispatch } from "../../store/hooks";
 
 export default function ProductCard({ product, url, cart }: IProductCardProps) {
   const [isDisabled, setIsDisabled] = useState(false);
   const [isLoading, setLoading] = useState(false);
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     if (cart) {

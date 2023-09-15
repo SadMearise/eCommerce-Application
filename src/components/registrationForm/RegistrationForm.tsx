@@ -9,7 +9,6 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import { Link, useNavigate } from "react-router-dom";
 import "dayjs/locale/en-gb";
-import { useDispatch } from "react-redux";
 import regValidationSchema from "../../utils/registerValidationSchema";
 import countriesSet from "../../countries";
 import styles from "./RegistrationForm.module.scss";
@@ -19,11 +18,12 @@ import loginToApi from "../../services/LoginToApi";
 import { setRegistrationSuccess } from "../../store/features/registration/registrationSlice";
 import createCustomer from "../../services/customer.service";
 import { login } from "../../store/features/user/userSlice";
+import { useAppDispatch } from "../../store/hooks";
 
 export default function RegistrationForm() {
   const minDateOfBirth = dayjs().subtract(13, "year").startOf("day");
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const [showPassword, setShowPassword] = useState(false);
   const [isShippingCountrySelected, setIsShippingCountrySelected] = useState(false);

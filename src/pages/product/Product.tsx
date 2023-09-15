@@ -5,7 +5,6 @@ import { ProductProjection, ProductType } from "@commercetools/platform-sdk/";
 import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { useDispatch } from "react-redux";
 import Header from "../../components/header/Header";
 import ProductSlider from "../../components/productSlider/ProductSlider";
 import styles from "./Product.module.scss";
@@ -18,34 +17,59 @@ import Footer from "../../components/footer/Footer";
 import { addProductToCart, cartDeleteItem, createCart, getActiveCart } from "../../services/cart.service";
 import { setCount } from "../../store/features/cartCount/cartCountSlice";
 import getProductCountFromCart from "../../utils/getProductCountFromCart";
+import AlertView from "../../components/alertView/AlertView";
+import { useAppDispatch } from "../../store/hooks";
 
 function Product() {
   const params = useParams();
   const [product, setProduct] = useState<ProductProjection>();
   const [error, setError] = useState("");
+  const [actionError, setActionError] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [productType, setProductType] = useState<ProductType>();
   const [isDisabled, setIsDisabled] = useState(false);
   const [isBtnLoading, setBtnLoading] = useState(false);
-  const dispatch = useDispatch();
+  const [isChangingSuccessful, setIsChangingSuccessful] = useState(false);
+  const [isActiveTimeout, setIsActiveTimeout] = useState(false);
+  const dispatch = useAppDispatch();
+
+  const handleSuccessAlert = () => {
+    setIsChangingSuccessful(true);
+
+    setTimeout(() => setIsChangingSuccessful(false), 2000);
+  };
 
   const handleRemoveFromCart = async () => {
-    const activeCart = await getActiveCart();
+    try {
+      const activeCart = await getActiveCart();
 
-    let productId = "";
-    if (activeCart && product) {
-      for (let i = 0; i < activeCart.lineItems.length; i += 1) {
-        if (activeCart.lineItems[i].productId === product.id) {
-          productId = activeCart.lineItems[i].id;
-          break;
+      let productId = "";
+      if (activeCart && product) {
+        for (let i = 0; i < activeCart.lineItems.length; i += 1) {
+          if (activeCart.lineItems[i].productId === product.id) {
+            productId = activeCart.lineItems[i].id;
+            break;
+          }
         }
+
+        await cartDeleteItem(activeCart.id, activeCart.version, productId);
+        dispatch(setCount(await getProductCountFromCart()));
+        handleSuccessAlert();
       }
 
-      await cartDeleteItem(activeCart.id, activeCart.version, productId);
-      dispatch(setCount(await getProductCountFromCart()));
-    }
+      setIsDisabled(false);
+    } catch (e) {
+      setActionError(`Can't remove product from cart. ${e}`);
 
-    setIsDisabled(false);
+      if (!isActiveTimeout) {
+        setTimeout(() => {
+          setActionError("");
+          setIsActiveTimeout(false);
+        }, 2000);
+      }
+
+      setIsActiveTimeout(true);
+    }
   };
 
   const handleAddToCart = async () => {
@@ -168,6 +192,26 @@ function Product() {
             )}
           </div>
         </div>
+        {isChangingSuccessful && (
+          <div className={styles.alert}>
+            <AlertView
+              alertTitle="Success"
+              severity="success"
+              variant="filled"
+              textContent="Changes were successful"
+            />
+          </div>
+        )}
+        {actionError && (
+          <div className={styles.alert}>
+            <AlertView
+              alertTitle="Error"
+              severity="error"
+              variant="filled"
+              textContent={actionError}
+            />
+          </div>
+        )}
       </Container>
       <Footer />
     </>

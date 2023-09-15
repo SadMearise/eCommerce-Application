@@ -42,6 +42,11 @@
   }
 }
 
+.alert {
+  position: absolute;
+  z-index: 1000;
+}
+
 .error-message {
   max-width: 500px;
   margin: 90px auto 0 auto;
