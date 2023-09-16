@@ -27,7 +27,8 @@ function Product() {
   const [actionError, setActionError] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [productType, setProductType] = useState<ProductType>();
-  const [isDisabled, setIsDisabled] = useState(false);
+  const [isAddBtnDisabled, setIsAddBtnDisabled] = useState(false);
+  const [isRemoveBtnDisabled, setIsRemoveBtnDisabled] = useState(true);
   const [isBtnLoading, setBtnLoading] = useState(false);
   const [isChangingSuccessful, setIsChangingSuccessful] = useState(false);
   const [isActiveTimeout, setIsActiveTimeout] = useState(false);
@@ -41,6 +42,7 @@ function Product() {
 
   const handleRemoveFromCart = async () => {
     try {
+      setIsRemoveBtnDisabled(true);
       const activeCart = await getActiveCart();
 
       let productId = "";
@@ -55,10 +57,10 @@ function Product() {
         await cartDeleteItem(activeCart.id, activeCart.version, productId);
         dispatch(setCount(await getProductCountFromCart()));
         handleSuccessAlert();
+        setIsAddBtnDisabled(false);
       }
-
-      setIsDisabled(false);
     } catch (e) {
+      setIsRemoveBtnDisabled(false);
       setActionError(`Can't remove product from cart. ${e}`);
 
       if (!isActiveTimeout) {
@@ -73,6 +75,7 @@ function Product() {
   };
 
   const handleAddToCart = async () => {
+    setIsAddBtnDisabled(true);
     setBtnLoading(true);
     let activeCart = await getActiveCart();
 
@@ -86,7 +89,8 @@ function Product() {
       dispatch(setCount(updatedCart.lineItems.length));
     }
     setBtnLoading(false);
-    setIsDisabled(true);
+    setIsAddBtnDisabled(true);
+    setIsRemoveBtnDisabled(false);
   };
 
   useEffect(() => {
@@ -118,7 +122,8 @@ function Product() {
 
       if (cart) {
         const isProductInCart = cart.lineItems.some((item) => item.productId === product.id);
-        setIsDisabled(isProductInCart);
+        setIsAddBtnDisabled(isProductInCart);
+        setIsRemoveBtnDisabled(!isProductInCart);
       }
 
       setIsLoading(false);
@@ -176,13 +181,13 @@ function Product() {
             <ProductSizes product={product} />
             <Button
               className={styles.btn}
-              disabled={isDisabled}
+              disabled={isAddBtnDisabled}
               variant="outlined"
               onClick={handleAddToCart}
             >
               {isBtnLoading ? <CircularProgress className={styles["circular-progress"]} /> : "Add to cart"}
             </Button>
-            {isDisabled && (
+            {!isRemoveBtnDisabled && (
               <IconButton
                 aria-label="delete"
                 onClick={handleRemoveFromCart}
