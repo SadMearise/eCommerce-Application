@@ -25,12 +25,8 @@ export default function ProductCard({ product, url, cart }: IProductCardProps) {
 
   useEffect(() => {
     if (cart) {
-      for (let i = 0; i < cart.lineItems.length; i += 1) {
-        if (cart.lineItems[i].productId === product.id) {
-          setIsDisabled(true);
-          break;
-        }
-      }
+      const isProductInCart = cart.lineItems.some((item) => item.productId === product.id);
+      setIsDisabled(isProductInCart);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -43,7 +39,7 @@ export default function ProductCard({ product, url, cart }: IProductCardProps) {
     const productPrices = product.masterVariant.prices ? product.masterVariant.prices : [];
     const prices = productPrices.length ? productPrices[0] : null;
 
-    const handleButtonClick = async () => {
+    const handleAddToCart = async () => {
       setLoading(true);
       setIsDisabled(true);
       let activeCart = await getActiveCart();
@@ -133,7 +129,7 @@ export default function ProductCard({ product, url, cart }: IProductCardProps) {
               className={styles["button-add-to-cart"]}
               variant="outlined"
               disabled={isDisabled}
-              onClick={handleButtonClick}
+              onClick={handleAddToCart}
             >
               {isLoading ? <CircularProgress className={styles["circular-progress"]} /> : "Add to cart"}
             </Button>

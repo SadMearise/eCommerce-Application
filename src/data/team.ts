@@ -33,6 +33,7 @@ const team = [
           "Catalog Page Enhancements",
           "Detailed Product Page: Add or Remove Product from Cart",
           "Routing Implementation",
+          "Header Enhancements",
         ],
       },
     ],
@@ -76,7 +77,7 @@ const team = [
         name: "step 3",
         descriptions: ["Detailed Product Page Implementation", "Unit Test Coverage", "Content management"],
       },
-      { name: "step 4", descriptions: ["About Us Page Implementation", "Header Enhancements", "Footer"] },
+      { name: "step 4", descriptions: ["About Us Page Implementation", "Footer"] },
     ],
   },
 ];

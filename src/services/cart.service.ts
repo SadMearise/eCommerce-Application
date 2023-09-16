@@ -2,9 +2,9 @@ import { Cart, CartRemoveLineItemAction } from "@commercetools/platform-sdk";
 import { CountryCode, StatusCodes } from "../models/types";
 import getAnonymousApiRoot from "./AnonymousClient";
 
-export async function getActiveCart(): Promise<false | Cart> {
-  const rootApi = getAnonymousApiRoot();
+const rootApi = getAnonymousApiRoot();
 
+export async function getActiveCart(): Promise<false | Cart> {
   try {
     const activeCartResp = await rootApi.me().activeCart().get().execute();
 
@@ -23,8 +23,6 @@ export async function getActiveCart(): Promise<false | Cart> {
 }
 
 export async function createCart() {
-  const rootApi = getAnonymousApiRoot();
-
   const cartResp = await rootApi
     .me()
     .carts()
@@ -45,8 +43,6 @@ export async function createCart() {
 }
 
 export async function addProductToCart(cartId: string, version: number, productId: string) {
-  const rootApi = getAnonymousApiRoot();
-
   const updatedCartResp = await rootApi
     .me()
     .carts()
@@ -71,8 +67,6 @@ export async function addProductToCart(cartId: string, version: number, productI
 }
 
 export async function cartDeleteItem(cartId: string, version: number, productId: string) {
-  const rootApi = getAnonymousApiRoot();
-
   const CartRemoveItemAction: CartRemoveLineItemAction = {
     action: "removeLineItem",
     lineItemId: productId,

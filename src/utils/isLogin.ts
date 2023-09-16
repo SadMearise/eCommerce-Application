@@ -1,13 +1,9 @@
 import tokenCache from "../services/TokenCash";
 
-const isLogin = (): boolean | undefined => {
-  let loginState: boolean | undefined = false;
+const isLogin = (): boolean => {
+  const tokenData = tokenCache.get();
 
-  if (tokenCache.get()) {
-    loginState = Object.prototype.hasOwnProperty.call(tokenCache.get(), "isLogin") ? tokenCache.get().isLogin : false;
-  }
-
-  return loginState;
+  return !!tokenData && !!tokenData.isLogin;
 };
 
 export default isLogin;

@@ -3,9 +3,7 @@ import { getActiveCart } from "../services/cart.service";
 const getProductCountFromCart = async () => {
   const cart = await getActiveCart();
 
-  if (!cart) return 0;
-
-  return cart.lineItems.length;
+  return cart ? cart.lineItems.length : 0;
 };
 
 export default getProductCountFromCart;

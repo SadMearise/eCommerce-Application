@@ -79,10 +79,11 @@ function Product() {
     if (!activeCart) {
       activeCart = await createCart();
     }
-    if (product) {
-      await addProductToCart(activeCart.id, activeCart.version, product.id);
 
-      dispatch(setCount(await getProductCountFromCart()));
+    if (product) {
+      const updatedCart = await addProductToCart(activeCart.id, activeCart.version, product.id);
+
+      dispatch(setCount(updatedCart.lineItems.length));
     }
     setBtnLoading(false);
     setIsDisabled(true);
@@ -109,20 +110,18 @@ function Product() {
 
   useEffect(() => {
     const checkCart = async () => {
+      if (!product) {
+        return;
+      }
+
       const cart = await getActiveCart();
 
-      if (product) {
-        if (cart) {
-          for (let i = 0; i < cart.lineItems.length; i += 1) {
-            if (cart.lineItems[i].productId === product.id) {
-              setIsDisabled(true);
-              break;
-            }
-          }
-        }
-
-        setIsLoading(false);
+      if (cart) {
+        const isProductInCart = cart.lineItems.some((item) => item.productId === product.id);
+        setIsDisabled(isProductInCart);
       }
+
+      setIsLoading(false);
     };
 
     checkCart();
