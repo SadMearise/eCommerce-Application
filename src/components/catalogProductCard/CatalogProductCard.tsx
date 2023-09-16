@@ -15,7 +15,6 @@ import { Attributes } from "../../utils/types";
 import sizeStringToNumber from "../../utils/sizeStringToNumber";
 import getAttributeLabel from "../../utils/getAttributeLabel";
 import { addProductToCart, createCart, getActiveCart } from "../../services/cart.service";
-import getProductCountFromCart from "../../utils/getProductCountFromCart";
 import { setCount } from "../../store/features/cartCount/cartCountSlice";
 import { useAppDispatch } from "../../store/hooks";
 
@@ -52,8 +51,8 @@ export default function ProductCard({ product, url, cart }: IProductCardProps) {
       if (!activeCart) {
         activeCart = await createCart();
       }
-      await addProductToCart(activeCart.id, activeCart.version, product.id);
-      dispatch(setCount(await getProductCountFromCart()));
+      const updatedCart = await addProductToCart(activeCart.id, activeCart.version, product.id);
+      dispatch(setCount(updatedCart.lineItems.length));
       setLoading(false);
     };
 

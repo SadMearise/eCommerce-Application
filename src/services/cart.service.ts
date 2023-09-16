@@ -47,7 +47,7 @@ export async function createCart() {
 export async function addProductToCart(cartId: string, version: number, productId: string) {
   const rootApi = getAnonymousApiRoot();
 
-  await rootApi
+  const updatedCartResp = await rootApi
     .me()
     .carts()
     .withId({ ID: cartId })
@@ -64,6 +64,10 @@ export async function addProductToCart(cartId: string, version: number, productI
       },
     })
     .execute();
+
+  const updatedCart = updatedCartResp.body;
+
+  return updatedCart;
 }
 
 export async function cartDeleteItem(cartId: string, version: number, productId: string) {
