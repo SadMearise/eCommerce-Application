@@ -175,6 +175,7 @@ function Product() {
             />
             <ProductSizes product={product} />
             <Button
+              className={styles.btn}
               disabled={isDisabled}
               variant="outlined"
               onClick={handleAddToCart}

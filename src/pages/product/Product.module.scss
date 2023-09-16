@@ -42,6 +42,10 @@
   }
 }
 
+.btn {
+  min-width: 135px !important;
+}
+
 .alert {
   position: absolute;
   z-index: 1000;
@@ -50,6 +54,11 @@
 .error-message {
   max-width: 500px;
   margin: 90px auto 0 auto;
+}
+
+.circular-progress {
+  height: 24.5px !important;
+  width: 24.5px !important;
 }
 
 .progress {
