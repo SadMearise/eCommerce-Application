@@ -18,6 +18,7 @@ import { addProductToCart, createCart, getActiveCart } from "../../services/cart
 import { setCount } from "../../store/features/cartCount/cartCountSlice";
 import { useAppDispatch } from "../../store/hooks";
 import AlertView from "../alertView/AlertView";
+import updateActiveTimeoutWithDelay from "../../utils/updateActiveTimeoutWithDelay";
 
 export default function ProductCard({ product, url, cart }: IProductCardProps) {
   const [isDisabled, setIsDisabled] = useState(false);
@@ -59,13 +60,7 @@ export default function ProductCard({ product, url, cart }: IProductCardProps) {
         setIsDisabled(false);
         setLoading(false);
 
-        if (!isActiveTimeout) {
-          setTimeout(() => {
-            setActionError("");
-            setIsActiveTimeout(false);
-          }, 2000);
-        }
-        setIsActiveTimeout(true);
+        updateActiveTimeoutWithDelay(isActiveTimeout, setActionError, setIsActiveTimeout, 2000);
       }
     };
 

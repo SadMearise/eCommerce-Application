@@ -78,7 +78,7 @@ export async function cartDeleteItem(cartId: string, version: number, productId:
     quantity: 1,
   };
 
-  await rootApi
+  const updatedCartResp = await rootApi
     .me()
     .carts()
     .withId({ ID: cartId })
@@ -89,4 +89,8 @@ export async function cartDeleteItem(cartId: string, version: number, productId:
       },
     })
     .execute();
+
+  const updatedCart = updatedCartResp.body;
+
+  return updatedCart;
 }

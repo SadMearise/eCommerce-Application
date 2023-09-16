@@ -16,9 +16,9 @@ import ProductPrices from "../../components/productPrices/ProductPrices";
 import Footer from "../../components/footer/Footer";
 import { addProductToCart, cartDeleteItem, createCart, getActiveCart } from "../../services/cart.service";
 import { setCount } from "../../store/features/cartCount/cartCountSlice";
-import getProductCountFromCart from "../../utils/getProductCountFromCart";
 import AlertView from "../../components/alertView/AlertView";
 import { useAppDispatch } from "../../store/hooks";
+import updateActiveTimeoutWithDelay from "../../utils/updateActiveTimeoutWithDelay";
 
 function Product() {
   const params = useParams();
@@ -54,8 +54,8 @@ function Product() {
           }
         }
 
-        await cartDeleteItem(activeCart.id, activeCart.version, productId);
-        dispatch(setCount(await getProductCountFromCart()));
+        const updatedCart = await cartDeleteItem(activeCart.id, activeCart.version, productId);
+        dispatch(setCount(updatedCart.lineItems.length));
         handleSuccessAlert();
         setIsAddBtnDisabled(false);
       }
@@ -63,14 +63,7 @@ function Product() {
       setIsRemoveBtnDisabled(false);
       setActionError(`Can't remove product from cart. ${e}`);
 
-      if (!isActiveTimeout) {
-        setTimeout(() => {
-          setActionError("");
-          setIsActiveTimeout(false);
-        }, 2000);
-      }
-
-      setIsActiveTimeout(true);
+      updateActiveTimeoutWithDelay(isActiveTimeout, setActionError, setIsActiveTimeout, 2000);
     }
   };
 
