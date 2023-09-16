@@ -17,10 +17,13 @@ import getAttributeLabel from "../../utils/getAttributeLabel";
 import { addProductToCart, createCart, getActiveCart } from "../../services/cart.service";
 import { setCount } from "../../store/features/cartCount/cartCountSlice";
 import { useAppDispatch } from "../../store/hooks";
+import AlertView from "../alertView/AlertView";
 
 export default function ProductCard({ product, url, cart }: IProductCardProps) {
   const [isDisabled, setIsDisabled] = useState(false);
   const [isLoading, setLoading] = useState(false);
+  const [isActiveTimeout, setIsActiveTimeout] = useState(false);
+  const [actionError, setActionError] = useState("");
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -40,16 +43,30 @@ export default function ProductCard({ product, url, cart }: IProductCardProps) {
     const prices = productPrices.length ? productPrices[0] : null;
 
     const handleAddToCart = async () => {
-      setLoading(true);
-      setIsDisabled(true);
-      let activeCart = await getActiveCart();
+      try {
+        setLoading(true);
+        setIsDisabled(true);
+        let activeCart = await getActiveCart();
 
-      if (!activeCart) {
-        activeCart = await createCart();
+        if (!activeCart) {
+          activeCart = await createCart();
+        }
+        const updatedCart = await addProductToCart(activeCart.id, activeCart.version, product.id);
+        dispatch(setCount(updatedCart.lineItems.length));
+        setLoading(false);
+      } catch (e) {
+        setActionError("Can't add product to cart");
+        setIsDisabled(false);
+        setLoading(false);
+
+        if (!isActiveTimeout) {
+          setTimeout(() => {
+            setActionError("");
+            setIsActiveTimeout(false);
+          }, 2000);
+        }
+        setIsActiveTimeout(true);
       }
-      const updatedCart = await addProductToCart(activeCart.id, activeCart.version, product.id);
-      dispatch(setCount(updatedCart.lineItems.length));
-      setLoading(false);
     };
 
     return (
@@ -137,6 +154,16 @@ export default function ProductCard({ product, url, cart }: IProductCardProps) {
               to={url}
               className={styles.link}
             />
+            {actionError && (
+              <div className={styles.alert}>
+                <AlertView
+                  alertTitle="Error"
+                  severity="error"
+                  variant="filled"
+                  textContent={actionError}
+                />
+              </div>
+            )}
           </CardContent>
         </Card>
       </div>

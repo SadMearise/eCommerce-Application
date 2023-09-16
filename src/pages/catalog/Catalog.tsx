@@ -189,33 +189,6 @@ export default function Catalog() {
             />
             <CatalogSortingDopdownMenu setSortValues={setSortValues} />
             {catalogCards()}
-            {/* {!loading ? products.length ? <div>content</div> : <div>content bot found</div> : <div>loading</div>} */}
-            {/* {products.length ? (
-              <>
-                <Box className={styles["catalog-container"]}>
-                  {products.map((product) => (
-                    <ProductCard
-                      product={product}
-                      key={product.id}
-                      url={`/product/${product.key}`}
-                    />
-                  ))}
-                </Box>
-                {countPages > 1 && (
-                  <Pagination
-                    className={styles.pagination}
-                    count={countPages}
-                    page={currentPage}
-                    color="primary"
-                    onChange={(_, num) => {
-                      setCurrentPage(num);
-                    }}
-                  />
-                )}
-              </>
-            ) : (
-              <div>Content not found</div>
-            )} */}
           </Grid>
         </Grid>
       </Container>

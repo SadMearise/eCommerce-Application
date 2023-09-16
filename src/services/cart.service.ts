@@ -1,11 +1,16 @@
 import { Cart, CartRemoveLineItemAction } from "@commercetools/platform-sdk";
 import { CountryCode, StatusCodes } from "../models/types";
 import getAnonymousApiRoot from "./AnonymousClient";
+import tokenCache from "./TokenCash";
 
 const rootApi = getAnonymousApiRoot();
 
 export async function getActiveCart(): Promise<false | Cart> {
   try {
+    if (!tokenCache.hasValidToken()) {
+      return false;
+    }
+
     const activeCartResp = await rootApi.me().activeCart().get().execute();
 
     const cart = activeCartResp.body;
