@@ -128,25 +128,6 @@ export function cartChangeItemQuantity(cartId: string, version: number, itemId: 
     .execute();
 }
 
-// export function cartDeleteItem(cartId: string, version: number, itemId: string) {
-//   const cartRemoveItemAction: CartRemoveLineItemAction = {
-//     action: "removeLineItem",
-//     lineItemId: itemId,
-//   };
-
-//   return apiRoot
-//     .me()
-//     .carts()
-//     .withId({ ID: cartId })
-//     .post({
-//       body: {
-//         version,
-//         actions: [cartRemoveItemAction],
-//       },
-//     })
-//     .execute();
-// }
-
 export function getDiscount() {
   return apiRoot.discountCodes().get().execute();
 }
@@ -171,4 +152,7 @@ export function cartAddDiscount(cartId: string, version: number, code: string): 
 
 export function deleteShoppingCart(cartId: string, version: number) {
   return apiRoot.carts().withId({ ID: cartId }).delete({ queryArgs: { version } }).execute();
+}
+export function getCarts() {
+  return apiRoot.me().carts().get().execute();
 }

@@ -11,33 +11,46 @@ import BasketProductQuantity from "../../components/basketProductQuantity/Basket
 import BasketProductCard from "../../components/basketProductCard/BasketProductCard";
 import BasketClearButton from "../../components/basketClearButton/BasketClearButton";
 import styles from "./Basket.module.scss";
-import { cartDeleteItem, deleteShoppingCart, getShoppingCart } from "../../services/cart.service";
+import { cartDeleteItem, deleteShoppingCart, getCarts, getShoppingCart } from "../../services/cart.service";
 import BasketEmptyView from "../../components/basketEmptyVIew/BasketEmptyView";
 import LoadingView from "../../components/loadingView/LoadingView";
+import { useAppDispatch } from "../../store/hooks";
+import { setCount } from "../../store/features/cartCount/cartCountSlice";
+import getProductCountFromCart from "../../utils/getProductCountFromCart";
 
 export default function Basket() {
   const [shoppingCart, setShoppingCart] = useState<Cart>();
   const [isLoading, setIsLoading] = useState(true);
+  const dispatch = useAppDispatch();
 
   const handleUpdateShoppingCart = async () => {
     try {
       const fetchShoppingCart = await getShoppingCart();
       const [cart] = fetchShoppingCart.body.results;
+
       setShoppingCart(cart);
+      dispatch(setCount(await getProductCountFromCart()));
     } catch (error) {
       throw new Error(`An error occurred while updating the shopping cart: ${error}`);
     }
   };
 
-  const handleDeleteShoppingCartItem = (cartId: string, version: number, itemId: string) => {
-    cartDeleteItem(cartId, version, itemId).then(() => handleUpdateShoppingCart());
+  const handleDeleteShoppingCartItem = async (cartId: string, version: number, itemId: string) => {
+    await cartDeleteItem(cartId, version, itemId);
+    await handleUpdateShoppingCart();
+    dispatch(setCount(await getProductCountFromCart()));
   };
 
   const handleClearShoppingCart = async () => {
     if (shoppingCart) {
       try {
-        await deleteShoppingCart(shoppingCart.id, shoppingCart.version);
-        handleUpdateShoppingCart();
+        const shoppingCarts = (await getCarts()).body.results;
+        const deleteShoppingCarts = shoppingCarts.map(async (cart) => {
+          await deleteShoppingCart(cart.id, cart.version);
+        });
+        await Promise.all(deleteShoppingCarts);
+        await handleUpdateShoppingCart();
+        dispatch(setCount(await getProductCountFromCart()));
       } catch (error) {
         throw new Error(`An error occurred while clearing the shopping cart: ${error}`);
       }
