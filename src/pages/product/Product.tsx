@@ -19,6 +19,7 @@ import { setCount } from "../../store/features/cartCount/cartCountSlice";
 import AlertView from "../../components/alertView/AlertView";
 import { useAppDispatch } from "../../store/hooks";
 import updateActiveTimeoutWithDelay from "../../utils/updateActiveTimeoutWithDelay";
+import getProductCountFromCart from "../../utils/getProductCountFromCart";
 
 function Product() {
   const params = useParams();
@@ -77,9 +78,9 @@ function Product() {
     }
 
     if (product) {
-      const updatedCart = await addProductToCart(activeCart.id, activeCart.version, product.id);
+      await addProductToCart(activeCart.id, activeCart.version, product.id);
 
-      dispatch(setCount(updatedCart.lineItems.length));
+      dispatch(setCount(await getProductCountFromCart()));
     }
     setBtnLoading(false);
     setIsAddBtnDisabled(true);

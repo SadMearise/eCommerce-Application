@@ -23,22 +23,21 @@ export default function Basket() {
   const [isLoading, setIsLoading] = useState(true);
   const [isChanging, setIsChanging] = useState<boolean>(false);
   const dispatch = useAppDispatch();
-
   const handleUpdateShoppingCart = async () => {
     try {
       const fetchShoppingCart = await getShoppingCart();
       const [cart] = fetchShoppingCart.body.results;
       setShoppingCart(cart);
+      dispatch(setCount(await getProductCountFromCart()));
     } catch (error) {
       throw new Error(`An error occurred while updating the shopping cart: ${error}`);
     }
   };
-
   const handleDeleteShoppingCartItem = async (cartId: string, version: number, itemId: string) => {
     setIsChanging(true);
     await cartDeleteItem(cartId, version, itemId);
     await handleUpdateShoppingCart();
-    dispatch(setCount(await getProductCountFromCart()));
+    // dispatch(setCount(await getProductCountFromCart()));
     setIsChanging(false);
   };
 
@@ -50,8 +49,8 @@ export default function Basket() {
           await deleteShoppingCart(cart.id, cart.version);
         });
         await Promise.all(deleteShoppingCarts);
-        await handleUpdateShoppingCart();
         dispatch(setCount(await getProductCountFromCart()));
+        await handleUpdateShoppingCart();
       } catch (error) {
         throw new Error(`An error occurred while clearing the shopping cart: ${error}`);
       }

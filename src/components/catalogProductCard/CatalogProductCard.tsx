@@ -19,6 +19,7 @@ import { setCount } from "../../store/features/cartCount/cartCountSlice";
 import { useAppDispatch } from "../../store/hooks";
 import AlertView from "../alertView/AlertView";
 import updateActiveTimeoutWithDelay from "../../utils/updateActiveTimeoutWithDelay";
+import getProductCountFromCart from "../../utils/getProductCountFromCart";
 
 export default function ProductCard({ product, url, cart }: IProductCardProps) {
   const [isDisabled, setIsDisabled] = useState(false);
@@ -52,8 +53,8 @@ export default function ProductCard({ product, url, cart }: IProductCardProps) {
         if (!activeCart) {
           activeCart = await createCart();
         }
-        const updatedCart = await addProductToCart(activeCart.id, activeCart.version, product.id);
-        dispatch(setCount(updatedCart.lineItems.length));
+        await addProductToCart(activeCart.id, activeCart.version, product.id);
+        dispatch(setCount(await getProductCountFromCart()));
         setLoading(false);
       } catch (e) {
         setActionError("Can't add product to cart");
