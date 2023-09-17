@@ -2,7 +2,7 @@ import { createBrowserRouter, redirect } from "react-router-dom";
 import Page404 from "../pages/404/404";
 import Login from "../pages/Login";
 import Registration from "../pages/Registration";
-import Home from "../pages/Home";
+import Home from "../pages/home/Home";
 import About from "../pages/about/About";
 import Basket from "../pages/basket/Basket";
 import Catalog from "../pages/catalog/Catalog";

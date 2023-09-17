@@ -1,0 +1,13 @@
+.promo-code-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  * {
+    margin: 0;
+  }
+
+  .promo-code {
+    font-size: 1.5rem;
+  }
+}
