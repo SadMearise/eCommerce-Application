@@ -1,5 +1,6 @@
 import { Backdrop, Box, Button, Fade, Modal, Typography } from "@mui/material";
 import { useState } from "react";
+import styles from "./BasketClearButton.module.scss";
 
 const style = {
   position: "absolute" as const,
@@ -47,14 +48,21 @@ export default function BasketClearButton({ handleClearShoppingCart }: { handleC
               >
                 Are you sure you want to delete products? It will be impossible to cancel this action.
               </Typography>
-              <Button
-                sx={{ mt: 2 }}
-                fullWidth
-                variant="contained"
-                onClick={handleClearShoppingCart}
-              >
-                Clear Shopping Cart
-              </Button>
+              <div className={styles["button-wrapper"]}>
+                <Button
+                  sx={{ mt: 2 }}
+                  onClick={handleClose}
+                >
+                  decline
+                </Button>
+                <Button
+                  sx={{ mt: 2 }}
+                  variant="contained"
+                  onClick={handleClearShoppingCart}
+                >
+                  Clear Shopping Cart
+                </Button>
+              </div>
             </Box>
           </Fade>
         </Modal>
