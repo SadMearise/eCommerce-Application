@@ -1,6 +1,7 @@
 import { Backdrop, Box, Button, Fade, Modal, Typography } from "@mui/material";
 import { useState } from "react";
 import styles from "./BasketClearButton.module.scss";
+import { BasketClearButtonProps } from "./types";
 
 const style = {
   position: "absolute" as const,
@@ -13,14 +14,19 @@ const style = {
   p: 4,
 };
 
-export default function BasketClearButton({ handleClearShoppingCart }: { handleClearShoppingCart: () => void }) {
+export default function BasketClearButton({ handleClearShoppingCart, isChanging }: BasketClearButtonProps) {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   return (
     <div>
       <div>
-        <Button onClick={handleOpen}>Clear Shopping Cart</Button>
+        <Button
+          onClick={handleOpen}
+          disabled={isChanging}
+        >
+          Clear Shopping Cart
+        </Button>
         <Modal
           open={open}
           onClose={handleClose}

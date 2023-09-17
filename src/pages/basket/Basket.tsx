@@ -21,6 +21,7 @@ import getProductCountFromCart from "../../utils/getProductCountFromCart";
 export default function Basket() {
   const [shoppingCart, setShoppingCart] = useState<Cart>();
   const [isLoading, setIsLoading] = useState(true);
+  const [isChanging, setIsChanging] = useState<boolean>(false);
   const dispatch = useAppDispatch();
 
   const handleUpdateShoppingCart = async () => {
@@ -34,9 +35,11 @@ export default function Basket() {
   };
 
   const handleDeleteShoppingCartItem = async (cartId: string, version: number, itemId: string) => {
+    setIsChanging(true);
     await cartDeleteItem(cartId, version, itemId);
     await handleUpdateShoppingCart();
     dispatch(setCount(await getProductCountFromCart()));
+    setIsChanging(false);
   };
 
   const handleClearShoppingCart = async () => {
@@ -86,7 +89,10 @@ export default function Basket() {
           <div className={styles["left-side"]}>
             <div className={styles["basket-items-wrapper"]}>
               <div className={styles["basket-header"]}>
-                <BasketClearButton handleClearShoppingCart={handleClearShoppingCart} />
+                <BasketClearButton
+                  isChanging={isChanging}
+                  handleClearShoppingCart={handleClearShoppingCart}
+                />
               </div>
               {shoppingCart &&
                 shoppingCart.lineItems.map((product) => (
@@ -99,6 +105,8 @@ export default function Basket() {
                       product={product}
                       shoppingCartVersion={shoppingCart.version}
                       cartId={shoppingCart?.id}
+                      isChanging={isChanging}
+                      setIsChanging={setIsChanging}
                       handleUpdateShoppingCart={handleUpdateShoppingCart}
                     />
                     <BasketProductPrice
@@ -109,6 +117,7 @@ export default function Basket() {
                       aria-label="delete"
                       sx={{ height: "max-content" }}
                       onClick={() => handleDeleteShoppingCartItem(shoppingCart.id, shoppingCart.version, product.id)}
+                      disabled={isChanging}
                     >
                       <DeleteIcon />
                     </IconButton>
