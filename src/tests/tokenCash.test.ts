@@ -15,8 +15,8 @@ describe("tokenCache", () => {
   });
 
   test("check if token is valid", () => {
-    const validCache = { token: "exampleToken", expirationTime: +new Date() + 3600000 };
-    const invalidCache = { token: "expiredToken", expirationTime: +new Date() - 3600000 };
+    const validCache = { token: "exampleToken", expirationTime: +new Date() + 3600000, refreshToken: "kratkoe" };
+    const invalidCache = { token: "expiredToken", expirationTime: +new Date() - 3600000, refreshToken: "kratkoe" };
 
     tokenCache.set(validCache);
     expect(tokenCache.hasValidToken()).toBe(true);
