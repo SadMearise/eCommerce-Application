@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useState } from "react";
 import { Alert, AlertTitle, IconButton } from "@mui/material";
-import { useDispatch } from "react-redux";
 import CloseIcon from "@mui/icons-material/Close";
 import { setRegistrationSuccess } from "../../store/features/registration/registrationSlice";
 import styles from "./AlertView.module.scss";
+import { useAppDispatch } from "../../store/hooks";
 
 interface AlertViewProps {
   textContent: string;
@@ -13,7 +13,7 @@ interface AlertViewProps {
 }
 
 export default function AlertView({ textContent, variant, severity, alertTitle }: AlertViewProps) {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const [open, setOpen] = useState(true);
 
   const handleSetIsSuccessFalse = useCallback(() => {

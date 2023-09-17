@@ -1,9 +1,12 @@
+import { useEffect, useState } from "react";
 import Card from "@mui/material/Card";
 import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import { Link } from "react-router-dom";
+import Button from "@mui/material/Button";
+import CircularProgress from "@mui/material/CircularProgress";
 import styles from "./CatalogProductCard.module.scss";
 import { IProductCardProps } from "./types";
 import { formatPrice } from "../../utils/getPrice";
@@ -11,8 +14,27 @@ import locale from "../../settings";
 import { Attributes } from "../../utils/types";
 import sizeStringToNumber from "../../utils/sizeStringToNumber";
 import getAttributeLabel from "../../utils/getAttributeLabel";
+import { addProductToCart, createCart, getActiveCart } from "../../services/cart.service";
+import { setCount } from "../../store/features/cartCount/cartCountSlice";
+import { useAppDispatch } from "../../store/hooks";
+import AlertView from "../alertView/AlertView";
+import updateActiveTimeoutWithDelay from "../../utils/updateActiveTimeoutWithDelay";
 
-export default function ProductCard({ product, url }: IProductCardProps) {
+export default function ProductCard({ product, url, cart }: IProductCardProps) {
+  const [isDisabled, setIsDisabled] = useState(false);
+  const [isLoading, setLoading] = useState(false);
+  const [isActiveTimeout, setIsActiveTimeout] = useState(false);
+  const [actionError, setActionError] = useState("");
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    if (cart) {
+      const isProductInCart = cart.lineItems.some((item) => item.productId === product.id);
+      setIsDisabled(isProductInCart);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   if (product) {
     const productDescription = product.description ? product.description[locale] : "";
     const productName = product.name ? product.name[locale] : "";
@@ -20,6 +42,27 @@ export default function ProductCard({ product, url }: IProductCardProps) {
     const productUrl = productImages.length ? productImages[0].url : "no-image.png";
     const productPrices = product.masterVariant.prices ? product.masterVariant.prices : [];
     const prices = productPrices.length ? productPrices[0] : null;
+
+    const handleAddToCart = async () => {
+      try {
+        setLoading(true);
+        setIsDisabled(true);
+        let activeCart = await getActiveCart();
+
+        if (!activeCart) {
+          activeCart = await createCart();
+        }
+        const updatedCart = await addProductToCart(activeCart.id, activeCart.version, product.id);
+        dispatch(setCount(updatedCart.lineItems.length));
+        setLoading(false);
+      } catch (e) {
+        setActionError("Can't add product to cart");
+        setIsDisabled(false);
+        setLoading(false);
+
+        updateActiveTimeoutWithDelay(isActiveTimeout, setActionError, setIsActiveTimeout, 2000);
+      }
+    };
 
     return (
       <div className={styles["card-wrapper"]}>
@@ -94,11 +137,29 @@ export default function ProductCard({ product, url }: IProductCardProps) {
                   <Typography className={styles.price}>{formatPrice(prices.value)}</Typography>
                 </Box>
               ))}
+            <Button
+              className={styles["button-add-to-cart"]}
+              variant="outlined"
+              disabled={isDisabled}
+              onClick={handleAddToCart}
+            >
+              {isLoading ? <CircularProgress className={styles["circular-progress"]} /> : "Add to cart"}
+            </Button>
+            <Link
+              to={url}
+              className={styles.link}
+            />
+            {actionError && (
+              <div className={styles.alert}>
+                <AlertView
+                  alertTitle="Error"
+                  severity="error"
+                  variant="filled"
+                  textContent={actionError}
+                />
+              </div>
+            )}
           </CardContent>
-          <Link
-            to={url}
-            className={styles.link}
-          />
         </Card>
       </div>
     );

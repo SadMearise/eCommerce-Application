@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Container } from "@mui/material";
-import { ProductProjection } from "@commercetools/platform-sdk";
+import { Cart, ProductProjection } from "@commercetools/platform-sdk";
 import Box from "@mui/material/Box";
 import Pagination from "@mui/material/Pagination";
 import Grid from "@mui/material/Grid";
@@ -19,6 +19,8 @@ import RouterPaths from "../../router/routes";
 import { getAttributePath, getSortingPath } from "../../utils/getPaths";
 import { getSearchProductProjections } from "../../services/product.service";
 import { TCatalogFilterValues } from "../../models/types";
+import Footer from "../../components/footer/Footer";
+import { getActiveCart } from "../../services/cart.service";
 
 export default function Catalog() {
   const location = useLocation();
@@ -38,6 +40,11 @@ export default function Catalog() {
   const [categories, setCategories] = useState<TCategories[]>([]);
   const [currentId, setCurrentId] = useState("");
   const [loading, setLoading] = useState(true);
+  const [cart, setCart] = useState<false | Cart>(false);
+
+  const updateCart = async () => {
+    setCart(await getActiveCart());
+  };
 
   const updateProducts = async () => {
     const filterRules: string[] = [];
@@ -86,6 +93,10 @@ export default function Catalog() {
   };
 
   useEffect(() => {
+    updateCart();
+  }, []);
+
+  useEffect(() => {
     if (location.pathname === RouterPaths.Catalog) {
       setCategoriesBreadcrumbs([]);
     }
@@ -107,6 +118,7 @@ export default function Catalog() {
                   product={product}
                   key={product.id}
                   url={`/product/${product.key}`}
+                  cart={cart}
                 />
               ))}
             </Box>
@@ -177,36 +189,10 @@ export default function Catalog() {
             />
             <CatalogSortingDopdownMenu setSortValues={setSortValues} />
             {catalogCards()}
-            {/* {!loading ? products.length ? <div>content</div> : <div>content bot found</div> : <div>loading</div>} */}
-            {/* {products.length ? (
-              <>
-                <Box className={styles["catalog-container"]}>
-                  {products.map((product) => (
-                    <ProductCard
-                      product={product}
-                      key={product.id}
-                      url={`/product/${product.key}`}
-                    />
-                  ))}
-                </Box>
-                {countPages > 1 && (
-                  <Pagination
-                    className={styles.pagination}
-                    count={countPages}
-                    page={currentPage}
-                    color="primary"
-                    onChange={(_, num) => {
-                      setCurrentPage(num);
-                    }}
-                  />
-                )}
-              </>
-            ) : (
-              <div>Content not found</div>
-            )} */}
           </Grid>
         </Grid>
       </Container>
+      <Footer />
     </>
   );
 }

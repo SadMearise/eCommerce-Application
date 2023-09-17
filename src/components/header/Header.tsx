@@ -13,19 +13,44 @@ import MenuItem from "@mui/material/MenuItem";
 import { Link } from "react-router-dom";
 import PermIdentityOutlinedIcon from "@mui/icons-material/PermIdentityOutlined";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
+import Badge from "@mui/material/Badge";
+import { useSelector } from "react-redux";
 import styles from "./Header.module.scss";
 import { useAppDispatch } from "../../store/hooks";
 import RouterPaths from "../../router/routes";
 import tokenCache from "../../services/TokenCash";
 import { logout } from "../../store/features/user/userSlice";
+import isLogin from "../../utils/isLogin";
+import cartCount from "../../store/features/cartCount/cartCountSelector";
+import getProductCountFromCart from "../../utils/getProductCountFromCart";
+import { setCount } from "../../store/features/cartCount/cartCountSlice";
+import { TPages } from "./types";
 
 export default function Header() {
   const dispatch = useAppDispatch();
+  const cartCountSelector = useSelector(cartCount);
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
 
-  const handleLogout = () => {
-    tokenCache.set({ token: "", expirationTime: 0 });
+  const pages: TPages = {
+    home: {
+      name: "Home",
+      path: RouterPaths.Home,
+    },
+    about: {
+      name: "About",
+      path: RouterPaths.About,
+    },
+    catalog: {
+      name: "Catalog",
+      path: RouterPaths.Catalog,
+    },
+  };
+
+  const handleLogout = async () => {
+    tokenCache.set({ token: "", expirationTime: 0, isLogin: false });
+
+    dispatch(setCount(await getProductCountFromCart()));
     dispatch(logout());
   };
 
@@ -77,33 +102,20 @@ export default function Header() {
                 display: { xs: "block", md: "none" },
               }}
             >
-              <MenuItem onClick={handleCloseNavMenu}>
-                <Typography
-                  textAlign="center"
-                  component={Link}
-                  to={RouterPaths.Home}
+              {Object.keys(pages).map((page) => (
+                <MenuItem
+                  onClick={handleCloseNavMenu}
+                  key={pages[page].name}
                 >
-                  Home
-                </Typography>
-              </MenuItem>
-              <MenuItem onClick={handleCloseNavMenu}>
-                <Typography
-                  textAlign="center"
-                  component={Link}
-                  to={RouterPaths.About}
-                >
-                  About
-                </Typography>
-              </MenuItem>
-              <MenuItem onClick={handleCloseNavMenu}>
-                <Typography
-                  textAlign="center"
-                  component={Link}
-                  to={RouterPaths.Catalog}
-                >
-                  Catalog
-                </Typography>
-              </MenuItem>
+                  <Typography
+                    textAlign="center"
+                    component={Link}
+                    to={pages[page].path}
+                  >
+                    {pages[page].name}
+                  </Typography>
+                </MenuItem>
+              ))}
             </Menu>
           </Box>
           <Typography
@@ -127,30 +139,17 @@ export default function Header() {
 
           <Box className={styles.body}>
             <Box sx={{ display: { xs: "none", md: "flex" } }}>
-              <Button
-                onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: "white", display: "block" }}
-                component={Link}
-                to={RouterPaths.Home}
-              >
-                Home
-              </Button>
-              <Button
-                onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: "white", display: "block" }}
-                component={Link}
-                to={RouterPaths.About}
-              >
-                About
-              </Button>
-              <Button
-                onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: "white", display: "block" }}
-                component={Link}
-                to={RouterPaths.Catalog}
-              >
-                Catalog
-              </Button>
+              {Object.keys(pages).map((page) => (
+                <Button
+                  key={pages[page].name}
+                  onClick={handleCloseNavMenu}
+                  sx={{ my: 2, color: "white", display: "block" }}
+                  component={Link}
+                  to={pages[page].path}
+                >
+                  {pages[page].name}
+                </Button>
+              ))}
             </Box>
             <Typography
               className={styles.logo}
@@ -173,13 +172,20 @@ export default function Header() {
               className={styles.icons}
               sx={{ flexGrow: 0, display: "flex", alignItems: "center" }}
             >
-              <IconButton
-                component={Link}
-                to={RouterPaths.Basket}
-                sx={{ p: 0 }}
-              >
-                <ShoppingCartOutlinedIcon className={styles.icon} />
-              </IconButton>
+              <Tooltip title="Open cart">
+                <IconButton
+                  component={Link}
+                  to={RouterPaths.Basket}
+                  sx={{ p: 0 }}
+                >
+                  <Badge
+                    badgeContent={cartCountSelector}
+                    color="error"
+                  >
+                    <ShoppingCartOutlinedIcon className={styles.icon} />
+                  </Badge>
+                </IconButton>
+              </Tooltip>
 
               <Tooltip title="Open settings">
                 <IconButton
@@ -205,7 +211,7 @@ export default function Header() {
                 open={Boolean(anchorElUser)}
                 onClose={handleCloseUserMenu}
               >
-                {tokenCache.hasValidToken() && (
+                {isLogin() && (
                   <MenuItem
                     className={styles["menu-item"]}
                     onClick={handleCloseUserMenu}
@@ -220,7 +226,7 @@ export default function Header() {
                     </Typography>
                   </MenuItem>
                 )}
-                {!tokenCache.hasValidToken() ? (
+                {!isLogin() ? (
                   <MenuItem
                     className={styles["menu-item"]}
                     onClick={handleCloseUserMenu}
@@ -252,7 +258,7 @@ export default function Header() {
                     </Typography>
                   </MenuItem>
                 )}
-                {!tokenCache.hasValidToken() && (
+                {!isLogin() && (
                   <MenuItem
                     className={styles["menu-item"]}
                     onClick={handleCloseUserMenu}

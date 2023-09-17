@@ -19,6 +19,18 @@ const httpMiddlewareOptions: HttpMiddlewareOptions = {
   fetch,
 };
 
+const anonymousSessionFlowOptions = {
+  host: authURL,
+  projectKey,
+  credentials: {
+    clientId,
+    clientSecret,
+  },
+  tokenCache,
+  scopes,
+  fetch,
+};
+
 export default function getApiRoot() {
   const tokenStore = tokenCache.get(undefined);
   const token = tokenStore?.token;
@@ -38,6 +50,7 @@ export default function getApiRoot() {
   const tokenCtpClient = new ClientBuilder()
     .withExistingTokenFlow(authorization, options)
     .withClientCredentialsFlow(authMiddlewareOptions)
+    .withAnonymousSessionFlow(anonymousSessionFlowOptions)
     .withHttpMiddleware(httpMiddlewareOptions)
     .withLoggerMiddleware()
     .build();
