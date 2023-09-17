@@ -55,8 +55,8 @@ function Product() {
           }
         }
 
-        const updatedCart = await cartDeleteItem(activeCart.id, activeCart.version, productId);
-        dispatch(setCount(updatedCart.lineItems.length));
+        await cartDeleteItem(activeCart.id, activeCart.version, productId);
+        dispatch(setCount(await getProductCountFromCart()));
         handleSuccessAlert();
         setIsAddBtnDisabled(false);
       }
