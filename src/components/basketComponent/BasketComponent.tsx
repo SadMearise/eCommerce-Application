@@ -8,7 +8,7 @@ import BasketProductQuantity from "../basketProductQuantity/BasketProductQuantit
 import BasketProductPrice from "../basketProductPrice/BasketProductPrice";
 import BasketTotalCost from "../basketTotalCost/BasketTotalCost";
 import BasketPromoCodeField from "../basketPromoCodeField/BasketPromoCodeField";
-import { cartDeleteItem, deleteShoppingCart, getShoppingCart } from "../../services/cart.service";
+import { cartDeleteItem, deleteShoppingCart, getDiscount, getShoppingCart } from "../../services/cart.service";
 import BasketEmptyView from "../basketEmptyVIew/BasketEmptyView";
 import BasketClearButton from "../basketClearButton/BasketClearButton";
 
@@ -38,8 +38,10 @@ export default function BasketComponent() {
       try {
         const fetchShoppingCart = await getShoppingCart();
         const [cart] = fetchShoppingCart.body.results;
+        const promo = await getDiscount();
         setShoppingCart(cart);
         console.log(cart);
+        console.log("promo", promo);
         setIsLoading(false);
       } catch (e) {
         setIsLoading(false);
@@ -105,6 +107,7 @@ export default function BasketComponent() {
             <BasketPromoCodeField
               shoppingCartID={shoppingCart.id}
               shoppingCartVersion={shoppingCart.version}
+              shoppingCartDiscountCodes={shoppingCart.discountCodes}
               handleUpdateShoppingCart={handleUpdateShoppingCart}
             />
           </div>

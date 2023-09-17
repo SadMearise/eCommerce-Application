@@ -8,8 +8,8 @@ import styles from "./AlertView.module.scss";
 interface AlertViewProps {
   textContent: string;
   variant: "filled" | "outlined" | "standard";
-  severity: "success" | "error";
-  alertTitle: "Success" | "Error";
+  severity: "success" | "error" | "info";
+  alertTitle: "Success" | "Error" | "Info";
 }
 
 export default function AlertView({ textContent, variant, severity, alertTitle }: AlertViewProps) {
