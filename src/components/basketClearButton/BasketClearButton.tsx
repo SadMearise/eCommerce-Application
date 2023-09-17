@@ -1,18 +1,7 @@
-import { Backdrop, Box, Button, Fade, Modal, Typography } from "@mui/material";
+import { Backdrop, Button, Fade, Modal, Typography } from "@mui/material";
 import { useState } from "react";
 import styles from "./BasketClearButton.module.scss";
 import { BasketClearButtonProps } from "./types";
-
-const style = {
-  position: "absolute" as const,
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 400,
-  bgcolor: "background.paper",
-  boxShadow: 24,
-  p: 4,
-};
 
 export default function BasketClearButton({ handleClearShoppingCart, isChanging }: BasketClearButtonProps) {
   const [open, setOpen] = useState(false);
@@ -39,7 +28,7 @@ export default function BasketClearButton({ handleClearShoppingCart, isChanging 
           }}
         >
           <Fade in={open}>
-            <Box sx={style}>
+            <div className={styles["modal-wrapper"]}>
               <Typography
                 id="transition-modal-title"
                 variant="h6"
@@ -69,7 +58,7 @@ export default function BasketClearButton({ handleClearShoppingCart, isChanging 
                   Clear Shopping Cart
                 </Button>
               </div>
-            </Box>
+            </div>
           </Fade>
         </Modal>
       </div>

@@ -1,4 +1,29 @@
 .button-wrapper {
   display: flex;
   justify-content: space-between;
+  padding-top: 20px;
+
+  @media (max-width: 400px) {
+    flex-direction: column;
+  }
+}
+
+.modal-wrapper {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 400px;
+  background-color: white;
+  box-shadow: 2px 6px 24px 0px rgba(34, 60, 80, 0.2);
+  padding: 20px;
+
+  @media (max-width: 450px) {
+    flex-direction: column;
+    width: 90%;
+  }
+
+  * {
+    margin: 0 !important;
+  }
 }
