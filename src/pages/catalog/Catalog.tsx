@@ -5,6 +5,7 @@ import Box from "@mui/material/Box";
 import Pagination from "@mui/material/Pagination";
 import Grid from "@mui/material/Grid";
 import { useLocation } from "react-router-dom";
+import CircularProgress from "@mui/material/CircularProgress";
 import Header from "../../components/header/Header";
 import ProductCard from "../../components/catalogProductCard/CatalogProductCard";
 import styles from "./Catalog.module.scss";
@@ -39,7 +40,7 @@ export default function Catalog() {
   const [categoriesBreadcrumbs, setCategoriesBreadcrumbs] = useState<TCategories[]>([]);
   const [categories, setCategories] = useState<TCategories[]>([]);
   const [currentId, setCurrentId] = useState("");
-  const [loading, setLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
   const [cart, setCart] = useState<false | Cart>(false);
 
   const updateCart = async () => {
@@ -85,7 +86,7 @@ export default function Catalog() {
 
     const searchedProduct = await getSearchProductProjections(queryArgs);
 
-    setLoading(false);
+    setIsLoading(false);
     if (searchedProduct.total) {
       setCountPages(Math.ceil(searchedProduct.total / PAGE_LIMIT));
     }
@@ -103,48 +104,47 @@ export default function Catalog() {
   }, [location]);
 
   useEffect(() => {
+    setIsLoading(false);
     updateProducts();
+    setIsLoading(true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filterValues, priceSliderValues, currentPage, searchInputValue, sortValues, categoriesBreadcrumbs]);
 
   const catalogCards = () => {
-    if (!loading) {
-      if (products.length) {
-        return (
-          <>
-            <Box className={styles["catalog-container"]}>
-              {products.map((product) => (
-                <ProductCard
-                  product={product}
-                  key={product.id}
-                  url={`/product/${product.key}`}
-                  cart={cart}
-                />
-              ))}
-            </Box>
-            {countPages > 1 && (
-              <Pagination
-                className={styles.pagination}
-                count={countPages}
-                page={currentPage}
-                color="primary"
-                onChange={(_, num) => {
-                  setCurrentPage(num);
-                }}
+    if (products.length || isLoading) {
+      return (
+        <>
+          <Box className={styles["catalog-container"]}>
+            {products.map((product) => (
+              <ProductCard
+                product={product}
+                key={product.id}
+                url={`/product/${product.key}`}
+                cart={cart}
+                setIsLoading={setIsLoading}
               />
-            )}
-          </>
-        );
-      }
-
-      return <div>Sorry! We have run out of products with the specified filters :&#40;</div>;
+            ))}
+          </Box>
+          {countPages > 1 && (
+            <Pagination
+              className={styles.pagination}
+              count={countPages}
+              page={currentPage}
+              color="primary"
+              onChange={(_, num) => {
+                setCurrentPage(num);
+              }}
+            />
+          )}
+        </>
+      );
     }
 
-    return <div>Loading...</div>;
+    return <div>Sorry! We have run out of products with the specified filters :&#40;</div>;
   };
 
   return (
-    <>
+    <div className={styles.wrapper}>
       <Header />
       <Container maxWidth="lg">
         <CatalogCategories
@@ -191,8 +191,13 @@ export default function Catalog() {
             {catalogCards()}
           </Grid>
         </Grid>
+        {isLoading && (
+          <div className={styles["progress-wrapper"]}>
+            <CircularProgress className={styles["circular-progress"]} />
+          </div>
+        )}
       </Container>
       <Footer />
-    </>
+    </div>
   );
 }

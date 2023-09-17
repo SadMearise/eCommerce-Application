@@ -6,7 +6,6 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import { Link } from "react-router-dom";
 import Button from "@mui/material/Button";
-import CircularProgress from "@mui/material/CircularProgress";
 import styles from "./CatalogProductCard.module.scss";
 import { IProductCardProps } from "./types";
 import { formatPrice } from "../../utils/getPrice";
@@ -20,9 +19,8 @@ import { useAppDispatch } from "../../store/hooks";
 import AlertView from "../alertView/AlertView";
 import updateActiveTimeoutWithDelay from "../../utils/updateActiveTimeoutWithDelay";
 
-export default function ProductCard({ product, url, cart }: IProductCardProps) {
+export default function ProductCard({ product, url, cart, setIsLoading }: IProductCardProps) {
   const [isDisabled, setIsDisabled] = useState(false);
-  const [isLoading, setLoading] = useState(false);
   const [isActiveTimeout, setIsActiveTimeout] = useState(false);
   const [actionError, setActionError] = useState("");
   const dispatch = useAppDispatch();
@@ -45,7 +43,7 @@ export default function ProductCard({ product, url, cart }: IProductCardProps) {
 
     const handleAddToCart = async () => {
       try {
-        setLoading(true);
+        setIsLoading(true);
         setIsDisabled(true);
         let activeCart = await getActiveCart();
 
@@ -54,11 +52,11 @@ export default function ProductCard({ product, url, cart }: IProductCardProps) {
         }
         const updatedCart = await addProductToCart(activeCart.id, activeCart.version, product.id);
         dispatch(setCount(updatedCart.lineItems.length));
-        setLoading(false);
+        setIsLoading(false);
       } catch (e) {
         setActionError("Can't add product to cart");
         setIsDisabled(false);
-        setLoading(false);
+        setIsLoading(false);
 
         updateActiveTimeoutWithDelay(isActiveTimeout, setActionError, setIsActiveTimeout, 2000);
       }
@@ -143,7 +141,7 @@ export default function ProductCard({ product, url, cart }: IProductCardProps) {
               disabled={isDisabled}
               onClick={handleAddToCart}
             >
-              {isLoading ? <CircularProgress className={styles["circular-progress"]} /> : "Add to cart"}
+              Add to cart
             </Button>
             <Link
               to={url}
