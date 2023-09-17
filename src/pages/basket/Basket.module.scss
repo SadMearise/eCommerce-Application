@@ -3,7 +3,10 @@
   display: flex;
   gap: 24px;
 
-  @media (max-width: 6000px) {
+  @media (max-width: 980px) {
+    flex-direction: column;
+  }
+  @media (max-width: 600px) {
     padding: 20px 0;
   }
 
@@ -35,13 +38,7 @@
     @media (max-width: 980px) {
       flex-basis: 100%;
       max-width: 100%;
-      position: fixed;
-      align-self: center;
-      width: 100%;
-      left: 0;
-      bottom: 63px;
-      z-index: 15;
-      background: white;
+      order: -1;
     }
 
     .sticky-container {
