@@ -1,8 +1,10 @@
-import {Cart,
+import {
+  Cart,
   CartRemoveLineItemAction,
   CartAddDiscountCodeAction,
   CartChangeLineItemQuantityAction,
-  ClientResponse} from "@commercetools/platform-sdk";
+  ClientResponse,
+} from "@commercetools/platform-sdk";
 import { CountryCode, StatusCodes } from "../models/types";
 import getAnonymousApiRoot from "./AnonymousClient";
 import tokenCache from "./TokenCash";
@@ -126,24 +128,24 @@ export function cartChangeItemQuantity(cartId: string, version: number, itemId: 
     .execute();
 }
 
-export function cartDeleteItem(cartId: string, version: number, itemId: string) {
-  const cartRemoveItemAction: CartRemoveLineItemAction = {
-    action: "removeLineItem",
-    lineItemId: itemId,
-  };
+// export function cartDeleteItem(cartId: string, version: number, itemId: string) {
+//   const cartRemoveItemAction: CartRemoveLineItemAction = {
+//     action: "removeLineItem",
+//     lineItemId: itemId,
+//   };
 
-  return apiRoot
-    .me()
-    .carts()
-    .withId({ ID: cartId })
-    .post({
-      body: {
-        version,
-        actions: [cartRemoveItemAction],
-      },
-    })
-    .execute();
-}
+//   return apiRoot
+//     .me()
+//     .carts()
+//     .withId({ ID: cartId })
+//     .post({
+//       body: {
+//         version,
+//         actions: [cartRemoveItemAction],
+//       },
+//     })
+//     .execute();
+// }
 
 export function getDiscount() {
   return apiRoot.discountCodes().get().execute();

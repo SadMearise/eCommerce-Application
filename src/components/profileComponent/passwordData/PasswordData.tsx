@@ -49,8 +49,8 @@ export default function PasswordData({ userId, version, email, handleChangeDataV
           handleChangeDataVersion(currentVersion);
         })
         .catch((error) => {
-          console.error(error);
           handleErrorAlert();
+          throw new Error(`An error occurred while changing password: ${error}`);
         });
     },
   });

@@ -121,8 +121,7 @@ export const updateCustomerInfo = async (
       })
       .execute();
   } catch (error) {
-    console.error("Ошибка при обновлении информации о клиенте:", error);
-    throw error;
+    throw new Error(`An error occurred while update customer info: ${error}`);
   }
 };
 

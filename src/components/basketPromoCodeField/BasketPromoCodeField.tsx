@@ -12,48 +12,38 @@ export default function BasketPromoCodeField({
   handleUpdateShoppingCart,
 }: BasketPromoCodeFieldProps) {
   const [promoCodeField, setPromoCodeField] = useState<string>("");
-  const [isSuccessfulPromo, setIsSuccessfulPromo] = useState<boolean>(false);
-  const [isInfoAlert, setIsInfoAlert] = useState<boolean>(false);
-  const [isPromoAlreadyApplyAlert, setIsPromoAlreadyApplyAlert] = useState<boolean>(false);
+  const [alertType, setAlertType] = useState("");
 
-  const handleSuccessPromo = (): void => {
-    setIsSuccessfulPromo(true);
+  const handleShowAlert = (type: "info" | "success" | "already-applied"): void => {
+    setAlertType(type);
 
-    setTimeout(() => setIsSuccessfulPromo(false), 2000);
+    setTimeout(() => setAlertType(""), 2000);
   };
-
-  const handlePromoAlreadyApplyAlert = (): void => {
-    setIsPromoAlreadyApplyAlert(true);
-
-    setTimeout(() => setIsPromoAlreadyApplyAlert(false), 2000);
-  };
-
-  const handleInfoAlert = (): void => {
-    setIsInfoAlert(true);
-
-    setTimeout(() => setIsInfoAlert(false), 2000);
-  };
-
   const handleAddPromoCode = async (): Promise<void> => {
-    const discount = (await getDiscount()).body.results;
-    const isAnyDiscountMatching = discount.some((discountItem) =>
-      // eslint-disable-next-line prettier/prettier
-      shoppingCartDiscountCodes.some((cartDiscountItem) => discountItem.id === cartDiscountItem.discountCode.id));
+    try {
+      const discount = (await getDiscount()).body.results;
+      const isPromoCodeAlreadyApplied = shoppingCartDiscountCodes.some(
+        (cartDiscountItem) =>
+          discount.some((item) => item.code === promoCodeField && item.id === cartDiscountItem.discountCode.id)
+        // eslint-disable-next-line function-paren-newline
+      );
+      if (isPromoCodeAlreadyApplied) {
+        handleShowAlert("already-applied");
+        return;
+      }
 
-    const hasMatchingPromoCode = discount.some((item) => item.code === promoCodeField);
-    if (isAnyDiscountMatching && hasMatchingPromoCode) {
-      handlePromoAlreadyApplyAlert();
-      return;
+      const hasMatchingPromoCode = discount.some((item) => item.code === promoCodeField);
+      if (hasMatchingPromoCode) {
+        cartAddDiscount(shoppingCartID, shoppingCartVersion, promoCodeField).then(() => {
+          handleShowAlert("success");
+          handleUpdateShoppingCart();
+        });
+        return;
+      }
+      handleShowAlert("info");
+    } catch (error) {
+      throw new Error(`An error occurred while getting the discount codes: ${error}`);
     }
-
-    if (hasMatchingPromoCode) {
-      cartAddDiscount(shoppingCartID, shoppingCartVersion, promoCodeField).then(() => {
-        handleSuccessPromo();
-        handleUpdateShoppingCart();
-      });
-      return;
-    }
-    handleInfoAlert();
   };
 
   return (
@@ -72,7 +62,7 @@ export default function BasketPromoCodeField({
       >
         Apply promo code
       </Button>
-      {isInfoAlert && (
+      {alertType === "info" && (
         <AlertView
           alertTitle="Info"
           severity="info"
@@ -80,20 +70,20 @@ export default function BasketPromoCodeField({
           textContent="Promo code does not exist"
         />
       )}
-      {isPromoAlreadyApplyAlert && (
-        <AlertView
-          alertTitle="Info"
-          severity="info"
-          variant="filled"
-          textContent="Promo code already apply"
-        />
-      )}
-      {isSuccessfulPromo && (
+      {alertType === "success" && (
         <AlertView
           alertTitle="Success"
           severity="success"
           variant="filled"
           textContent="Promo code successfully applied"
+        />
+      )}
+      {alertType === "already-applied" && (
+        <AlertView
+          alertTitle="Info"
+          severity="info"
+          variant="filled"
+          textContent="Promo code already apply"
         />
       )}
     </div>
