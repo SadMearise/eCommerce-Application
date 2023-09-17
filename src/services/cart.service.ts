@@ -82,7 +82,6 @@ export async function cartDeleteItem(cartId: string, version: number, productId:
   const CartRemoveItemAction: CartRemoveLineItemAction = {
     action: "removeLineItem",
     lineItemId: productId,
-    quantity: 1,
   };
 
   const updatedCartResp = await rootApi

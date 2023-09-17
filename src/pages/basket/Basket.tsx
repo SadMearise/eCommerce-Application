@@ -27,9 +27,7 @@ export default function Basket() {
     try {
       const fetchShoppingCart = await getShoppingCart();
       const [cart] = fetchShoppingCart.body.results;
-
       setShoppingCart(cart);
-      dispatch(setCount(await getProductCountFromCart()));
     } catch (error) {
       throw new Error(`An error occurred while updating the shopping cart: ${error}`);
     }
