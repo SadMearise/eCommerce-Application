@@ -15,4 +15,12 @@ body {
 
 header + div {
   min-height: calc(100vh - 136px); /* header + footer = 136px */
+
+  @media (max-width: 899px) {
+    min-height: calc(100vh - 131px);
+  }
+
+  @media (max-width: 599px) {
+    min-height: calc(100vh - 115px);
+  }
 }
