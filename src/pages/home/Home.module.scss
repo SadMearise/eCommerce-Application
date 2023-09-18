@@ -1,3 +1,7 @@
+.container {
+  margin-bottom: 30px;
+}
+
 .promo-code-wrapper {
   display: flex;
   flex-direction: column;
@@ -18,4 +22,11 @@
   justify-content: center;
   align-items: center;
   gap: 20px;
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
+}
+
+.title {
+  margin-bottom: 20px;
 }
