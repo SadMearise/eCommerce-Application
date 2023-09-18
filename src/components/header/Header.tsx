@@ -179,7 +179,7 @@ export default function Header() {
                   sx={{ p: 0 }}
                 >
                   <Badge
-                    badgeContent={cartCountSelector}
+                    badgeContent={Number(cartCountSelector)}
                     color="error"
                   >
                     <ShoppingCartOutlinedIcon className={styles.icon} />
