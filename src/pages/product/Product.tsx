@@ -45,7 +45,7 @@ function Product() {
     try {
       setIsRemoveBtnDisabled(true);
       const activeCart = (await getCarts()).body.results;
-      const currentCart = activeCart[activeCart.length - 1];
+      const currentCart = activeCart[0];
 
       let productId = "";
       if (activeCart && product) {
@@ -73,7 +73,7 @@ function Product() {
     setIsAddBtnDisabled(true);
     setBtnLoading(true);
     const getCart = (await getCarts()).body.results;
-    let activeCart = getCart[getCart.length - 1];
+    let activeCart = getCart[0];
 
     if (getCart.length < 1) {
       activeCart = await createCart();
@@ -115,7 +115,7 @@ function Product() {
       }
 
       const cart = (await getCarts()).body.results;
-      const currentCart = cart[cart.length - 1];
+      const currentCart = cart[0];
 
       if (currentCart) {
         const isProductInCart = currentCart.lineItems.some((item) => item.productId === product.id);

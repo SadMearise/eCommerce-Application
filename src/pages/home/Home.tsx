@@ -1,13 +1,26 @@
 import { useSelector } from "react-redux";
 import { Container } from "@mui/material";
+import { useEffect } from "react";
 import AlertView from "../../components/alertView/AlertView";
 import Header from "../../components/header/Header";
 import isSuccess from "../../store/features/registration/registrationSelector";
 import Footer from "../../components/footer/Footer";
+import getProductCountFromCart from "../../utils/getProductCountFromCart";
+import { setCount } from "../../store/features/cartCount/cartCountSlice";
+import { useAppDispatch } from "../../store/hooks";
 import styles from "./Home.module.scss";
 
 export default function Home() {
+  const dispatch = useAppDispatch();
   const isSuccessSelector = useSelector(isSuccess);
+
+  useEffect(() => {
+    const updateCountFromCart = async () => {
+      dispatch(setCount(await getProductCountFromCart()));
+    };
+
+    updateCountFromCart();
+  }, [dispatch]);
 
   return (
     <>

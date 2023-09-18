@@ -43,8 +43,8 @@ export default function Catalog() {
   const [cart, setCart] = useState<false | Cart>(false);
 
   const updateCart = async () => {
-    const getCart = await (await getCarts()).body.results;
-    const currentCart = getCart[getCart.length - 1];
+    const getCart = (await getCarts()).body.results;
+    const currentCart = getCart[0];
     setCart(currentCart);
   };
 

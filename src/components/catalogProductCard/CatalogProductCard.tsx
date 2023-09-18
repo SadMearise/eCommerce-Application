@@ -14,7 +14,7 @@ import locale from "../../settings";
 import { Attributes } from "../../utils/types";
 import sizeStringToNumber from "../../utils/sizeStringToNumber";
 import getAttributeLabel from "../../utils/getAttributeLabel";
-import { addProductToCart, createCart, getActiveCart } from "../../services/cart.service";
+import { addProductToCart, createCart, getCarts } from "../../services/cart.service";
 import { setCount } from "../../store/features/cartCount/cartCountSlice";
 import { useAppDispatch } from "../../store/hooks";
 import AlertView from "../alertView/AlertView";
@@ -48,7 +48,8 @@ export default function ProductCard({ product, url, cart }: IProductCardProps) {
       try {
         setLoading(true);
         setIsDisabled(true);
-        let activeCart = await getActiveCart();
+        const myCarts = (await getCarts()).body.results;
+        let activeCart = myCarts[0];
 
         if (!activeCart) {
           activeCart = await createCart();
