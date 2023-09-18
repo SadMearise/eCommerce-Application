@@ -108,18 +108,20 @@ export default function Basket() {
                       setIsChanging={setIsChanging}
                       handleUpdateShoppingCart={handleUpdateShoppingCart}
                     />
-                    <BasketProductPrice
-                      price={product.price}
-                      productQuantity={product.quantity}
-                    />
-                    <IconButton
-                      aria-label="delete"
-                      sx={{ height: "max-content" }}
-                      onClick={() => handleDeleteShoppingCartItem(shoppingCart.id, shoppingCart.version, product.id)}
-                      disabled={isChanging}
-                    >
-                      <DeleteIcon />
-                    </IconButton>
+                    <div className={styles["price-and-delete-button-wrapper"]}>
+                      <BasketProductPrice
+                        price={product.price}
+                        productQuantity={product.quantity}
+                      />
+                      <IconButton
+                        aria-label="delete"
+                        sx={{ height: "max-content" }}
+                        onClick={() => handleDeleteShoppingCartItem(shoppingCart.id, shoppingCart.version, product.id)}
+                        disabled={isChanging}
+                      >
+                        <DeleteIcon />
+                      </IconButton>
+                    </div>
                   </div>
                 ))}
             </div>
