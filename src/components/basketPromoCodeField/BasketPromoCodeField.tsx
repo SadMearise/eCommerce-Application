@@ -51,7 +51,6 @@ export default function BasketPromoCodeField({
       <TextField
         id="outlined-helperText"
         label="Enter your promo code"
-        helperText="Your promo code is SAVE50"
         onChange={(e) => setPromoCodeField(e.target.value)}
         fullWidth
       />
