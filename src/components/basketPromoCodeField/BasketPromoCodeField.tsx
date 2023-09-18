@@ -9,6 +9,8 @@ export default function BasketPromoCodeField({
   shoppingCartID,
   shoppingCartVersion,
   shoppingCartDiscountCodes,
+  isChanging,
+  setIsChanging,
   handleUpdateShoppingCart,
 }: BasketPromoCodeFieldProps) {
   const [promoCodeField, setPromoCodeField] = useState<string>("");
@@ -21,6 +23,7 @@ export default function BasketPromoCodeField({
   };
   const handleAddPromoCode = async (): Promise<void> => {
     try {
+      setIsChanging(true);
       const discount = (await getDiscount()).body.results;
       const isPromoCodeAlreadyApplied = shoppingCartDiscountCodes.some(
         (cartDiscountItem) =>
@@ -29,6 +32,7 @@ export default function BasketPromoCodeField({
       );
       if (isPromoCodeAlreadyApplied) {
         handleShowAlert("already-applied");
+        setIsChanging(false);
         return;
       }
 
@@ -38,9 +42,11 @@ export default function BasketPromoCodeField({
           handleShowAlert("success");
           handleUpdateShoppingCart();
         });
+        setIsChanging(false);
         return;
       }
       handleShowAlert("info");
+      setIsChanging(false);
     } catch (error) {
       throw new Error(`An error occurred while getting the discount codes: ${error}`);
     }
@@ -56,7 +62,7 @@ export default function BasketPromoCodeField({
       />
       <Button
         variant="contained"
-        disabled={!promoCodeField}
+        disabled={!promoCodeField || isChanging}
         onClick={handleAddPromoCode}
       >
         Apply promo code

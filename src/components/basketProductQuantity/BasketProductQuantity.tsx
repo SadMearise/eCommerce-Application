@@ -18,20 +18,17 @@ export default function BasketProductQuantity({
 
   const handleIncrementItemQuantity = () => {
     setIsChanging(true);
-    cartChangeItemQuantity(cartId, shoppingCartVersion, id, quantity + 1).then(() => {
-      handleUpdateShoppingCart();
-      setIsChanging(false);
-    });
+    cartChangeItemQuantity(cartId, shoppingCartVersion, id, quantity + 1)
+      .then(() => handleUpdateShoppingCart())
+      .then(() => setIsChanging(false));
   };
 
   const handleDecrementItemQuantity = () => {
     setIsChanging(true);
-    cartChangeItemQuantity(cartId, shoppingCartVersion, id, quantity - 1).then(() => {
-      handleUpdateShoppingCart();
-      setIsChanging(false);
-    });
+    cartChangeItemQuantity(cartId, shoppingCartVersion, id, quantity - 1)
+      .then(() => handleUpdateShoppingCart())
+      .then(() => setIsChanging(false));
   };
-
   return (
     <div className={styles["basket-item-quantity"]}>
       <IconButton
@@ -60,7 +57,6 @@ export default function BasketProductQuantity({
                 .then(() => handleUpdateShoppingCart())
                 .then(() => setIsChanging(false));
             } else {
-              setIsChanging(true);
               cartChangeItemQuantity(cartId, shoppingCartVersion, id, newValue)
                 .then(() => handleUpdateShoppingCart())
                 .then(() => setIsChanging(false));

@@ -37,11 +37,11 @@ export default function Basket() {
     setIsChanging(true);
     await cartDeleteItem(cartId, version, itemId);
     await handleUpdateShoppingCart();
-    // dispatch(setCount(await getProductCountFromCart()));
     setIsChanging(false);
   };
 
   const handleClearShoppingCart = async () => {
+    setIsChanging(true);
     if (shoppingCart) {
       try {
         const shoppingCarts = (await getCarts()).body.results;
@@ -49,8 +49,8 @@ export default function Basket() {
           await deleteShoppingCart(cart.id, cart.version);
         });
         await Promise.all(deleteShoppingCarts);
-        dispatch(setCount(await getProductCountFromCart()));
         await handleUpdateShoppingCart();
+        setIsChanging(false);
       } catch (error) {
         throw new Error(`An error occurred while clearing the shopping cart: ${error}`);
       }
@@ -138,6 +138,8 @@ export default function Basket() {
                   shoppingCartID={shoppingCart.id}
                   shoppingCartVersion={shoppingCart.version}
                   shoppingCartDiscountCodes={shoppingCart.discountCodes}
+                  isChanging={isChanging}
+                  setIsChanging={setIsChanging}
                   handleUpdateShoppingCart={handleUpdateShoppingCart}
                 />
               </div>

@@ -47,6 +47,7 @@ export default function BasketClearButton({ handleClearShoppingCart, isChanging 
                 <Button
                   sx={{ mt: 2 }}
                   onClick={handleClose}
+                  disabled={isChanging}
                 >
                   decline
                 </Button>
@@ -54,6 +55,7 @@ export default function BasketClearButton({ handleClearShoppingCart, isChanging 
                   sx={{ mt: 2 }}
                   variant="contained"
                   onClick={handleClearShoppingCart}
+                  disabled={isChanging}
                 >
                   Clear Shopping Cart
                 </Button>
