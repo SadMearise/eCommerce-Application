@@ -4,6 +4,7 @@ const team = [
     name: "Nikita Khrustalev",
     role: "Team lead, front-end developer",
     github: "https://github.com/sadmearise",
+    nick: "sadmearise",
     photo: "nikita.jpg",
     bio: "3 years of experience in IT, the last year of which he studies web development.",
     education: [
@@ -43,6 +44,7 @@ const team = [
     name: "Ivan Timoshkin",
     role: "Front-end developer",
     github: "https://github.com/amberlynn364",
+    nick: "amberlynn364",
     photo: "ivan.jpg",
     bio: "Despite the lack of education in the field of information technology, he aspires to become a “frontend developer”.",
     education: [
@@ -64,6 +66,7 @@ const team = [
     name: "Yauheniya Mastavaya",
     role: "Front-end developer",
     github: "https://github.com/zena86",
+    nick: "zena86",
     photo: "zena.jpg",
     bio: "1 year of experience commercial developing websites using HTML, CSS, and JavaScript",
     education: ["Belarusian State Technological University", "The Rolling Scopes School(JavaScript/Front-end)"],

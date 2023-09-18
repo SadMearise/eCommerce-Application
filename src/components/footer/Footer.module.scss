@@ -7,6 +7,10 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
 }
 
 .logo {
@@ -15,10 +19,67 @@
   & img {
     display: block;
   }
+
+  @media (max-width: 768px) {
+    order: 1;
+    margin-bottom: 20px;
+  }
 }
 
 .date {
-  font-size: 20px;
+  font-size: 14px;
   font-weight: 900;
   color: #575153;
+
+  @media (max-width: 768px) {
+    order: 3;
+  }
+}
+
+.github-body {
+  display: flex;
+  align-items: center;
+
+  @media (max-width: 768px) {
+    order: 2;
+    margin-bottom: 10px;
+  }
+}
+
+.github-item {
+  margin-right: 10px;
+  text-decoration: none;
+  color: #575153;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  transition: all 0.3s ease;
+
+  &:last-child {
+
+    @media (max-width: 768px) {
+      margin-right: 0;
+    }
+  }
+
+  &:visited {
+    text-decoration: none;
+    color: #575153;
+  }
+
+  &:hover {
+    color: #1976d2;
+  }
+
+  &:visited:hover {
+    color: #1976d2;
+  }
+
+  @media (max-width: 360px) {
+    margin-right: 7px;
+  }
+}
+
+.nick {
+  margin-left: 3px;
 }

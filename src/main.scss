@@ -20,7 +20,11 @@ header + div {
     min-height: calc(100vh - 131px);
   }
 
+  @media (max-width: 768px) {
+    min-height: calc(100vh - 209px);
+  }
+
   @media (max-width: 599px) {
-    min-height: calc(100vh - 115px);
+    min-height: calc(100vh - 201px);
   }
 }
