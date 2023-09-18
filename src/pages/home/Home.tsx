@@ -1,5 +1,5 @@
 import { useSelector } from "react-redux";
-import { Container } from "@mui/material";
+import { Button, Card, CardActions, CardContent, CardMedia, Container, Typography } from "@mui/material";
 import { useEffect } from "react";
 import AlertView from "../../components/alertView/AlertView";
 import Header from "../../components/header/Header";
@@ -28,12 +28,68 @@ export default function Home() {
       <Container maxWidth="lg">
         <div className={styles["promo-code-wrapper"]}>
           <h1>Available promo codes:</h1>
-          <p className={styles["promo-code"]}>
-            &quot;SAVE50&quot;: enter the promotional code in the cart to receive a 50% discount
-          </p>
-          <p className={styles["promo-code"]}>
-            &quot;SAVE30&quot;: enter the promotional code in the cart to receive a 30% discount
-          </p>
+          <div className={styles["card-wrapper"]}>
+            <Card sx={{ maxWidth: 345 }}>
+              <CardMedia
+                sx={{ height: 140, backgroundSize: "100% 100%" }}
+                image="gift-svgrepo-com.svg"
+                title="green iguana"
+              />
+              <CardContent>
+                <Typography
+                  gutterBottom
+                  variant="h5"
+                  component="div"
+                >
+                  SAVE50
+                </Typography>
+                <Typography
+                  variant="body2"
+                  color="text.secondary"
+                >
+                  Enter the promotional code in the cart to receive a 50% discount
+                </Typography>
+              </CardContent>
+              <CardActions>
+                <Button
+                  size="small"
+                  fullWidth
+                >
+                  go to Shopping Cart
+                </Button>
+              </CardActions>
+            </Card>
+            <Card sx={{ maxWidth: 345 }}>
+              <CardMedia
+                sx={{ height: 140, backgroundSize: "100% 100%" }}
+                image="coupon-svgrepo-com.svg"
+                title="green iguana"
+              />
+              <CardContent>
+                <Typography
+                  gutterBottom
+                  variant="h5"
+                  component="div"
+                >
+                  SAVE30
+                </Typography>
+                <Typography
+                  variant="body2"
+                  color="text.secondary"
+                >
+                  Enter the promotional code in the cart to receive a 30% discount
+                </Typography>
+              </CardContent>
+              <CardActions>
+                <Button
+                  size="small"
+                  fullWidth
+                >
+                  go to Shopping Cart
+                </Button>
+              </CardActions>
+            </Card>
+          </div>
         </div>
       </Container>
       {isSuccessSelector && (
