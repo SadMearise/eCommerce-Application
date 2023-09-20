@@ -125,6 +125,7 @@ export default function BasketProductQuantity({
           const newValue = Number(e.target.value);
           if (!Number.isNaN(newValue)) {
             handleChangeValue(newValue);
+            handleChangeValue(newValue);
           }
         }}
       />

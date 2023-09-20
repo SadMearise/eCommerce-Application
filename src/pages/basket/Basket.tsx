@@ -23,7 +23,6 @@ export default function Basket() {
   const [isLoading, setIsLoading] = useState(true);
   const [isChanging, setIsChanging] = useState<boolean>(false);
   const dispatch = useAppDispatch();
-
   const handleUpdateShoppingCart = async () => {
     try {
       const fetchShoppingCart = await getShoppingCart();
@@ -85,6 +84,12 @@ export default function Basket() {
         const [cart] = fetchShoppingCart.body.results;
         setShoppingCart(cart);
         setIsLoading(false);
+        if (cart && cart.lineItems.length > 0) {
+          const counter = cart.lineItems.reduce((accum, cartItem) => accum + cartItem.quantity, 0);
+          dispatch(setCount(counter));
+        } else {
+          dispatch(setCount(0));
+        }
         if (cart && cart.lineItems.length > 0) {
           const counter = cart.lineItems.reduce((accum, cartItem) => accum + cartItem.quantity, 0);
           dispatch(setCount(counter));
