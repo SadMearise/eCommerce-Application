@@ -19,6 +19,7 @@ import { useAppDispatch } from "../../store/hooks";
 import AlertView from "../alertView/AlertView";
 import updateActiveTimeoutWithDelay from "../../utils/updateActiveTimeoutWithDelay";
 import getProductCountFromCart from "../../utils/getProductCountFromCart";
+import isProductInCart from "../../utils/isProductInCart";
 
 export default function ProductCard({ product, url, cart, setIsLoading }: IProductCardProps) {
   const [isDisabled, setIsDisabled] = useState(false);
@@ -28,8 +29,8 @@ export default function ProductCard({ product, url, cart, setIsLoading }: IProdu
 
   useEffect(() => {
     if (cart) {
-      const isProductInCart = cart.lineItems.some((item) => item.productId === product.id);
-      setIsDisabled(isProductInCart);
+      const isProductInCartRes = isProductInCart(cart, product.id);
+      setIsDisabled(isProductInCartRes);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -52,7 +53,14 @@ export default function ProductCard({ product, url, cart, setIsLoading }: IProdu
         if (!activeCart) {
           activeCart = await createCart();
         }
-        await addProductToCart(activeCart.id, activeCart.version, product.id);
+
+        const isProductInCartRes = isProductInCart(activeCart, product.id);
+
+        if (isProductInCartRes) {
+          setIsDisabled(isProductInCartRes);
+        } else {
+          await addProductToCart(activeCart.id, activeCart.version, product.id);
+        }
         dispatch(setCount(await getProductCountFromCart()));
         setIsLoading(false);
       } catch (e) {

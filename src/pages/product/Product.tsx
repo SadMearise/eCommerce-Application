@@ -20,6 +20,7 @@ import AlertView from "../../components/alertView/AlertView";
 import { useAppDispatch } from "../../store/hooks";
 import updateActiveTimeoutWithDelay from "../../utils/updateActiveTimeoutWithDelay";
 import getProductCountFromCart from "../../utils/getProductCountFromCart";
+import isProductInCart from "../../utils/isProductInCart";
 
 function Product() {
   const params = useParams();
@@ -56,7 +57,11 @@ function Product() {
           }
         }
 
-        await cartDeleteItem(currentCart.id, currentCart.version, productId);
+        const isProductInCartRes = isProductInCart(currentCart, product.id);
+
+        if (isProductInCartRes) {
+          await cartDeleteItem(currentCart.id, currentCart.version, productId);
+        }
         dispatch(setCount(await getProductCountFromCart()));
         handleSuccessAlert();
         setIsAddBtnDisabled(false);
@@ -80,7 +85,11 @@ function Product() {
     }
 
     if (product) {
-      await addProductToCart(activeCart.id, activeCart.version, product.id);
+      const isProductInCartRes = isProductInCart(activeCart, product.id);
+
+      if (!isProductInCartRes) {
+        await addProductToCart(activeCart.id, activeCart.version, product.id);
+      }
 
       dispatch(setCount(await getProductCountFromCart()));
     }
@@ -118,9 +127,9 @@ function Product() {
       const currentCart = cart[0];
 
       if (currentCart) {
-        const isProductInCart = currentCart.lineItems.some((item) => item.productId === product.id);
-        setIsAddBtnDisabled(isProductInCart);
-        setIsRemoveBtnDisabled(!isProductInCart);
+        const isProductInCartRes = isProductInCart(currentCart, product.id);
+        setIsAddBtnDisabled(isProductInCartRes);
+        setIsRemoveBtnDisabled(!isProductInCartRes);
       }
 
       setIsLoading(false);
