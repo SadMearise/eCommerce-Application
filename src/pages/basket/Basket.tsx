@@ -124,7 +124,6 @@ export default function Basket() {
                     <BasketProductCard product={product} />
                     <BasketProductQuantity
                       product={product}
-                      shoppingCartVersion={shoppingCart.version}
                       cartId={shoppingCart?.id}
                       isChanging={isChanging}
                       setIsChanging={setIsChanging}

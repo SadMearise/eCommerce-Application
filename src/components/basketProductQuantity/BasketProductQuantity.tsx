@@ -8,7 +8,6 @@ import { BasketProductQuantityProps } from "./types";
 
 export default function BasketProductQuantity({
   product,
-  shoppingCartVersion,
   cartId,
   isChanging,
   setIsChanging,
@@ -27,7 +26,7 @@ export default function BasketProductQuantity({
       if (!hasItemInCart) {
         await addProductToCart(cartId, cart.version, productId, quantity + 1);
       } else {
-        await cartChangeItemQuantity(cartId, shoppingCartVersion, id, quantity + 1);
+        await cartChangeItemQuantity(cartId, cart.version, id, quantity + 1);
       }
 
       await handleUpdateShoppingCart();
@@ -49,7 +48,7 @@ export default function BasketProductQuantity({
       if (!hasItemInCart) {
         await addProductToCart(cartId, cart.version, productId, quantity - 1);
       } else {
-        await cartChangeItemQuantity(cartId, shoppingCartVersion, id, quantity - 1);
+        await cartChangeItemQuantity(cartId, cart.version, id, quantity - 1);
       }
     } catch (error) {
       throw new Error(`An error occurred:, ${error}`);
@@ -79,7 +78,7 @@ export default function BasketProductQuantity({
       if (!hasItemInCart) {
         await addProductToCart(cartId, cart.version, productId, quantityToSet);
       } else {
-        await cartChangeItemQuantity(cartId, shoppingCartVersion, id, quantityToSet);
+        await cartChangeItemQuantity(cartId, cart.version, id, quantityToSet);
       }
     } catch (error) {
       throw new Error(`An error occurred: ${error}`);
