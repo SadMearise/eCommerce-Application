@@ -34,7 +34,7 @@ export default function Basket() {
       throw new Error(`An error occurred while updating the shopping cart: ${error}`);
     }
   };
-  const handleDeleteShoppingCartItem = async (cartId: string, version: number, itemId: string) => {
+  const handleDeleteShoppingCartItem = async (cartId: string, itemId: string) => {
     setIsChanging(true);
     try {
       const fetchShoppingCart = await getShoppingCart();
@@ -137,7 +137,7 @@ export default function Basket() {
                       <IconButton
                         aria-label="delete"
                         sx={{ height: "max-content" }}
-                        onClick={() => handleDeleteShoppingCartItem(shoppingCart.id, shoppingCart.version, product.id)}
+                        onClick={() => handleDeleteShoppingCartItem(shoppingCart.id, product.id)}
                         disabled={isChanging}
                       >
                         <DeleteIcon />
@@ -159,8 +159,6 @@ export default function Basket() {
                 )}
                 <BasketPromoCodeField
                   shoppingCartID={shoppingCart.id}
-                  shoppingCartVersion={shoppingCart.version}
-                  shoppingCartDiscountCodes={shoppingCart.discountCodes}
                   isChanging={isChanging}
                   setIsChanging={setIsChanging}
                   handleUpdateShoppingCart={handleUpdateShoppingCart}

@@ -1,14 +1,12 @@
 import { Button, TextField } from "@mui/material";
 import { useState } from "react";
 import styles from "./BasketPromoCodeField.module.scss";
-import { cartAddDiscount, getDiscount } from "../../services/cart.service";
+import { cartAddDiscount, getDiscount, getShoppingCart } from "../../services/cart.service";
 import { BasketPromoCodeFieldProps } from "./types";
 import AlertView from "../alertView/AlertView";
 
 export default function BasketPromoCodeField({
   shoppingCartID,
-  shoppingCartVersion,
-  shoppingCartDiscountCodes,
   isChanging,
   setIsChanging,
   handleUpdateShoppingCart,
@@ -25,30 +23,32 @@ export default function BasketPromoCodeField({
     try {
       setIsChanging(true);
       const discount = (await getDiscount()).body.results;
-      const isPromoCodeAlreadyApplied = shoppingCartDiscountCodes.some(
+      const fetchShoppingCart = await getShoppingCart();
+      const [cart] = fetchShoppingCart.body.results;
+      const isPromoCodeAlreadyApplied = cart.discountCodes.some(
         (cartDiscountItem) =>
           discount.some((item) => item.code === promoCodeField && item.id === cartDiscountItem.discountCode.id)
         // eslint-disable-next-line function-paren-newline
       );
       if (isPromoCodeAlreadyApplied) {
         handleShowAlert("already-applied");
-        setIsChanging(false);
+        handleUpdateShoppingCart();
         return;
       }
 
       const hasMatchingPromoCode = discount.some((item) => item.code === promoCodeField);
       if (hasMatchingPromoCode) {
-        cartAddDiscount(shoppingCartID, shoppingCartVersion, promoCodeField).then(() => {
+        cartAddDiscount(shoppingCartID, cart.version, promoCodeField).then(() => {
           handleShowAlert("success");
           handleUpdateShoppingCart();
         });
-        setIsChanging(false);
         return;
       }
       handleShowAlert("info");
-      setIsChanging(false);
     } catch (error) {
       throw new Error(`An error occurred while getting the discount codes: ${error}`);
+    } finally {
+      setIsChanging(false);
     }
   };
 
