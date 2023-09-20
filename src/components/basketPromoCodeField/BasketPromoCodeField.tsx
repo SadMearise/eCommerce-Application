@@ -22,9 +22,14 @@ export default function BasketPromoCodeField({
   const handleAddPromoCode = async (): Promise<void> => {
     try {
       setIsChanging(true);
-      const discount = (await getDiscount()).body.results;
       const fetchShoppingCart = await getShoppingCart();
       const [cart] = fetchShoppingCart.body.results;
+      if (!cart) {
+        handleUpdateShoppingCart();
+        return;
+      }
+
+      const discount = (await getDiscount()).body.results;
       const isPromoCodeAlreadyApplied = cart.discountCodes.some(
         (cartDiscountItem) =>
           discount.some((item) => item.code === promoCodeField && item.id === cartDiscountItem.discountCode.id)
