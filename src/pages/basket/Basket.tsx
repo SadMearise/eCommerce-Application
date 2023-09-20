@@ -23,6 +23,7 @@ export default function Basket() {
   const [isLoading, setIsLoading] = useState(true);
   const [isChanging, setIsChanging] = useState<boolean>(false);
   const dispatch = useAppDispatch();
+
   const handleUpdateShoppingCart = async () => {
     try {
       const fetchShoppingCart = await getShoppingCart();
@@ -35,9 +36,24 @@ export default function Basket() {
   };
   const handleDeleteShoppingCartItem = async (cartId: string, version: number, itemId: string) => {
     setIsChanging(true);
-    await cartDeleteItem(cartId, version, itemId);
-    await handleUpdateShoppingCart();
-    setIsChanging(false);
+    try {
+      const fetchShoppingCart = await getShoppingCart();
+      const [cart] = fetchShoppingCart.body.results;
+      const hasItemInCart = cart.lineItems.some((item) => item.id === itemId);
+
+      if (!hasItemInCart) {
+        await handleUpdateShoppingCart();
+        setIsChanging(false);
+        return;
+      }
+
+      await cartDeleteItem(cartId, version, itemId);
+    } catch (error) {
+      throw new Error(`An error occurred: ${error}`);
+    } finally {
+      await handleUpdateShoppingCart();
+      setIsChanging(false);
+    }
   };
 
   const handleClearShoppingCart = async () => {
@@ -49,10 +65,11 @@ export default function Basket() {
           await deleteShoppingCart(cart.id, cart.version);
         });
         await Promise.all(deleteShoppingCarts);
-        await handleUpdateShoppingCart();
-        setIsChanging(false);
       } catch (error) {
         throw new Error(`An error occurred while clearing the shopping cart: ${error}`);
+      } finally {
+        await handleUpdateShoppingCart();
+        setIsChanging(false);
       }
     }
   };
@@ -64,14 +81,15 @@ export default function Basket() {
         const [cart] = fetchShoppingCart.body.results;
         setShoppingCart(cart);
         setIsLoading(false);
+        const counter = cart.lineItems.reduce((accum, cartItem) => accum + cartItem.quantity, 0);
+        dispatch(setCount(counter));
       } catch (error) {
         setIsLoading(false);
         throw new Error(`An error occurred while loading the shopping cart: ${error}`);
       }
     };
-
     loadProducts();
-  }, []);
+  }, [dispatch]);
 
   if (isLoading) {
     return <LoadingView />;

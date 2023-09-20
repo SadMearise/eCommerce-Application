@@ -3,7 +3,7 @@ import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import styles from "./BasketProductQuantity.module.scss";
 import { MAX_PRODUCTS_IN_BASKET, MIN_PRODUCTS_IN_BASKET } from "../../utils/constants";
-import { cartChangeItemQuantity } from "../../services/cart.service";
+import { addProductToCart, cartChangeItemQuantity, getShoppingCart } from "../../services/cart.service";
 import { BasketProductQuantityProps } from "./types";
 
 export default function BasketProductQuantity({
@@ -14,21 +14,81 @@ export default function BasketProductQuantity({
   setIsChanging,
   handleUpdateShoppingCart,
 }: BasketProductQuantityProps) {
-  const { id, quantity } = product;
+  const { id, quantity, productId } = product;
 
-  const handleIncrementItemQuantity = () => {
+  const handleIncrementItemQuantity = async () => {
     setIsChanging(true);
-    cartChangeItemQuantity(cartId, shoppingCartVersion, id, quantity + 1)
-      .then(() => handleUpdateShoppingCart())
-      .then(() => setIsChanging(false));
+
+    try {
+      const fetchShoppingCart = await getShoppingCart();
+      const [cart] = fetchShoppingCart.body.results;
+      const hasItemInCart = cart.lineItems.some((item) => item.id === id);
+
+      if (!hasItemInCart) {
+        await addProductToCart(cartId, cart.version, productId, quantity + 1);
+      } else {
+        await cartChangeItemQuantity(cartId, shoppingCartVersion, id, quantity + 1);
+      }
+
+      await handleUpdateShoppingCart();
+    } catch (error) {
+      throw new Error(`An error occurred:, ${error}`);
+    } finally {
+      setIsChanging(false);
+    }
   };
 
-  const handleDecrementItemQuantity = () => {
+  const handleDecrementItemQuantity = async () => {
     setIsChanging(true);
-    cartChangeItemQuantity(cartId, shoppingCartVersion, id, quantity - 1)
-      .then(() => handleUpdateShoppingCart())
-      .then(() => setIsChanging(false));
+
+    try {
+      const fetchShoppingCart = await getShoppingCart();
+      const [cart] = fetchShoppingCart.body.results;
+      const hasItemInCart = cart.lineItems.some((item) => item.id === id);
+
+      if (!hasItemInCart) {
+        await addProductToCart(cartId, cart.version, productId, quantity - 1);
+      } else {
+        await cartChangeItemQuantity(cartId, shoppingCartVersion, id, quantity - 1);
+      }
+    } catch (error) {
+      throw new Error(`An error occurred:, ${error}`);
+    } finally {
+      await handleUpdateShoppingCart();
+      setIsChanging(false);
+    }
   };
+
+  const handleChangeValue = async (newValue: number) => {
+    setIsChanging(true);
+    try {
+      const fetchShoppingCart = await getShoppingCart();
+      const [cart] = fetchShoppingCart.body.results;
+      const hasItemInCart = cart.lineItems.some((item) => item.id === id);
+
+      let quantityToSet;
+
+      if (newValue < MIN_PRODUCTS_IN_BASKET) {
+        quantityToSet = MIN_PRODUCTS_IN_BASKET;
+      } else if (newValue > MAX_PRODUCTS_IN_BASKET) {
+        quantityToSet = MAX_PRODUCTS_IN_BASKET;
+      } else {
+        quantityToSet = newValue;
+      }
+
+      if (!hasItemInCart) {
+        await addProductToCart(cartId, cart.version, productId, quantityToSet);
+      } else {
+        await cartChangeItemQuantity(cartId, shoppingCartVersion, id, quantityToSet);
+      }
+    } catch (error) {
+      throw new Error(`An error occurred: ${error}`);
+    } finally {
+      await handleUpdateShoppingCart();
+      setIsChanging(false);
+    }
+  };
+
   return (
     <div className={styles["basket-item-quantity"]}>
       <IconButton
@@ -45,22 +105,9 @@ export default function BasketProductQuantity({
         sx={{ width: "50px", "& input": { textAlign: "center" } }}
         disabled={isChanging}
         onChange={(e) => {
-          setIsChanging(true);
           const newValue = Number(e.target.value);
           if (!Number.isNaN(newValue)) {
-            if (newValue < MIN_PRODUCTS_IN_BASKET) {
-              cartChangeItemQuantity(cartId, shoppingCartVersion, id, MIN_PRODUCTS_IN_BASKET)
-                .then(() => handleUpdateShoppingCart())
-                .then(() => setIsChanging(false));
-            } else if (newValue > MAX_PRODUCTS_IN_BASKET) {
-              cartChangeItemQuantity(cartId, shoppingCartVersion, id, MAX_PRODUCTS_IN_BASKET)
-                .then(() => handleUpdateShoppingCart())
-                .then(() => setIsChanging(false));
-            } else {
-              cartChangeItemQuantity(cartId, shoppingCartVersion, id, newValue)
-                .then(() => handleUpdateShoppingCart())
-                .then(() => setIsChanging(false));
-            }
+            handleChangeValue(newValue);
           }
         }}
       />
