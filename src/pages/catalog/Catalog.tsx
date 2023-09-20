@@ -97,7 +97,7 @@ export default function Catalog() {
 
   useEffect(() => {
     updateCart();
-  }, []);
+  }, [currentPage]);
 
   useEffect(() => {
     if (location.pathname === RouterPaths.Catalog) {
