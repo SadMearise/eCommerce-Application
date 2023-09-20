@@ -39,6 +39,10 @@ export default function Basket() {
     try {
       const fetchShoppingCart = await getShoppingCart();
       const [cart] = fetchShoppingCart.body.results;
+      if (!cart) {
+        await handleUpdateShoppingCart();
+        return;
+      }
       const hasItemInCart = cart.lineItems.some((item) => item.id === itemId);
 
       if (!hasItemInCart) {
