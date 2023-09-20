@@ -54,7 +54,7 @@ export async function createCart() {
   return cart;
 }
 
-export async function addProductToCart(cartId: string, version: number, productId: string) {
+export async function addProductToCart(cartId: string, version: number, productId: string, quantity = 1) {
   const updatedCartResp = await rootApi
     .me()
     .carts()
@@ -66,7 +66,7 @@ export async function addProductToCart(cartId: string, version: number, productI
           {
             action: "addLineItem",
             productId,
-            quantity: 1,
+            quantity,
           },
         ],
       },
