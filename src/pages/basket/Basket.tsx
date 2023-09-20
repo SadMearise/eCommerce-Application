@@ -47,7 +47,7 @@ export default function Basket() {
         return;
       }
 
-      await cartDeleteItem(cartId, version, itemId);
+      await cartDeleteItem(cartId, cart.version, itemId);
     } catch (error) {
       throw new Error(`An error occurred: ${error}`);
     } finally {
