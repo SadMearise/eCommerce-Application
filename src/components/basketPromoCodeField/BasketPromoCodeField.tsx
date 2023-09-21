@@ -51,7 +51,7 @@ export default function BasketPromoCodeField({
       }
       handleShowAlert("info");
     } catch (error) {
-      throw new Error(`An error occurred while getting the discount codes: ${error}`);
+      console.error(`An error occurred while getting the discount codes: ${error}`);
     } finally {
       setIsChanging(false);
     }
