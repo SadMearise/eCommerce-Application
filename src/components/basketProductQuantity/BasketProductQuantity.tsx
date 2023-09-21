@@ -37,7 +37,7 @@ export default function BasketProductQuantity({
 
       await handleUpdateShoppingCart();
     } catch (error) {
-      throw new Error(`An error occurred:, ${error}`);
+      console.error(`An error occurred:, ${error}`);
     } finally {
       setIsChanging(false);
     }
@@ -64,7 +64,7 @@ export default function BasketProductQuantity({
         await cartChangeItemQuantity(cartId, cart.version, id, quantity - 1);
       }
     } catch (error) {
-      throw new Error(`An error occurred:, ${error}`);
+      console.error(`An error occurred:, ${error}`);
     } finally {
       await handleUpdateShoppingCart();
       setIsChanging(false);
@@ -99,7 +99,7 @@ export default function BasketProductQuantity({
         await cartChangeItemQuantity(cartId, cart.version, id, quantityToSet);
       }
     } catch (error) {
-      throw new Error(`An error occurred: ${error}`);
+      console.error(`An error occurred: ${error}`);
     } finally {
       await handleUpdateShoppingCart();
       setIsChanging(false);

@@ -30,7 +30,7 @@ export default function Basket() {
       setShoppingCart(cart);
       dispatch(setCount(await getProductCountFromCart()));
     } catch (error) {
-      throw new Error(`An error occurred while updating the shopping cart: ${error}`);
+      console.error(`An error occurred while updating the shopping cart: ${error}`);
     }
   };
   const handleDeleteShoppingCartItem = async (cartId: string, itemId: string) => {
@@ -52,7 +52,7 @@ export default function Basket() {
 
       await cartDeleteItem(cartId, cart.version, itemId);
     } catch (error) {
-      throw new Error(`An error occurred: ${error}`);
+      console.error(`An error occurred: ${error}`);
     } finally {
       await handleUpdateShoppingCart();
       setIsChanging(false);
@@ -69,7 +69,7 @@ export default function Basket() {
         });
         await Promise.all(deleteShoppingCarts);
       } catch (error) {
-        throw new Error(`An error occurred while clearing the shopping cart: ${error}`);
+        console.error(`An error occurred while clearing the shopping cart: ${error}`);
       } finally {
         await handleUpdateShoppingCart();
         setIsChanging(false);
@@ -98,7 +98,7 @@ export default function Basket() {
         }
       } catch (error) {
         setIsLoading(false);
-        throw new Error(`An error occurred while loading the shopping cart: ${error}`);
+        console.error(`An error occurred while loading the shopping cart: ${error}`);
       }
     };
     loadProducts();

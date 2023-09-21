@@ -35,23 +35,27 @@ export async function getActiveCart(): Promise<false | Cart> {
 }
 
 export async function createCart() {
-  const cartResp = await rootApi
-    .me()
-    .carts()
-    .post({
-      body: {
-        currency: "EUR",
-        country: CountryCode.Georgia,
-      },
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-    .execute();
+  try {
+    const cartResp = await rootApi
+      .me()
+      .carts()
+      .post({
+        body: {
+          currency: "EUR",
+          country: CountryCode.Georgia,
+        },
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+      .execute();
 
-  const cart = cartResp.body;
+    const cart = cartResp.body;
 
-  return cart;
+    return cart;
+  } catch (error) {
+    throw new Error(`An error occurred: ${error}`);
+  }
 }
 
 export async function addProductToCart(cartId: string, version: number, productId: string, quantity = 1) {
@@ -79,6 +83,7 @@ export async function addProductToCart(cartId: string, version: number, productI
 }
 
 export async function cartDeleteItem(cartId: string, version: number, productId: string) {
+  // try {
   const CartRemoveItemAction: CartRemoveLineItemAction = {
     action: "removeLineItem",
     lineItemId: productId,
@@ -99,6 +104,9 @@ export async function cartDeleteItem(cartId: string, version: number, productId:
   const updatedCart = updatedCartResp.body;
 
   return updatedCart;
+  // } catch (error) {
+  //   throw new Error(`An error occurred with deleting item: ${error}`);
+  // }
 }
 
 const apiRoot = getApiRoot();
