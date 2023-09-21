@@ -89,6 +89,9 @@ function Product() {
 
       if (!isProductInCartRes) {
         await addProductToCart(activeCart.id, activeCart.version, product.id);
+      } else {
+        setActionError("Already exists in the cart.");
+        updateActiveTimeoutWithDelay(isActiveTimeout, setActionError, setIsActiveTimeout, 2000);
       }
 
       dispatch(setCount(await getProductCountFromCart()));
