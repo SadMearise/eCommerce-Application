@@ -1,7 +1,7 @@
 import { Alert, AlertTitle, CircularProgress, Container } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { ProductProjection, ProductType } from "@commercetools/platform-sdk/";
+import { ProductProjection } from "@commercetools/platform-sdk/";
 import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -9,8 +9,7 @@ import Header from "../../components/header/Header";
 import ProductSlider from "../../components/productSlider/ProductSlider";
 import styles from "./Product.module.scss";
 import locale from "../../settings";
-import { getProductByKey, getProductTypeById } from "../../services/product.service";
-import ProductAttributes from "../../components/productAttributes/ProductAttributes";
+import { getProductByKey } from "../../services/product.service";
 import ProductSizes from "../../components/productSizes/ProductSizes";
 import ProductPrices from "../../components/productPrices/ProductPrices";
 import Footer from "../../components/footer/Footer";
@@ -28,7 +27,6 @@ function Product() {
   const [error, setError] = useState("");
   const [actionError, setActionError] = useState("");
   const [isLoading, setIsLoading] = useState(true);
-  const [productType, setProductType] = useState<ProductType>();
   const [isAddBtnDisabled, setIsAddBtnDisabled] = useState(false);
   const [isRemoveBtnDisabled, setIsRemoveBtnDisabled] = useState(true);
   const [isBtnLoading, setBtnLoading] = useState(false);
@@ -109,9 +107,6 @@ function Product() {
 
         const prod = await getProductByKey(keyValue);
         setProduct(prod);
-
-        const type = await getProductTypeById(prod.productType.id);
-        setProductType(type);
       } catch (e) {
         setError(`Can't load product. ${e}`);
       }
@@ -183,10 +178,6 @@ function Product() {
             <h1 className={styles.title}>{product?.name[locale]}</h1>
             <ProductPrices product={product} />
             <p>{product?.description ? product?.description[locale] : "No description"}</p>
-            <ProductAttributes
-              product={product}
-              productType={productType}
-            />
             <ProductSizes product={product} />
             <Button
               className={styles.btn}

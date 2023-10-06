@@ -1,9 +1,9 @@
 .basket-item-details {
   display: flex;
+  align-items: center;
 
   @media (max-width: 375px) {
     flex-direction: column;
-    align-items: center;
   }
 
   .basket-item-img {
@@ -13,6 +13,7 @@
 
   .basket-item-description {
     display: flex;
+    justify-content: center;
     flex-direction: column;
     gap: 5px;
     width: 195px;

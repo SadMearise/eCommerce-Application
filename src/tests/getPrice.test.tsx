@@ -11,11 +11,10 @@ test("The getPrice function returns the correct price value", async () => {
       id: "bc5ff7c0-79f8-4b78-a8e6-cb101892faf9",
     },
     name: {
-      "en-US": "Women's Gray T-shirt",
+      en: "Women's Gray T-shirt",
     },
     description: {
-      "en-US":
-        "Classic casual t-shirt for women on the move.\nRound neck, half sleeves Women's Grey T-shirt. 100% cotton, preshrunk. Regular fit with just the right balance of style and comfort. Looks really cool.",
+      en: "Classic casual t-shirt for women on the move.\nRound neck, half sleeves Women's Grey T-shirt. 100% cotton, preshrunk. Regular fit with just the right balance of style and comfort. Looks really cool.",
     },
     categories: [
       {
@@ -29,14 +28,14 @@ test("The getPrice function returns the correct price value", async () => {
     ],
     categoryOrderHints: {},
     slug: {
-      "en-US": "grey-t-shirt",
+      en: "grey-t-shirt",
     },
     metaTitle: {
-      "en-US": "",
+      en: "",
       ru: "",
     },
     metaDescription: {
-      "en-US": "",
+      en: "",
       ru: "",
     },
     masterVariant: {

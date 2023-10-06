@@ -27,7 +27,7 @@ export default function Catalog() {
   const location = useLocation();
   const priceSliderDefaultValues: TPriceSliderDefaultValues = {
     min: 0,
-    max: 100,
+    max: 10000,
   };
 
   const [products, setProducts] = useState<ProductProjection[]>([]);
@@ -58,7 +58,7 @@ export default function Catalog() {
     }
 
     if (categoriesBreadcrumbs.length) {
-      filterRules.push(`categories.id:"${categoriesBreadcrumbs[categoriesBreadcrumbs.length - 1].id}"`);
+      filterRules.push(`categories.id: subtree("${categoriesBreadcrumbs[categoriesBreadcrumbs.length - 1].id}")`);
     }
 
     filterRules.push(
@@ -72,7 +72,7 @@ export default function Catalog() {
     });
 
     let queryArgs: TQueryArgs = {
-      "text.en-US": `${searchInputValue}`,
+      "text.en": `${searchInputValue}`,
       fuzzy: true,
       filter: filterRules,
       limit: PAGE_LIMIT,
@@ -155,11 +155,13 @@ export default function Catalog() {
           setCategories={setCategories}
           currentId={currentId}
           setCurrentId={setCurrentId}
+          setCurrentPage={setCurrentPage}
         />
         <CatalogBreadcrumbs
           breadcrumbs={categoriesBreadcrumbs}
           setCategoriesBreadcrumbs={setCategoriesBreadcrumbs}
           setCurrentId={setCurrentId}
+          setCurrentPage={setCurrentPage}
         />
         <Grid
           className={styles["content-container"]}

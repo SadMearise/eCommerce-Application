@@ -7,4 +7,5 @@ export interface ICatalogBreadcrumbsProps {
   setCategories: React.Dispatch<React.SetStateAction<TCategories[]>>;
   currentId: string;
   setCurrentId: React.Dispatch<React.SetStateAction<string>>;
+  setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
 }

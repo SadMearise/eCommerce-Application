@@ -4,9 +4,10 @@ import Button from "@mui/material/Button";
 import PriceSlider from "../priceSlider/PriceSlider";
 import styles from "./CatalogFilter.module.scss";
 import RadioButtonsGroup from "./radioGroup/RadioButtonsGroup";
-import { ICatalogFilterProps } from "./types";
+import { ICatalogFilterProps, TAttributeValue } from "./types";
 import { getProductTypes } from "../../services/product.service";
 import { TCatalogFilterValues } from "../../models/types";
+import locale from "../../settings";
 
 export default function CatalogFilter({
   setPriceSliderValues,
@@ -39,20 +40,21 @@ export default function CatalogFilter({
           }
 
           const { type } = attribute;
-
-          if (type?.name !== "enum") {
+          if (type?.name !== "enum" && type?.name !== "lenum") {
             return;
           }
 
-          type.values.forEach((value: { key: string; label: string }) => {
+          type.values.forEach((value: TAttributeValue) => {
             setFilterInitValues((prev) => {
-              if (prev[attribute.name].includes(value.label)) {
+              const label = typeof value.label === "object" ? value.label[locale] : value.label;
+
+              if (prev[attribute.name].includes(label)) {
                 return prev;
               }
 
               return {
                 ...prev,
-                [attribute.name]: [...prev[attribute.name as keyof typeof prev], value.label],
+                [attribute.name]: [...prev[attribute.name as keyof typeof prev], label],
               };
             });
           });

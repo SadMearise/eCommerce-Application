@@ -1,3 +1,3 @@
-const locale = "en-US";
+const locale = "en";
 
 export default locale;
