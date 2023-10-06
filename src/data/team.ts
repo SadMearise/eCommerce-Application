@@ -16,7 +16,7 @@ const team = [
       "The Rolling Scopes School(JavaScript/Front-end)",
     ],
     skills:
-      "JavaScript, TypeScript, Node.js, HTML5, CSS3, Sass(SCSS), BEM methodology, Gulp, Webpack, Git, Github, npm, yarn. Have basic expirience with PHP, WordPress, Vite, React, Redux Toolkit and React Router. Previously worked with Python and MySQL",
+      "JavaScript, TypeScript, Node.js, HTML5, CSS3, Sass(SCSS), BEM methodology, Gulp, Webpack, ESLint, Git, Github, npm, yarn. Have basic expirience with PHP, WordPress, Vite, React, Next.js, Redux Toolkit and React Router. Previously worked with Python and MySQL",
     language: "English: Pre-Intermediate(A2)",
     contributions: [
       {
