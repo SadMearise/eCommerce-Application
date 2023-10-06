@@ -15,7 +15,7 @@ import RouterPaths from "../../router/routes";
 import { getDiscount } from "../../services/cart.service";
 import locale from "../../settings";
 
-const images = ["gift-svgrepo-com.svg", "coupon-svgrepo-com.svg"];
+const images = ["./gift-svgrepo-com.svg", "./coupon-svgrepo-com.svg"];
 
 export default function Home() {
   const [promoCodes, setPromoCodes] = useState<DiscountCode[]>([]);

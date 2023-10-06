@@ -13,7 +13,7 @@ export default function BasketEmptyView() {
         <div className={styles["empty-cart-wrapper"]}>
           <h2 className={styles["empty-cart-title"]}>Your Cart Is Currently Empty!</h2>
           <img
-            src="shopping-cart.png"
+            src="./shopping-cart.png"
             alt="shopping-cart"
             className={styles["empty-cart-img"]}
           />

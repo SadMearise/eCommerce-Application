@@ -3,6 +3,7 @@ import react from "@vitejs/plugin-react";
 import topLevelAwait from "vite-plugin-top-level-await";
 
 export default defineConfig({
+  base: "./",
   resolve: {
     alias: {
       process: "process/browser",
