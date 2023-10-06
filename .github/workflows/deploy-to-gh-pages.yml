@@ -1,45 +1,32 @@
-name: Build and deploy
+name: CI
 
 on:
   push:
-    branches: ['develop']
-
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
+    branches:
+      - develop
 
 jobs:
-  # Single deploy job since we're just deploying
-  deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+  build:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
-      - name: Set up Node
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18.16.0
-          cache: 'npm'
-      - name: Install dependencies
-        run: npm install
+        uses: actions/checkout@v1
+
       - name: Build
-        run: npm run build
+        run: |
+          npm install
+          npm run build
         env:
-            VITE_CTP_API_URL: ${{ secrets.VITE_CTP_API_URL }}
-            VITE_CTP_AUTH_URL: ${{ secrets.VITE_CTP_AUTH_URL }}
-            VITE_CTP_CLIENT_ID: ${{ secrets.VITE_CTP_CLIENT_ID }}
-            VITE_CTP_CLIENT_SECRET: ${{ secrets.VITE_CTP_CLIENT_SECRET }}
-            VITE_CTP_PROJECT_KEY: ${{ secrets.VITE_CTP_PROJECT_KEY }}
-            VITE_CTP_SCOPES: ${{ secrets.VITE_CTP_SCOPES }}
-      - name: Setup Pages
-        uses: actions/configure-pages@v3
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v1
+          VITE_CTP_API_URL: ${{ secrets.VITE_CTP_API_URL }}
+          VITE_CTP_AUTH_URL: ${{ secrets.VITE_CTP_AUTH_URL }}
+          VITE_CTP_CLIENT_ID: ${{ secrets.VITE_CTP_CLIENT_ID }}
+          VITE_CTP_CLIENT_SECRET: ${{ secrets.VITE_CTP_CLIENT_SECRET }}
+          VITE_CTP_PROJECT_KEY: ${{ secrets.VITE_CTP_PROJECT_KEY }}
+          VITE_CTP_SCOPES: ${{ secrets.VITE_CTP_SCOPES }}
+
+      - name: Deploy
+        uses: JamesIves/github-pages-deploy-action@releases/v3
         with:
-          # Upload dist repository
-          path: './dist'
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v1
+          BRANCH: gh-pages
+          FOLDER: dist
