@@ -8,7 +8,7 @@ function School() {
         className={styles.logo}
       >
         <img
-          src="rs_school_js.svg"
+          src="./rs_school_js.svg"
           alt="RSS"
         />
       </a>

@@ -36,7 +36,7 @@ export default function ProductCard({ product, url, cart, setIsLoading }: IProdu
     const productDescription = product.description ? product.description[locale] : "";
     const productName = product.name ? product.name[locale] : "";
     const productImages = product.masterVariant.images ? product.masterVariant.images : [];
-    const productUrl = productImages.length ? productImages[0].url : "no-image.png";
+    const productUrl = productImages.length ? productImages[0].url : "./no-image.png";
     const productPrices = product.masterVariant.prices ? product.masterVariant.prices : [];
     const prices = productPrices.length ? productPrices[0] : null;
 

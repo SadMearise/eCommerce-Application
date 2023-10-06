@@ -1,26 +1,26 @@
 const collaboration = [
   {
-    icon: "planning.png",
+    icon: "./planning.png",
     text: "Planning",
   },
   {
-    icon: "help.png",
+    icon: "./help.png",
     text: "Help and motivate each other",
   },
   {
-    icon: "partnership.png",
+    icon: "./partnership.png",
     text: "Shared leadership roles",
   },
   {
-    icon: "social.png",
+    icon: "./social.png",
     text: "Individual and mutual accountability",
   },
   {
-    icon: "target.png",
+    icon: "./target.png",
     text: "Specific team goals that the team itself implements",
   },
   {
-    icon: "discussion.png",
+    icon: "./discussion.png",
     text: "Discussion and active problem solving",
   },
 ];
