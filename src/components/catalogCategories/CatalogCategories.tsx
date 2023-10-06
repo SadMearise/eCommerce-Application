@@ -13,6 +13,7 @@ export default function CatalogCategories({
   setCategories,
   currentId,
   setCurrentId,
+  setCurrentPage,
 }: ICatalogBreadcrumbsProps) {
   const handleButtonClick = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     const target = event.target as HTMLInputElement;
@@ -23,6 +24,7 @@ export default function CatalogCategories({
       return;
     }
 
+    setCurrentPage(1);
     setCurrentId(category.id);
     setCategoriesBreadcrumbs((prev) => [...prev, { name: category.name, id: category.id }]);
   };
@@ -30,7 +32,6 @@ export default function CatalogCategories({
   useEffect(() => {
     const updateCategories = async () => {
       const categoriesResp = await getCategories({ queryArgs: { expand: "parent" } });
-
       setCategories([]);
 
       categoriesResp.results.forEach((result) => {

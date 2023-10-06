@@ -30,6 +30,7 @@ export default function BasketPromoCodeField({
       }
 
       const discount = (await getDiscount()).body.results;
+
       const isPromoCodeAlreadyApplied = cart.discountCodes.some(
         (cartDiscountItem) =>
           discount.some((item) => item.code === promoCodeField && item.id === cartDiscountItem.discountCode.id)

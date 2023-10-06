@@ -14,6 +14,7 @@ export default function CatalogBreadcrumbs({
   breadcrumbs,
   setCategoriesBreadcrumbs,
   setCurrentId,
+  setCurrentPage,
 }: ICatalogBreadcrumbsProps) {
   const removeBreadcrumbs = (event: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
     const target = event.target as HTMLInputElement;
@@ -40,6 +41,7 @@ export default function CatalogBreadcrumbs({
           component={RouterLink}
           onClick={(event) => {
             setCurrentId("");
+            setCurrentPage(1);
             removeBreadcrumbs(event);
           }}
         >
@@ -66,6 +68,7 @@ export default function CatalogBreadcrumbs({
               onClick={(event) => {
                 const target = event.target as HTMLInputElement;
 
+                setCurrentPage(1);
                 setCurrentId(target.id);
                 removeBreadcrumbs(event);
               }}

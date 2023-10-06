@@ -10,9 +10,6 @@ import styles from "./CatalogProductCard.module.scss";
 import { IProductCardProps } from "./types";
 import { formatPrice } from "../../utils/getPrice";
 import locale from "../../settings";
-import { Attributes } from "../../utils/types";
-import sizeStringToNumber from "../../utils/sizeStringToNumber";
-import getAttributeLabel from "../../utils/getAttributeLabel";
 import { addProductToCart, createCart, getCarts } from "../../services/cart.service";
 import { setCount } from "../../store/features/cartCount/cartCountSlice";
 import { useAppDispatch } from "../../store/hooks";
@@ -99,11 +96,12 @@ export default function ProductCard({ product, url, cart, setIsLoading }: IProdu
             >
               {productDescription}
             </Typography>
+
             <p className={styles.attributes}>
-              <b>Brand:</b>
+              <b>Designer:</b>
               {product.masterVariant.attributes?.map(
                 (attribute) =>
-                  attribute.name === "brand" && (
+                  attribute.name === "designer" && (
                     <span key={`${Math.random()}${attribute.value.label}`}>{attribute.value.label}</span>
                   )
               )}
@@ -113,23 +111,19 @@ export default function ProductCard({ product, url, cart, setIsLoading }: IProdu
               {product.masterVariant.attributes?.map(
                 (attribute) =>
                   attribute.name === "color" && (
-                    <span key={`${Math.random()}${attribute.value.label}`}>{attribute.value.label}</span>
+                    <span key={`${Math.random()}${attribute.value.label[locale]}`}>
+                      {attribute.value.label[locale]}
+                    </span>
                   )
               )}
             </p>
             <p className={styles.attributes}>
-              <b>Sizes: </b>
-              {product.variants
-                .concat([product.masterVariant])
-                .sort((a, b) => sizeStringToNumber(a) - sizeStringToNumber(b))
-                .map((variant) => (
-                  <span key={variant.id}>
-                    {getAttributeLabel(variant.attributes?.find((attr) => attr.name.endsWith(Attributes.Size)))}
-                    &nbsp;
-                  </span>
-                ))}
+              <b>Size:</b>
+              {product.masterVariant.attributes?.map(
+                (attribute) =>
+                  attribute.name === "size" && <span key={`${Math.random()}${attribute.value}`}>{attribute.value}</span>
+              )}
             </p>
-
             {prices &&
               (Object.prototype.hasOwnProperty.call(prices, "discounted") && prices.discounted ? (
                 <Box className={styles["price-wrapper"]}>

@@ -4,7 +4,7 @@ export type TPriceSliderDefaultValues = {
 };
 
 export type TQueryArgs = {
-  "text.en-US": string;
+  "text.en": string;
   fuzzy: boolean;
   filter: string[];
   limit: number;

@@ -8,3 +8,8 @@ export interface ICatalogFilterProps {
   setFilterValues: React.Dispatch<React.SetStateAction<TCatalogFilterValues>>;
   setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
 }
+
+export type TAttributeValue = {
+  key: string;
+  label: string | Record<string, string>;
+};

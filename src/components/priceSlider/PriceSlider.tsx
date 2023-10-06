@@ -41,7 +41,7 @@ export default function PriceSlider({
   };
 
   useEffect(() => {
-    handleChange([0, 100], 2);
+    handleChange([0, 10000], 2);
     setPriceSliderState(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [priceSliderState]);
@@ -60,7 +60,7 @@ export default function PriceSlider({
         getAriaValueText={valuetext}
         disableSwap
         min={0}
-        max={100}
+        max={10000}
         step={minDistance}
       />
     </FormControl>

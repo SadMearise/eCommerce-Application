@@ -1,7 +1,8 @@
 import { useSelector } from "react-redux";
 import { Button, Card, CardActions, CardContent, CardMedia, Container, Typography } from "@mui/material";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { DiscountCode } from "@commercetools/platform-sdk";
 import AlertView from "../../components/alertView/AlertView";
 import Header from "../../components/header/Header";
 import isSuccess from "../../store/features/registration/registrationSelector";
@@ -11,23 +12,23 @@ import { setCount } from "../../store/features/cartCount/cartCountSlice";
 import { useAppDispatch } from "../../store/hooks";
 import styles from "./Home.module.scss";
 import RouterPaths from "../../router/routes";
+import { getDiscount } from "../../services/cart.service";
+import locale from "../../settings";
 
-const cards = [
-  {
-    name: "SAVE50",
-    description: "Enter the promotional code in the cart to receive a 50% discount",
-    image: "gift-svgrepo-com.svg",
-  },
-  {
-    name: "SAVE30",
-    description: "Enter the promotional code in the cart to receive a 30% discount",
-    image: "coupon-svgrepo-com.svg",
-  },
-];
+const images = ["gift-svgrepo-com.svg", "coupon-svgrepo-com.svg"];
 
 export default function Home() {
+  const [promoCodes, setPromoCodes] = useState<DiscountCode[]>([]);
   const dispatch = useAppDispatch();
   const isSuccessSelector = useSelector(isSuccess);
+
+  useEffect(() => {
+    const getPromoCodes = async () => {
+      setPromoCodes((await getDiscount()).body.results);
+    };
+
+    getPromoCodes();
+  }, []);
 
   useEffect(() => {
     const updateCountFromCart = async () => {
@@ -47,14 +48,14 @@ export default function Home() {
         <div className={styles["promo-code-wrapper"]}>
           <h1 className={styles.title}>Available promo codes:</h1>
           <div className={styles["card-wrapper"]}>
-            {cards.map((card) => (
+            {promoCodes.map((promoCode, index) => (
               <Card
                 sx={{ maxWidth: 345 }}
-                key={card.name}
+                key={promoCode.id}
               >
                 <CardMedia
                   sx={{ height: 140, backgroundSize: "100% 100%" }}
-                  image={card.image}
+                  image={images[index]}
                 />
                 <CardContent>
                   <Typography
@@ -62,13 +63,13 @@ export default function Home() {
                     variant="h5"
                     component="div"
                   >
-                    {card.name}
+                    {promoCode.name && promoCode.name[locale]}
                   </Typography>
                   <Typography
                     variant="body2"
                     color="text.secondary"
                   >
-                    {card.description}
+                    {promoCode.description && promoCode.description[locale]}
                   </Typography>
                 </CardContent>
                 <CardActions>
