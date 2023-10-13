@@ -22,10 +22,10 @@
   - TypeScript 🚀
   - React ⚛️
   - Redux Toolkit 🔄
-  - TypeScript SDK 🌐
+  - React Router 🌐
   - Material UI 🏛️
 - Backend:
-  - Commerce-tools 🚀
+  - Commercetools 🚀
 - Infrastructure and Deployment:
   - Git 🗂️
   - GitHub 🐙
