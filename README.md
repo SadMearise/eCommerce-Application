@@ -1,6 +1,6 @@
 # Kratkoe - Online Clothing Store
 
-![Project Status](https://img.shields.io/badge/status-active-brightgreen.svg)
+![Project Status](https://img.shields.io/badge/status-finished-brightgreen.svg)
 
 ## Table of Contents
 
