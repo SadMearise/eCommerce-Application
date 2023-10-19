@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ChangeEvent, useRef } from "react";
 import FormGroup from "@mui/material/FormGroup";
 import FormLabel from "@mui/material/FormLabel";
 import FormControl from "@mui/material/FormControl";
@@ -7,21 +7,12 @@ import { setUpperCaseFirstSymbol } from "../../../utils/textTransform";
 import styles from "./RadioButtonGroup.module.scss";
 
 export default function RadioButtonsGroup({ label, fields, setFilterValues, setCurrentPage }: IRadioButtonsGroupProps) {
-  const handleFormGroup = (event: React.FormEvent<HTMLDivElement>) => {
-    const target = event.target as HTMLInputElement;
+  const refs = useRef([...new Array(fields.length)].map(() => React.createRef<HTMLInputElement>()));
 
-    if (!(target instanceof HTMLElement)) {
-      return;
-    }
-    const changedElement = target.closest("[data-value]");
+  const handleFormGroup = ({ target: { id, value } }: ChangeEvent<HTMLInputElement>) => {
+    const inputNode = refs.current[Number(id)].current;
 
-    if (!changedElement || !(changedElement instanceof HTMLElement)) {
-      return;
-    }
-    const { value } = changedElement.dataset;
-
-    if (target.checked) {
-      // @ts-expect-error: Unreachable code error
+    if (inputNode && inputNode.checked) {
       setFilterValues((filterValues) => {
         if (!Object.prototype.hasOwnProperty.call(filterValues, label)) {
           return {
@@ -48,17 +39,18 @@ export default function RadioButtonsGroup({ label, fields, setFilterValues, setC
   return (
     <FormControl className={styles["form-control"]}>
       <FormLabel id={`demo-radio-buttons-group-${label}`}>{setUpperCaseFirstSymbol(label)}</FormLabel>
-      <FormGroup onChange={(event) => handleFormGroup(event)}>
-        {fields.map((field) => (
+      <FormGroup onChange={handleFormGroup}>
+        {fields.map((field, i) => (
           <label
             className={styles["control-label"]}
-            data-value={field}
             htmlFor={field}
             key={field}
           >
             <input
+              ref={refs.current[i]}
               type="checkbox"
-              id={field}
+              id={String(i)}
+              value={field}
             />
             {field}
           </label>
