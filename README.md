@@ -8,7 +8,6 @@
 - [Technologies](#technologies)
 - [Scripts](#scripts)
 - [Installation and Use](#installation-and-use)
-- [How to Use](#how-to-use)
 
 ## Description:
 
