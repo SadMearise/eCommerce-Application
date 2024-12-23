@@ -22,7 +22,7 @@
   - React ⚛️
   - Redux Toolkit 🔄
   - React Router 🌐
-  - Material UI 🏛️
+  - MUI 🏛️
 - Backend:
   - Commercetools 🚀
 - Infrastructure and Deployment:
