@@ -11,7 +11,7 @@
 
 ## Description:
 
-"Kratkoe" is an online clothing store offering a wide range of stylish and high-quality apparel for both men and women. Our store aims to provide customers with a convenient and enjoyable shopping experience, offering fashionable trends at affordable prices.
+"Kratkoe" is an online clothing store offering a wide range of stylish and high-quality apparel for both men and women. Our store aims to provide customers with a convenient and enjoyable shopping experience, offering fashionable trends at affordable prices
 
 ## Technologies:
 
