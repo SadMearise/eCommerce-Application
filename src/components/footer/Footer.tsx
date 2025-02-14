@@ -14,6 +14,7 @@ function Footer() {
       <span className={styles.nick}>{member.nick}</span>
     </a>
   ));
+
   return (
     <footer className={styles.footer}>
       <Container maxWidth="xl">
