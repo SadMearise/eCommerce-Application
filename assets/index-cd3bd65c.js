@@ -11182,36 +11182,36 @@ Error generating stack: ` + i.message + `
       }
       function ree(t, e, r, n) {
         V0() || At(false);
-        let { navigator: a, static: i } = C.useContext(yc), { matches: o } = C.useContext(zl), s = o[o.length - 1], l = s ? s.params : {};
-        s && s.pathname;
-        let u = s ? s.pathnameBase : "/";
-        s && s.route;
-        let c = z0(), p;
+        let { navigator: a } = C.useContext(yc), { matches: i } = C.useContext(zl), o = i[i.length - 1], s = o ? o.params : {};
+        o && o.pathname;
+        let l = o ? o.pathnameBase : "/";
+        o && o.route;
+        let u = z0(), c;
         if (e) {
-          var f;
-          let h = typeof e == "string" ? Ps(e) : e;
-          u === "/" || (f = h.pathname) != null && f.startsWith(u) || At(false), p = h;
+          var p;
+          let w = typeof e == "string" ? Ps(e) : e;
+          l === "/" || (p = w.pathname) != null && p.startsWith(l) || At(false), c = w;
         } else
-          p = c;
-        let d = p.pathname || "/", m = d;
-        if (u !== "/") {
-          let h = u.replace(/^\//, "").split("/");
-          m = "/" + d.replace(/^\//, "").split("/").slice(h.length).join("/");
+          c = u;
+        let f = c.pathname || "/", d = f;
+        if (l !== "/") {
+          let w = l.replace(/^\//, "").split("/");
+          d = "/" + f.replace(/^\//, "").split("/").slice(w.length).join("/");
         }
-        let g = !i && r && r.matches && r.matches.length > 0 ? r.matches : _u(t, {
-          pathname: m
-        }), w = see(g && g.map((h) => Object.assign({}, h, {
-          params: Object.assign({}, l, h.params),
+        let m = _u(t, {
+          pathname: d
+        }), g = see(m && m.map((w) => Object.assign({}, w, {
+          params: Object.assign({}, s, w.params),
           pathname: ps([
-            u,
-            a.encodeLocation ? a.encodeLocation(h.pathname).pathname : h.pathname
+            l,
+            a.encodeLocation ? a.encodeLocation(w.pathname).pathname : w.pathname
           ]),
-          pathnameBase: h.pathnameBase === "/" ? u : ps([
-            u,
-            a.encodeLocation ? a.encodeLocation(h.pathnameBase).pathname : h.pathnameBase
+          pathnameBase: w.pathnameBase === "/" ? l : ps([
+            l,
+            a.encodeLocation ? a.encodeLocation(w.pathnameBase).pathname : w.pathnameBase
           ])
-        })), o, r, n);
-        return e && w ? C.createElement(Qg.Provider, {
+        })), i, r, n);
+        return e && g ? C.createElement(Qg.Provider, {
           value: {
             location: t0({
               pathname: "/",
@@ -11219,10 +11219,10 @@ Error generating stack: ` + i.message + `
               hash: "",
               state: null,
               key: "default"
-            }, p),
+            }, c),
             navigationType: Xr.Pop
           }
-        }, w) : w;
+        }, g) : g;
       }
       function nee() {
         let t = dee(), e = e0(t) ? t.status + " " + t.statusText : t instanceof Error ? t.message : JSON.stringify(t), r = t instanceof Error ? t.stack : null, a = {
@@ -139432,12 +139432,12 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
         });
       }
       const Ox = {
-        projectKey: "ecommerce10",
-        clientSecret: "dQe_zlThWow0PDGAY4krriFgMdKjvzIe",
-        clientId: "6xUv3ToLfpg94qDgrJDI1TyA",
+        projectKey: "kratkoe001",
+        clientSecret: "in4gsSleuTfBH3MMorlg0lPHyhtfMofF",
+        clientId: "xKlVV8frW_lh9TpJGLtHS_ge",
         authURL: "https://auth.europe-west1.gcp.commercetools.com",
         apiURL: "https://api.europe-west1.gcp.commercetools.com",
-        scopes: "manage_project:ecommerce10".split(" ") || [
+        scopes: "manage_project:kratkoe001".split(" ") || [
           ""
         ]
       }, { projectKey: gV, clientSecret: Hke, clientId: Gke, authURL: Yke, apiURL: Zke, scopes: Xke } = Ox, Qke = {
